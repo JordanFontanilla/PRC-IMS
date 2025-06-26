@@ -1,0 +1,8 @@
+{
+    "require": {
+        "phpoffice/phpspreadsheet": "^4.3",
+        "shuchkin/simplexlsx": "^1.1",
+        "tecnickcom/tcpdf": "^6.9",
+        "endroid/qr-code": "^6.0"
+    }
+}
