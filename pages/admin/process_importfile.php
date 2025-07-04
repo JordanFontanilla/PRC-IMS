@@ -1,112 +1,137 @@
 <?php
-ob_start(); // Start output buffering
+require '../../vendor/autoload.php';
+require '../../db_connection.php';
+
+use PhpOffice\PhpSpreadsheet\IOFactory;
+
 header('Content-Type: application/json');
 
-// Enable error reporting (remove in production)
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
+$response = ['status' => 'error', 'message' => 'An unknown error occurred.'];
 
-// Response structure
-$response = [];
+if (isset($_FILES['excelFile']) && $_FILES['excelFile']['error'] == 0) {
+    $filePath = $_FILES['excelFile']['tmp_name'];
 
-try {
-    if (!isset($_FILES['excelFile']) || $_FILES['excelFile']['error'] !== 0) {
-        throw new Exception("No file uploaded or upload error.");
-    }
+    try {
+        $spreadsheet = IOFactory::load($filePath);
+        $sheet = $spreadsheet->getActiveSheet();
+        $highestRow = $sheet->getHighestRow();
+        $highestColumn = 'J'; // Read up to column J
 
-    $fileTmpPath = $_FILES['excelFile']['tmp_name'];
-    $fileName = $_FILES['excelFile']['name'];
-    $fileExt = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
-    $allowedExts = ['xlsx', 'xls'];
+        $conn->begin_transaction();
 
-    if (!in_array($fileExt, $allowedExts)) {
-        throw new Exception("Invalid file type. Please upload an Excel file.");
-    }
+        $insertedCount = 0;
+        $updatedCount = 0;
+        $redundantCount = 0;
+        $errorCount = 0;
+        $errorMessages = [];
+        $current_date = date('Y-m-d H:i:s');
 
-    require '../../vendor/autoload.php';         // PhpSpreadsheet
-    require '../../function_connection.php';     // DB connection
+        for ($row = 2; $row <= $highestRow; $row++) {
+            $rowData = $sheet->rangeToArray('A' . $row . ':' . $highestColumn . $row, NULL, TRUE, FALSE)[0];
 
-    $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($fileTmpPath);
-    $sheet = $spreadsheet->getActiveSheet();
-    $rows = $sheet->toArray();
+            // Assign variables from rowData
+            $type_name = trim($rowData[0]);
+            $inv_bnm = trim($rowData[1]);
+            $inv_serialno = trim($rowData[2]);
+            $inv_propno = trim($rowData[3]);
+            $inv_propname = trim($rowData[4]);
+            $quantity = !empty($rowData[5]) ? intval($rowData[5]) : 1;
+            $date_acquired = !empty($rowData[6]) ? date('Y-m-d', strtotime($rowData[6])) : null;
+            $price = !empty($rowData[7]) ? (float)$rowData[7] : 0.00;
+            $status_text = strtolower(trim($rowData[8]));
+            $item_type = strtolower(trim($rowData[9]));
 
-    $insertedCount = 0;
-    $redundantCount = 0;
+            // Map status or default to 'Available' (1)
+            $status_map = ['available' => 1, 'unavailable' => 2, 'pending' => 3, 'borrowed' => 4, 'returned' => 5, 'missing' => 6];
+            $inv_status = $status_map[$status_text] ?? 1;
 
-    array_shift($rows); // Skip header row
+            // Get type_id from tbl_type
+            $type_id = null;
+            $type_stmt = $conn->prepare("SELECT type_id FROM tbl_type WHERE type_name = ?");
+            $type_stmt->bind_param("s", $type_name);
+            $type_stmt->execute();
+            $type_result = $type_stmt->get_result();
+            if ($type_result->num_rows > 0) {
+                $type_id = $type_result->fetch_assoc()['type_id'];
+            }
+            $type_stmt->close();
 
-    foreach ($rows as $row) {
-        if (count($row) < 9) continue;
+            if (!$type_id) {
+                $errorCount++;
+                $errorMessages[] = "Row $row: Type '$type_name' not found.";
+                continue;
+            }
 
-        $type_id = trim($row[0]);
-        $inv_serialno = trim($row[1]);
-        $inv_propno = trim($row[2]);
-        $inv_propname = trim($row[3]);
-        $inv_bnm = trim($row[4]);
-        $end_user = trim($row[7]);
-        $accounted_to = trim($row[8]);
-
-        if (empty($inv_propname)) continue;
-
-
-        $inv_date_added = date('F j, Y h:i A');
-        $inv_status = 1;
-        $inv_quantity = 1;
-
-        // Check for duplicates
-        // NEW: Check all 5 fields for exact match
-        $checkQuery = "SELECT COUNT(*) FROM tbl_inv 
-        WHERE type_id = ? AND inv_serialno = ? AND inv_propno = ? AND inv_propname = ? AND inv_bnm = ?";
-        $stmtCheck = $conn->prepare($checkQuery);
-        $stmtCheck->bind_param("issss", $type_id, $inv_serialno, $inv_propno, $inv_propname, $inv_bnm);
-
-        $stmtCheck->execute();
-        $stmtCheck->bind_result($rowCount);
-        $stmtCheck->fetch();
-        $stmtCheck->close();
-
-        if ($rowCount > 0) {
-            $redundantCount++;
-            continue;
+            if ($item_type === 'non-consumable') {
+                // Handle non-consumable items in tbl_inv
+                $check_stmt = $conn->prepare("SELECT inv_id FROM tbl_inv WHERE inv_serialno = ? AND inv_propno = ?");
+                $check_stmt->bind_param("ss", $inv_serialno, $inv_propno);
+                $check_stmt->execute();
+                if ($check_stmt->get_result()->num_rows == 0) {
+                    $insert_stmt = $conn->prepare("INSERT INTO tbl_inv (type_id, inv_bnm, inv_serialno, inv_propno, inv_propname, date_acquired, price, `condition`, inv_status, inv_date_added) VALUES (?, ?, ?, ?, ?, ?, ?, 'New', ?, ?)");
+                    $insert_stmt->bind_param("isssssdis", $type_id, $inv_bnm, $inv_serialno, $inv_propno, $inv_propname, $date_acquired, $price, $inv_status, $current_date);
+                    if ($insert_stmt->execute()) {
+                        $insertedCount++;
+                    } else {
+                        $errorCount++;
+                        $errorMessages[] = "Row $row: DB error inserting non-consumable.";
+                    }
+                } else {
+                    $redundantCount++;
+                }
+            } elseif ($item_type === 'consumable') {
+                // Handle consumable items in tbl_inv_consumables
+                $check_stmt = $conn->prepare("SELECT inv_id, inv_quantity FROM tbl_inv_consumables WHERE inv_bnm = ? AND type_id = ?");
+                $check_stmt->bind_param("si", $inv_bnm, $type_id);
+                $check_stmt->execute();
+                $result = $check_stmt->get_result();
+                if ($result->num_rows > 0) {
+                    $existing_item = $result->fetch_assoc();
+                    $new_quantity = $existing_item['inv_quantity'] + $quantity;
+                    $update_stmt = $conn->prepare("UPDATE tbl_inv_consumables SET inv_quantity = ? WHERE inv_id = ?");
+                    $update_stmt->bind_param("ii", $new_quantity, $existing_item['inv_id']);
+                    if ($update_stmt->execute()) {
+                        $updatedCount++;
+                    } else {
+                        $errorCount++;
+                        $errorMessages[] = "Row $row: DB error updating consumable quantity.";
+                    }
+                } else {
+                    $serialno_db = !empty($inv_serialno) ? $inv_serialno : null;
+                    $propertyno_db = !empty($inv_propno) ? $inv_propno : null;
+                    $insert_stmt = $conn->prepare("INSERT INTO tbl_inv_consumables (type_id, inv_bnm, inv_serialno, inv_propno, inv_propname, inv_status, inv_quantity, date_acquired, price, inv_date_added) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                    $insert_stmt->bind_param("issssiisds", $type_id, $inv_bnm, $serialno_db, $propertyno_db, $inv_propname, $inv_status, $quantity, $date_acquired, $price, $current_date);
+                    if ($insert_stmt->execute()) {
+                        $insertedCount++;
+                    } else {
+                        $errorCount++;
+                        $errorMessages[] = "Row $row: DB error inserting consumable.";
+                    }
+                }
+            } else {
+                $errorCount++;
+                $errorMessages[] = "Row $row: Invalid item type '{$item_type}'. Use 'consumable' or 'non-consumable'.";
+            }
         }
 
-        // Insert record
-        $query = "INSERT INTO tbl_inv 
-            (type_id, inv_serialno, inv_propno, inv_propname, inv_bnm, inv_date_added, inv_status, inv_quantity, end_user, accounted_to)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        $stmt = $conn->prepare($query);
+        $conn->commit();
+        $response = [
+            'status' => 'success', 
+            'inserted' => $insertedCount, 
+            'updated' => $updatedCount,
+            'redundant' => $redundantCount, 
+            'errors' => $errorCount,
+            'error_messages' => $errorMessages
+        ];
 
-        if (!$stmt) {
-            error_log("Prepare failed: " . $conn->error);
-            continue;
-        }
-
-        $stmt->bind_param("isssssisss", $type_id, $inv_serialno, $inv_propno, $inv_propname, $inv_bnm, $inv_date_added, $inv_status, $inv_quantity, $end_user, $accounted_to);
-
-        if (!$stmt->execute()) {
-            error_log("Execute failed for serial [$inv_serialno]: " . $stmt->error);
-            $stmt->close();
-            continue;
-        }
-
-        $stmt->close();
-        $insertedCount++;
+    } catch (Exception $e) {
+        $conn->rollback();
+        $response = ['status' => 'error', 'message' => 'Error processing file: ' . $e->getMessage()];
     }
-
-    $conn->close();
-
-    $response = [
-        'inserted' => $insertedCount,
-        'redundant' => $redundantCount
-    ];
-
-} catch (Exception $e) {
-    error_log("Import error: " . $e->getMessage());
-    $response = ['error' => $e->getMessage()];
+} else {
+    $response = ['status' => 'error', 'message' => 'No file uploaded or an error occurred during upload.'];
 }
 
-// Discard any stray output and return JSON only
-ob_end_clean();
 echo json_encode($response);
-exit;
+$conn->close();
 ?>

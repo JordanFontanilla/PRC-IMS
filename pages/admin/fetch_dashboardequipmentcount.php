@@ -6,15 +6,15 @@ header('Content-Type: application/json');
 // Initialize counts
 $allequip = $allavailequip = $allmissequip = $allpendequip = $allborrequip = 0;
 
-// Fetch all equipment count
-$queryAll = "SELECT COUNT(*) AS count1 FROM tbl_inv";
-$queryAvail = "SELECT COUNT(*) AS count2 FROM tbl_inv WHERE inv_status = 1";
-$queryMiss = "SELECT COUNT(*) AS count3 FROM tbl_inv WHERE inv_status = 6";
+// Re-calculate counts considering both tables
+$queryAll = "SELECT (SELECT COUNT(*) FROM tbl_inv) + (SELECT COUNT(*) FROM tbl_inv_consumables) AS count1";
+$queryAvail = "SELECT (SELECT COUNT(*) FROM tbl_inv WHERE inv_status = 1) + (SELECT COUNT(*) FROM tbl_inv_consumables WHERE inv_status = 1) AS count2";
+$queryMiss = "SELECT (SELECT COUNT(*) FROM tbl_inv WHERE inv_status = 6) + (SELECT COUNT(*) FROM tbl_inv_consumables WHERE inv_status = 6) AS count3";
 $queryPend = "SELECT COUNT(*) AS count4 FROM tbl_borrow_request WHERE breq_status = 3";
-$queryBorr = "SELECT COUNT(*) AS count5 FROM tbl_inv WHERE inv_status = 4";
-$queryBorr2 = "SELECT COUNT(*) AS count6 FROM tbl_inv WHERE inv_status = 3";
-$queryNonCon = "SELECT COUNT(*) AS count7 FROM tbl_inv left join tbl_type ON tbl_inv.type_id = tbl_type.type_id WHERE tbl_type.type_origin = 'Non-Consumable'";
-$queryCon = "SELECT COUNT(*) AS count8 FROM tbl_inv left join tbl_type ON tbl_inv.type_id = tbl_type.type_id WHERE tbl_type.type_origin = 'Consumable'";
+$queryBorr = "SELECT (SELECT COUNT(*) FROM tbl_inv WHERE inv_status = 4) + (SELECT COUNT(*) FROM tbl_inv_consumables WHERE inv_status = 4) AS count5";
+$queryBorr2 = "SELECT (SELECT COUNT(*) FROM tbl_inv WHERE inv_status = 3) + (SELECT COUNT(*) FROM tbl_inv_consumables WHERE inv_status = 3) AS count6";
+$queryNonCon = "SELECT COUNT(*) AS count7 FROM tbl_inv";
+$queryCon = "SELECT COUNT(*) AS count8 FROM tbl_inv_consumables";
 
 $resultAll = mysqli_query($conn, $queryAll);
 $resultAvail = mysqli_query($conn, $queryAvail);

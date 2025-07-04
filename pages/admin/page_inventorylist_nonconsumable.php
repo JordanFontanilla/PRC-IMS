@@ -5,6 +5,7 @@
 
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h1 class="h3 mb-0 text-gray-800">Inventory List: Non-Consumable </h1>
+    <?php if ($is_admin): ?>
     <div class="ml-auto">
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addNonConsumableEquipModal"><i class="fas fa-plus"></i>
             Add
@@ -19,6 +20,7 @@
             <i class="fas fa-print"></i> Print
         </button>
     </div>
+    <?php endif; ?>
 </div>
 <hr>
 
@@ -75,7 +77,7 @@
 
     <div class="table-static">
             <?php 
-        // open your DB connection (you can reuse or reopen—it’s a cheap call)
+        // open your DB connection (you can reuse or reopen—it's a cheap call)
         require '../../function_connection.php';
         $typeRes = $conn->query("
             SELECT DISTINCT type_name 
@@ -103,6 +105,8 @@
                     <th>Serial No.</th>
                     <th>Property No.</th>
                     <th>Division/Section</th>
+                    <th>Date Added</th>
+                    <th>Price</th>
                     <th>Status</th>
                     <th>Action</th>
                 </tr>
@@ -129,12 +133,18 @@ document.getElementById("exportExcelNonConsum").addEventListener("click", functi
         showConfirmButton: false
     });
 
-    fetch('pages/admin/process_exporttoexcel.php')
-        .then(response => {
+    fetch('pages/admin/process_export.php')
+        .then(async response => {
             if (!response.ok) {
-                throw new Error("Network response was not ok");
+                const errorText = await response.text();
+                try {
+                    const errorJson = JSON.parse(errorText);
+                    throw new Error(errorJson.message || 'An unknown server error occurred.');
+                } catch (e) {
+                    throw new Error(errorText || 'An unknown server error occurred.');
+                }
             }
-            return response.blob(); // Convert response to blob
+            return response.blob();
         })
         .then(blob => {
             const filename = "EQUIPMENTLIST_" + new Date().toISOString().slice(0,10).replace(/-/g, '') + ".xlsx";
@@ -161,7 +171,7 @@ document.getElementById("exportExcelNonConsum").addEventListener("click", functi
         })
         .catch(error => {
             console.error("Export failed:", error);
-            Swal.fire("Error", "An error occurred during export.", "error");
+            Swal.fire("Error", error.message || "An error occurred during export.", "error");
         });
 });
 $(document).ready(function () {
@@ -190,7 +200,7 @@ $(document).ready(function () {
 <style>
     #typeFilter {
     min-width: 120px;
-    font-weight: 800;  /* or use “bold” */
+    font-weight: 800;  /* or use "bold" */
     font-size: 0.875rem;
     border-radius: 0.375rem; /* rounded */
     background-color:rgb(16, 155, 255); /* Bootstrap primary */

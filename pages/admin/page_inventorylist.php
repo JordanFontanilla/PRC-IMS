@@ -1,10 +1,12 @@
-<?php include 'modals.php';
+<?php
+include 'modals.php';
 ?>
 
 <!-- Include the modal -->
 
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h1 class="h3 mb-0 text-gray-800">Inventory List</h1>
+    <?php if ($is_admin): ?>
     <div class="ml-auto">
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addNonConsumableEquipModal"><i class="fas fa-plus"></i>
             Add
@@ -18,8 +20,8 @@
         <button type="button" class="btn btn-success" data-toggle="modal" data-target="#printFilterModal">
             <i class="fas fa-print"></i> Print
         </button>
-
     </div>
+    <?php endif; ?>
 </div>
 <hr>
 
@@ -83,6 +85,9 @@
                     <th>Serial No.</th>
                     <th>Property No.</th>
                     <th>Property Name</th>
+                    <th>Date Acquired</th>
+                    <th>Condition</th>
+                    <th>Price</th>
                     <th>Status</th>
                     <th>Action</th>
                     
@@ -107,12 +112,18 @@ document.getElementById("exportExcelNonConsum").addEventListener("click", functi
         showConfirmButton: false
     });
 
-    fetch('pages/admin/process_exporttoexcel.php')
-        .then(response => {
+    fetch('pages/admin/process_export.php')
+        .then(async response => {
             if (!response.ok) {
-                throw new Error("Network response was not ok");
+                const errorText = await response.text();
+                try {
+                    const errorJson = JSON.parse(errorText);
+                    throw new Error(errorJson.message || 'An unknown server error occurred.');
+                } catch (e) {
+                    throw new Error(errorText || 'An unknown server error occurred.');
+                }
             }
-            return response.blob(); // Convert response to blob
+            return response.blob();
         })
         .then(blob => {
             const filename = "EQUIPMENTLIST_" + new Date().toISOString().slice(0,10).replace(/-/g, '') + ".xlsx";
@@ -139,7 +150,7 @@ document.getElementById("exportExcelNonConsum").addEventListener("click", functi
         })
         .catch(error => {
             console.error("Export failed:", error);
-            Swal.fire("Error", "An error occurred during export.", "error");
+            Swal.fire("Error", error.message || "An error occurred during export.", "error");
         });
 });
 </script>

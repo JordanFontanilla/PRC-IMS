@@ -50,6 +50,7 @@
 
                 <?php if ($is_admin): ?>
                     <a class="collapse-item load-pendingrequest" href="javascript:void(0);">Pending Request [Admin]</a>
+                    <a class="collapse-item load-pending-return" href="javascript:void(0);">Pending Return [Admin]</a>
                     <hr>
                 <?php endif; ?>
                 <h6 class="collapse-header">Item Status:</h6>

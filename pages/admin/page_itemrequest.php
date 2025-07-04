@@ -88,6 +88,11 @@
           <input type="text" class="form-control" id="borrowerName" placeholder="Enter Name" required>
         </div>
         <div class="form-group">
+          <label for="searchItemName">Add via Item Name:</label>
+          <input type="text" class="form-control" id="searchItemName" placeholder="Enter Item Name">
+          <div id="recommendations" class="list-group" style="position: absolute; z-index: 1000; width: calc(100% - 30px);"></div>
+        </div>
+        <div class="form-group">
           <label for="searchItem">Add via Serial Number:</label>
           <input type="text" class="form-control" id="searchItem" placeholder="Serial Number">
         </div>
@@ -139,21 +144,59 @@ const debounceDelay = 500;
 let debounceTimeout;
 let selectedItemsList = {}; // Using an object to track selected item IDs
 
-// Function to handle the input event for the barcode scan
-$(document).on('input', '#searchItem', function () {
+// Function to handle the blur event for the barcode scan
+$(document).on('blur', '#searchItem', function () {
     const serial = $(this).val().trim();
 
-    // If input is valid (at least 3 characters), process the serial
     if (serial.length >= 1) {
-        clearTimeout(debounceTimeout);
-        debounceTimeout = setTimeout(function () {
-            checkSerial(serial); // Check the serial number against the database
-        }, debounceDelay);
+        checkSerial(serial); // Check the serial number against the database
     }
 });
 
+// Function to handle name-based search with recommendations
+$(document).on('input', '#searchItemName', function () {
+    const name = $(this).val().trim();
+
+    if (name.length >= 2) {
+        clearTimeout(debounceTimeout);
+        debounceTimeout = setTimeout(() => {
+            fetchRecommendations(name);
+        }, debounceDelay);
+    } else {
+        $('#recommendations').empty();
+    }
+});
+
+function fetchRecommendations(name) {
+    $.ajax({
+        url: 'pages/admin/fetch_items_by_name.php', // New endpoint for name search
+        type: 'GET',
+        data: { name: name },
+        dataType: 'json',
+        success: function (data) {
+            const recommendationsDiv = $('#recommendations');
+            recommendationsDiv.empty();
+            if (data.length > 0) {
+                data.forEach(item => {
+                    const itemHTML = `<a href="#" class="list-group-item list-group-item-action" data-item='${JSON.stringify(item)}'>
+                                        <strong>${item.type_name}</strong> - ${item.inv_bnm} (${item.inv_serialno || 'No Serial'})
+                                      </a>`;
+                    recommendationsDiv.append(itemHTML);
+                });
+            }
+        }
+    });
+}
+
+$(document).on('click', '#recommendations .list-group-item', function (e) {
+    e.preventDefault();
+    const item = $(this).data('item');
+    addItemToTable(item);
+    $('#searchItemName').val('');
+    $('#recommendations').empty();
+});
+
 // Function to handle the AJAX call to check the serial number
-// Function to handle the AJAX call to check the serial number and add all matching items
 function checkSerial(serial) {
     $.ajax({
         url: 'pages/admin/check_serial.php',

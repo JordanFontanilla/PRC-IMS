@@ -4,7 +4,8 @@
 <!-- Include the modal -->
 
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h1 class="h3 mb-0 text-gray-800">Inventory List: Consumable</h1>
+    <h1 class="h3 mb-0 text-gray-800">Inventory List (Consumable)</h1>
+    <?php if ($is_admin): ?>
     <div class="ml-auto">
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addConsumableEquipModal"><i class="fas fa-plus"></i>
             Add
@@ -20,6 +21,7 @@
 </button>
 
     </div>
+    <?php endif; ?>
 </div>
 <hr>
 
@@ -83,9 +85,11 @@
                     <th>Serial No.</th>
                     <th>Property No.</th>
                     <th>Property Name</th>
+                    <th>Quantity</th>
+                    <th>Date Acquired</th>
+                    <th>Price</th>
                     <th>Status</th>
                     <th>Action</th>
-                    
                 </tr>
             </thead>    
             <tbody>
@@ -101,37 +105,54 @@ $('#generatePDFBtn').click(function() {
     window.open('pages/admin/process_createpdf.php', '_blank'); // Opens in a new tab
 });
 
-document.getElementById("exportExcelConsum").addEventListener("click", function() {
-    $.ajax({
-        url: 'pages/admin/process_exporttoexcel.php',
-        type: 'GET',
-        dataType: 'json',
-        beforeSend: function() {
+document.getElementById("exportExcelConsum").addEventListener("click", function () {
+    Swal.fire({
+        title: "Exporting...",
+        text: "Please wait while the file is being generated.",
+        icon: "info",
+        allowOutsideClick: false,
+        showConfirmButton: false
+    });
+
+    fetch('pages/admin/process_export.php?consumable=true')
+        .then(async response => {
+            if (!response.ok) {
+                const errorText = await response.text();
+                try {
+                    const errorJson = JSON.parse(errorText);
+                    throw new Error(errorJson.message || 'An unknown server error occurred.');
+                } catch (e) {
+                    throw new Error(errorText || 'An unknown server error occurred.');
+                }
+            }
+            return response.blob();
+        })
+        .then(blob => {
+            const filename = "CONSUMABLE_EQUIPMENTLIST_" + new Date().toISOString().slice(0,10).replace(/-/g, '') + ".xlsx";
+
+            // Create download link
+            const link = document.createElement("a");
+            const url = window.URL.createObjectURL(blob);
+            link.href = url;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+
+            // Cleanup
+            window.URL.revokeObjectURL(url);
+            link.remove();
+
             Swal.fire({
-                title: "Exporting...",
-                text: "Please wait while the file is being generated.",
-                icon: "info",
-                allowOutsideClick: false,
+                title: "Export Successful!",
+                text: "Your Excel file has been downloaded.",
+                icon: "success",
+                timer: 2000,
                 showConfirmButton: false
             });
-        },
-        success: function(response) {
-            if (response.status === "success") {
-                Swal.fire({
-                    title: "Export Successful!",
-                    text: response.message,
-                    icon: "success",
-                    timer: 2000,
-                    timerProgressBar: true,
-                    confirmButtonText: "OK"
-                });
-            } else {
-                Swal.fire("Error", "Failed to export data.", "error");
-            }
-        },
-        error: function() {
-            Swal.fire("Error", "An error occurred during export.", "error");
-        }
-    });
+        })
+        .catch(error => {
+            console.error("Export failed:", error);
+            Swal.fire("Error", error.message || "An error occurred during export.", "error");
+        });
 });
 </script>

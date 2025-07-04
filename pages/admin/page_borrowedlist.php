@@ -1,16 +1,4 @@
-<?php include 'modals.php';
-// Check if the user is already logged in and active
-if (isset($_SESSION['is_active']) && $_SESSION['is_active'] == 1) {
-    // Check if the user is Admin or Employee and redirect accordingly
-    if ($_SESSION['user_level'] === 'Admin') {
-        header("Location: index.php");  // Redirect to Admin dashboard
-        exit;
-    } elseif ($_SESSION['user_level'] === 'Employee') {
-        header("Location: index_employee.php");  // Redirect to Employee dashboard
-        exit;
-    }
-}
-?> <!-- Include the modal -->
+<?php include 'modals.php'; ?> <!-- Include the modal -->
 
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h1 class="h3 mb-0 text-gray-800">Borrowed Equipment List</h1>

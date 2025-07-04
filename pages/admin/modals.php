@@ -1,3 +1,9 @@
+<?php
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+$is_admin = isset($_SESSION['user_level']) && $_SESSION['user_level'] === 'Admin';
+?>
 <!-- Add User Modal -->
 <div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="addUserModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -70,6 +76,13 @@
                     <hr>
                     <button type="submit" class="btn btn-primary btn-block">Create User</button>
                 </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="saveChangesBtn">Save Changes</button>
+                <?php if ($is_admin): ?>
+                <button type="button" class="btn btn-danger" id="deleteBtn">Delete</button>
+                <?php endif; ?>
             </div>
         </div>
     </div>
@@ -376,15 +389,14 @@ $(document).on('click', '#saveUserChanges', function() {
             </div>
             <div class="modal-body">
                 <form id="addConsumableEquipForm">
-                    <!-- First Row: Type, Brand, Model -->
                     <div class="form-row">
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-12">
                             <label for="cinv_type" class="font-weight-bold">Type</label>
                             <select class="form-control" id="cinv_type" required>
                                 <option value="" disabled selected>Select Type</option>
                                 <?php
                                 require '../../function_connection.php';
-                                $query = "SELECT type_id, type_name FROM tbl_type WHERE type_origin = 'Consumable'";
+                                $query = "SELECT type_id, type_name, type_origin FROM tbl_type WHERE type_origin = 'Consumable'";
                                 $result = $conn->query($query);
                                 if ($result->num_rows > 0) {
                                     while ($row = $result->fetch_assoc()) {
@@ -397,11 +409,14 @@ $(document).on('click', '#saveUserChanges', function() {
                                 ?>
                             </select>
                         </div>
-                        <div class="form-group col-md-3">
+                    </div>
+                    <!-- First Row: Brand, Model -->
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
                             <label for="cbrand" class="font-weight-bold">Brand</label>
                             <input type="text" class="form-control" id="cbrand" placeholder="ex: MSI" required>
                         </div>
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-6">
                             <label for="cmodel" class="font-weight-bold">Model</label>
                             <input type="text" class="form-control" id="cmodel" placeholder="Model" required>
                         </div>
@@ -410,23 +425,33 @@ $(document).on('click', '#saveUserChanges', function() {
                     <!-- Second Row: Serial Number -->
                     <div class="form-row">
                         <div class="form-group col-md-6">
-                            <label for="cserialno1" class="font-weight-bold">Serial Number</label>
-                            <input type="text" class="form-control" id="cserialno1" placeholder="Enter Serial Number" required>
+                            <label for="cpropertyno" class="font-weight-bold">Property Number (Optional)</label>
+                            <input type="text" class="form-control" id="cpropertyno" placeholder="Enter Property Number">
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="cpropertyno" class="font-weight-bold">Property Number</label>
-                            <input type="text" class="form-control" id="cpropertyno" placeholder="Enter Property Number" required>
+                            <label for="cserialno1" class="font-weight-bold">Serial Number (Optional)</label>
+                            <input type="text" class="form-control" id="cserialno1" placeholder="Enter Serial Number">
                         </div>
                     </div>
 
                     <div class="form-row">
-                        <div class="form-group col-md-12">
+                        <div class="form-group col-md-6">
                             <label for="cpropertyname" class="font-weight-bold">Property Name</label>
                             <input type="text" class="form-control" id="cpropertyname" placeholder="Enter Property Name" required>
                         </div>
-                        <div class="form-group col-md-12">
+                        <div class="form-group col-md-6">
+                            <label for="cdate_acquired" class="font-weight-bold">Date Acquired</label>
+                            <input type="date" class="form-control" id="cdate_acquired">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
                             <label for="cquantity" class="font-weight-bold">Quanity</label>
                             <input type="number" class="form-control" id="cquantity" min="1" placeholder="Enter Quantity, Leave blank for 1">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="cprice" class="font-weight-bold">Price</label>
+                            <input type="number" class="form-control" id="cprice" step="0.01" placeholder="Enter Price">
                         </div>
                     </div>
 
@@ -454,13 +479,15 @@ $(document).ready(function() {
             cserialno1: $('#cserialno1').val(),
             cpropertyno: $('#cpropertyno').val(),
             cpropertyname: $('#cpropertyname').val(),
+            cdate_acquired: $('#cdate_acquired').val(),
+            cprice: $('#cprice').val(),
             cquantity: $('#cquantity').val() || 1
         };
 
         console.log("Collected Form Data:", formData);
 
         // Validate required fields
-        if (!formData.cinv_type || !formData.cbrand || !formData.cmodel || !formData.cserialno1 || !formData.cpropertyno || !formData.cpropertyname) {
+        if (!formData.cinv_type || !formData.cbrand || !formData.cmodel || !formData.cpropertyname) {
             Swal.fire({
                 title: "Missing Fields",
                 text: "Please fill in all required fields.",
@@ -656,6 +683,27 @@ $(document).ready(function() {
                         </div>
                     </div>
 
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="date_acquired" class="font-weight-bold">Date Acquired</label>
+                            <input type="date" class="form-control" id="date_acquired">
+                        </div>
+                         <div class="form-group col-md-4">
+                            <label for="price" class="font-weight-bold">Price</label>
+                            <input type="number" class="form-control" id="price" step="0.01" placeholder="Enter Price">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="condition" class="font-weight-bold">Condition</label>
+                            <select class="form-control" id="condition">
+                                <option value="New">New</option>
+                                <option value="Good">Good</option>
+                                <option value="Fair">Fair</option>
+                                <option value="Poor">Poor</option>
+                                <option value="For Repair">For Repair</option>
+                            </select>
+                        </div>
+                    </div>
+
                     <hr>
 
                     <!-- Submit Button -->
@@ -678,6 +726,9 @@ $(document).ready(function () {
             serialno: $('#serialno').val().trim(),
             propertyno: $('#propertyno').val().trim(),
             propertyname: $('#propertyname').val().trim(),
+            date_acquired: $('#date_acquired').val().trim(),
+            price: $('#price').val().trim(),
+            condition: $('#condition').val().trim(),
             enduser: $('#enduser').val().trim(),
             accountedto: $('#accountedto').val().trim()
         };
@@ -1044,6 +1095,9 @@ $(function() {
                             <tr><th>Division/Section</th><td id="equipPropName"></td></tr>
                             <tr><th>Status</th><td id="equipStatus"></td></tr>
                             <tr><th>Date Added</th><td id="equipDateAdded"></td></tr>
+                            <tr><th>Date Acquired</th><td id="equipDateAcquired"></td></tr>
+                            <tr><th>Price</th><td id="equipPrice"></td></tr>
+                            <tr id="viewConditionRow"><th>Condition</th><td id="equipCondition"></td></tr>
                             <tr><th>End User</th><td id="equipenduser"></td></tr>
                             <tr><th>Accounted to</th><td id="equipaccountedto"></td></tr>
                         </table>
@@ -1067,35 +1121,74 @@ $(function() {
 $(document).ready(function() {
     $(document).on('click', '.info-inv', function() {
         var inv_id = $(this).data('id');
+        var item_type = $(this).data('item-type');
+        
+        // Show loading indicator for QR code
+        $('#equipQR').attr('src', 'pages/admin/oiia.gif').css('width', '150px');
         
         $.ajax({
             url: 'pages/admin/fetch_inventorydetails.php', // Endpoint to fetch details
             type: 'POST',
-            data: { inv_id: inv_id },
+            data: { inv_id: inv_id, item_type: item_type },
             dataType: 'json',
             success: function(response) {
                 if (response.success) {
-                    $('#equipType').text(response.data.type_name);
-                    $('#equipBrand').text(response.data.inv_bnm);
-                    $('#equipSerial').text(response.data.inv_serialno);
-                    $('#equipPropNo').text(response.data.inv_propno);
-                    $('#equipPropName').text(response.data.inv_propname);
-                    $('#equipStatus').text(response.data.status);
-                    $('#equipDateAdded').text(response.data.inv_date_added);
-                    $('#equipenduser').text(response.data.end_user);
-                    $('#equipaccountedto').text(response.data.accounted_to);
+                    $('#equipType').text(response.data.type_name || '');
+                    $('#equipBrand').text(response.data.inv_bnm || '');
+                    $('#equipSerial').text(response.data.inv_serialno || '');
+                    $('#equipPropNo').text(response.data.inv_propno || '');
+                    $('#equipPropName').text(response.data.inv_propname || '');
+                    $('#equipStatus').text(response.data.status || '');
+                    $('#equipDateAdded').text(response.data.inv_date_added || '');
+                    $('#equipDateAcquired').text(response.data.date_acquired || '');
+                    $('#equipPrice').text(response.data.price ? parseFloat(response.data.price).toFixed(2) : '0.00');
+                    $('#equipenduser').text(response.data.end_user || '');
+                    $('#equipaccountedto').text(response.data.accounted_to || '');
+
+                    // Show/hide based on item type
+                    if (item_type === 'non-consumable') {
+                        $('#viewConditionRow').show();
+                        $('#equipCondition').text(response.data.condition || '');
+                    } else {
+                        $('#viewConditionRow').hide();
+                    }
 
                     // Dynamically generate QR code image src
-                    const qrSrc = `pages/admin/generate_qr.php?type=${encodeURIComponent(response.data.type_name)}&brand=${encodeURIComponent(response.data.inv_bnm)}&serial=${encodeURIComponent(response.data.inv_serialno)}&propno=${encodeURIComponent(response.data.inv_propno)}&propname=${encodeURIComponent(response.data.inv_propname)}&status=${encodeURIComponent(response.data.status)}`;
-
-
-                    $('#equipQR').attr('src', qrSrc);
+                    const qrData = {
+                        type: response.data.type_name || '',
+                        brand: response.data.inv_bnm || '',
+                        serial: response.data.inv_serialno || '',
+                        propno: response.data.inv_propno || '',
+                        propname: response.data.inv_propname || '',
+                        status: response.data.status || '',
+                        date_acquired: response.data.date_acquired || '',
+                        price: response.data.price || '0.00',
+                        condition: item_type === 'non-consumable' ? (response.data.condition || '') : ''
+                    };
+                    
+                    // Generate timestamp to prevent caching
+                    const timestamp = new Date().getTime();
+                    const qrSrc = `pages/admin/generate_qr.php?${$.param(qrData)}&_=${timestamp}`;
+                    
+                    // Set QR code with error handling
+                    const qrImage = new Image();
+                    qrImage.onload = function() {
+                        $('#equipQR').attr('src', qrSrc).css('width', '');
+                    };
+                    qrImage.onerror = function() {
+                        console.error('Failed to load QR code');
+                        $('#equipQR').attr('src', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAAEsAQMAAABDsxw2AAAABlBMVEX///8AAABVwtN+AAAB5UlEQVRo3u2aMY6DMBBFzYIoOAAH4P5H2SuEgtItLbTZSqWkaO0pLNmZP/wBFvlVQmHhJ+8xjPnrPfcFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUF9VdKRuNSHo6tfx8+c1b7EVBQ76Gs+w6H0Jwl7cMRUFBvouLYPwHd+vAtGRTUWyhfXrKCtbZOm2vZ0UNBvYQyScYv5SUruPaaQNk1CCio36fS56zVlW3qmXTtiYvmLCjTmYKCeg218YrBpzVnGb/EQkG9iVJyqyVTkbJJfQTrPYGCehNlvB8sW2f7UJrJeXNlUFDvoSaL8bWm8Ekse6CqQkG9iZrEsul9tqSEQK0MFNQbKJupXH5dHe2e42leVlNQUD9PbaabnfWzr74My9cIKKg3UEFrqmY9F0XRO4OCegcVsqZWzdPWWVQPBfUmyrzyClbkTE9xdjP9FRTUb1HKR4TO+iPp8mmXYAcUFNSrKF0jeuq5pdUza7nKHRTUG6h9LDvBVhey2qLKHyiot1CNp74PoVFgPjuBgnoDFWYoYRdKubqXtWhQUO+g4q68a99Y5+/eMkNBvYOKc5dnc5a9xUMNCwrqHVQzXmsWWC3G1VV+ExTUGyijpefbRXm86mD0f0BBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQf3n+gE9Y3YjCI7uxgAAAABJRU5ErkJggg==')
+                            .css('width', '150px');
+                    };
+                    qrImage.src = qrSrc;
                 } else {
                     alert('Error fetching data.');
                 }
             },
             error: function() {
                 alert('Failed to fetch details.');
+                $('#equipQR').attr('src', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAAEsAQMAAABDsxw2AAAABlBMVEX///8AAABVwtN+AAAB5UlEQVRo3u2aMY6DMBBFzYIoOAAH4P5H2SuEgtItLbTZSqWkaO0pLNmZP/wBFvlVQmHhJ+8xjPnrPfcFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUF9VdKRuNSHo6tfx8+c1b7EVBQ76Gs+w6H0Jwl7cMRUFBvouLYPwHd+vAtGRTUWyhfXrKCtbZOm2vZ0UNBvYQyScYv5SUruPaaQNk1CCio36fS56zVlW3qmXTtiYvmLCjTmYKCeg218YrBpzVnGb/EQkG9iVJyqyVTkbJJfQTrPYGCehNlvB8sW2f7UJrJeXNlUFDvoSaL8bWm8Ekse6CqQkG9iZrEsul9tqSEQK0MFNQbKJupXH5dHe2e42leVlNQUD9PbaabnfWzr74My9cIKKg3UEFrqmY9F0XRO4OCegcVsqZWzdPWWVQPBfUmyrzyClbkTE9xdjP9FRTUb1HKR4TO+iPp8mmXYAcUFNSrKF0jeuq5pdUza7nKHRTUG6h9LDvBVhey2qLKHyiot1CNp74PoVFgPjuBgnoDFWYoYRdKubqXtWhQUO+g4q68a99Y5+/eMkNBvYOKc5dnc5a9xUMNCwrqHVQzXmsWWC3G1VV+ExTUGyijpefbRXm86mD0f0BBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQf3n+gE9Y3YjCI7uxgAAAABJRU5ErkJggg==')
+                    .css('width', '150px');
             }
         });
     });
@@ -1155,9 +1248,33 @@ $(document).ready(function() {
                                 </select>
                             </td>
                         </tr>
+                        <tr id="quantity-row" style="display: none;">
+                            <th>Quantity</th>
+                            <td><input type="number" id="editequipQuantity" class="form-control" /></td>
+                        </tr>
                         <tr>
                             <th>Date Added</th>
                             <td><input type="text" id="editequipDateAdded" class="form-control" disabled /></td>
+                        </tr>
+                        <tr>
+                            <th>Date Acquired</th>
+                            <td><input type="date" id="editequipDateAcquired" class="form-control" /></td>
+                        </tr>
+                        <tr>
+                            <th>Price</th>
+                            <td><input type="number" id="editequipPrice" class="form-control" step="0.01" /></td>
+                        </tr>
+                        <tr id="condition-edit-row" style="display: none;">
+                            <th>Condition</th>
+                            <td>
+                                <select class="form-control" id="editequipCondition">
+                                    <option value="New">New</option>
+                                    <option value="Good">Good</option>
+                                    <option value="Fair">Fair</option>
+                                    <option value="Poor">Poor</option>
+                                    <option value="For Repair">For Repair</option>
+                                </select>
+                            </td>
                         </tr>
                         <tr>
                             <th>End User</th>
@@ -1173,6 +1290,9 @@ $(document).ready(function() {
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary" id="saveChangesBtn">Save Changes</button>
+                <?php if ($is_admin): ?>
+                <button type="button" class="btn btn-danger" id="deleteBtn">Delete</button>
+                <?php endif; ?>
             </div>
         </div>
     </div>
@@ -1204,12 +1324,14 @@ function loadTypeOptions(selectedTypeId) {
 // Handle edit button click
 $(document).on('click', '.edit-inv', function() {
     var invId = $(this).data('id');
+    var itemType = $(this).data('item-type');
     $('#editEquipModal').data('inv-id', invId);
+    $('#editEquipModal').data('item-type', itemType);
 
     $.ajax({
         url: 'pages/admin/fetch_inventorydetails.php',
         method: 'POST',
-        data: { inv_id: invId },
+        data: { inv_id: invId, item_type: itemType },
         dataType: 'json',
         success: function(response) {
             if (response.success) {
@@ -1220,8 +1342,20 @@ $(document).on('click', '.edit-inv', function() {
                 $('#editequipPropName').val(response.data.inv_propname);
                 $('#editequipStatus').val(getStatusValue(response.data.status));
                 $('#editequipDateAdded').val(response.data.inv_date_added);
+                $('#editequipDateAcquired').val(response.data.date_acquired);
+                $('#editequipPrice').val(response.data.price);
                 $('#editequipenduser').val(response.data.end_user);
                 $('#editequipaccountedto').val(response.data.accounted_to);
+
+                if (itemType === 'consumable') {
+                    $('#quantity-row').show();
+                    $('#condition-edit-row').hide();
+                    $('#editequipQuantity').val(response.data.inv_quantity);
+                } else {
+                    $('#quantity-row').hide();
+                    $('#condition-edit-row').show();
+                    $('#editequipCondition').val(response.data.condition);
+                }
 
                 // Load dropdown with types and select current
                 loadTypeOptions(response.data.type_id);
@@ -1249,6 +1383,7 @@ function getStatusValue(statusText) {
 
 $(document).on('click', '#saveChangesBtn', function() {
     var invId = $('#editEquipModal').data('inv-id');
+    var itemType = $('#editEquipModal').data('item-type');
     var equipBrand = $('#editequipBrand').val();
     var equipType = $('#editequipType').val();
     var equipSerial = $('#editequipSerial').val();
@@ -1257,16 +1392,26 @@ $(document).on('click', '#saveChangesBtn', function() {
     var equipStatus = $('#editequipStatus').val();
     var editequipenduser = $('#editequipenduser').val();
     var editequipaccountedto = $('#editequipaccountedto').val();
+    var equipDateAcquired = $('#editequipDateAcquired').val();
+    var equipPrice = $('#editequipPrice').val();
+    var equipCondition = $('#editequipCondition').val();
 
     $.ajax({
         url: 'pages/admin/process_updateequipment.php',
         method: 'POST',
         data: {
             inv_id: invId,
+            item_type: itemType,
             equipSerial: equipSerial,
             equipPropNo: equipPropNo,
             equipPropName: equipPropName,
             equipType: equipType,
+            equipStatus: equipStatus,
+            editequipenduser: editequipenduser,
+            editequipaccountedto: editequipaccountedto,
+            equipDateAcquired: equipDateAcquired,
+            equipPrice: equipPrice,
+            equipCondition: equipCondition,
             checkDuplicates: true
         },
         dataType: 'json',
@@ -1299,11 +1444,11 @@ $(document).on('click', '#saveChangesBtn', function() {
                     cancelButtonText: 'No, Cancel'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        updateEquipment(invId, equipBrand, equipType, equipSerial, equipPropNo, equipPropName, equipStatus, editequipenduser, editequipaccountedto);
+                        updateEquipment(invId, equipBrand, equipType, equipSerial, equipPropNo, equipPropName, equipStatus, editequipenduser, editequipaccountedto, equipDateAcquired, equipPrice, equipCondition);
                     }
                 });
             } else {
-                updateEquipment(invId, equipBrand, equipType, equipSerial, equipPropNo, equipPropName, equipStatus, editequipenduser, editequipaccountedto);
+                updateEquipment(invId, equipBrand, equipType, equipSerial, equipPropNo, equipPropName, equipStatus, editequipenduser, editequipaccountedto, equipDateAcquired, equipPrice, equipCondition);
             }
         },
         error: function() {
@@ -1312,22 +1457,35 @@ $(document).on('click', '#saveChangesBtn', function() {
     });
 });
 
-function updateEquipment(invId, equipBrand, equipType, equipSerial, equipPropNo, equipPropName, equipStatus, editequipenduser, editequipaccountedto) {
+function updateEquipment(invId, equipBrand, equipType, equipSerial, equipPropNo, equipPropName, equipStatus, editequipenduser, editequipaccountedto, equipDateAcquired, equipPrice, equipCondition) {
+    var itemType = $('#editEquipModal').data('item-type');
+    var equipQuantity = $('#editequipQuantity').val();
+
+    var data = {
+        inv_id: invId,
+        equipBrand: equipBrand,
+        equipSerial: equipSerial,
+        equipPropNo: equipPropNo,
+        equipStatus: equipStatus,
+        equipType: equipType,
+        equipPropName: equipPropName,
+        editequipenduser: editequipenduser,
+        editequipaccountedto: editequipaccountedto,
+        equipDateAcquired: equipDateAcquired,
+        equipPrice: equipPrice,
+        updateEquipment: true,
+        item_type: itemType
+    };
+
+    if (itemType === 'consumable') {
+        data.equipQuantity = equipQuantity;
+    } else {
+        data.equipCondition = equipCondition;
+    }
     $.ajax({
         url: 'pages/admin/process_updateequipment.php',
         method: 'POST',
-        data: {
-            inv_id: invId,
-            equipBrand: equipBrand,
-            equipSerial: equipSerial,
-            equipPropNo: equipPropNo,
-            equipStatus: equipStatus,
-            equipType: equipType,
-            equipPropName: equipPropName,
-            editequipenduser: editequipenduser,
-            editequipaccountedto: editequipaccountedto,
-            updateEquipment: true
-        },
+        data: data,
         dataType: 'json',
         success: function(response) {
             if (response.success) {
@@ -1349,6 +1507,58 @@ function updateEquipment(invId, equipBrand, equipType, equipSerial, equipPropNo,
         }
     });
 }
+
+$(document).on('click', '#deleteBtn', function() {
+    var invId = $('#editEquipModal').data('inv-id');
+    var itemType = $('#editEquipModal').data('item-type');
+
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You are about to permanently delete this item. This action cannot be undone.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: 'pages/admin/process_delete_equipment.php',
+                type: 'POST',
+                data: {
+                    inv_id: invId,
+                    item_type: itemType
+                },
+                dataType: 'json',
+                success: function(response) {
+                    if (response.status === 'success') {
+                        Swal.fire(
+                            'Deleted!',
+                            'The item has been deleted.',
+                            'success'
+                        ).then(() => {
+                            $('#editEquipModal').modal('hide');
+                            location.reload();
+                        });
+                    } else {
+                        Swal.fire(
+                            'Error!',
+                            response.message,
+                            'error'
+                        );
+                    }
+                },
+                error: function() {
+                    Swal.fire(
+                        'Error!',
+                        'An error occurred while processing the request.',
+                        'error'
+                    );
+                }
+            });
+        }
+    });
+});
 
 </script>
 <!-- edit Equipment Modal end -->
@@ -1451,7 +1661,8 @@ $(document).ready(function() {
             model: $('#model').val(),
             serialno: $('#serialno').val(),
             propertyno: $('#propertyno').val(),
-            propertyname: $('#propertyname').val()
+            propertyname: $('#propertyname').val(),
+            price: $('#price').val()
         };
 
         // AJAX request
@@ -2015,17 +2226,18 @@ $(document).on('click', '.info-bulkreturn', function() {
 
                     // Send the selected request tokens and returner's name via AJAX
                     $.ajax({
-                        url: 'pages/admin/process_bulkreturn.php',
+                        url: 'pages/admin/process_request_return.php',
                         method: 'POST',
                         data: {
                             request_ids: selectedRequests,
                             returner_name: returnerName
                         },
+                        dataType: 'json',
                         success: function(response) {
-                            if (response === 'success') {
+                            if (response.status === 'success') {
                                 Swal.fire(
-                                    'Returned!',
-                                    'The selected request(s) have been returned.',
+                                    'Requested!',
+                                    'The selected item(s) have been submitted for return approval.',
                                     'success'
                                 );
                                 setTimeout(function() {
@@ -2034,7 +2246,7 @@ $(document).on('click', '.info-bulkreturn', function() {
                             } else {
                                 Swal.fire(
                                     'Error!',
-                                    'An error occurred while returning the request(s). Please try again.',
+                                    response.message || 'An error occurred while processing the return request. Please try again.',
                                     'error'
                                 );
                             }
@@ -2231,3 +2443,56 @@ $('#applyPrintFilterBtn').on('click', function () {
         </div>
     </div>
 </div>
+
+<script>
+$(document).on('click', '.report-missing', function() {
+    var invId = $(this).data('id');
+    var itemType = $(this).data('item-type');
+
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You are about to report this item as missing. This action cannot be easily undone.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Yes, report it as missing!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: 'pages/admin/process_report_missing.php',
+                type: 'POST',
+                data: {
+                    inv_id: invId,
+                    item_type: itemType
+                },
+                dataType: 'json',
+                success: function(response) {
+                    if (response.status === 'success') {
+                        Swal.fire(
+                            'Reported!',
+                            'The item has been reported as missing.',
+                            'success'
+                        ).then(() => {
+                            location.reload();
+                        });
+                    } else {
+                        Swal.fire(
+                            'Error!',
+                            response.message,
+                            'error'
+                        );
+                    }
+                },
+                error: function() {
+                    Swal.fire(
+                        'Error!',
+                        'An error occurred while processing the request.',
+                        'error'
+                    );
+                }
+            });
+        }
+    });
+});
+</script>

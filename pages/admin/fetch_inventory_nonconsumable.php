@@ -1,7 +1,6 @@
 <?php
 require '../../function_connection.php';
 
-// Add CSS to prevent wrapping
 $queryinv = "SELECT 
                 tbl_inv.inv_id, 
                 tbl_inv.type_id, 
@@ -12,7 +11,9 @@ $queryinv = "SELECT
                 tbl_inv.inv_bnm, 
                 tbl_type.type_name,
                 tbl_type.type_origin,
-                tbl_inv.inv_date_added
+                tbl_inv.inv_date_added,
+                tbl_inv.date_acquired,
+                tbl_inv.price
              FROM tbl_inv 
              LEFT JOIN tbl_type ON tbl_inv.type_id = tbl_type.type_id 
              WHERE tbl_type.type_origin = 'Non-Consumable'
@@ -69,15 +70,21 @@ if ($result->num_rows > 0) {
         echo "<td>" . htmlspecialchars($row['inv_serialno']) . "</td>";
         echo "<td>" . htmlspecialchars($row['inv_propno']) . "</td>";
         echo "<td>" . htmlspecialchars($row['inv_propname']) . "</td>";
+        echo "<td>" . htmlspecialchars($row['date_acquired']) . "</td>";
+        echo "<td>" . htmlspecialchars(number_format($row['price'], 2)) . "</td>";
         echo "<td class='text-center'><span class='badge badge-$badgeColor'>" . htmlspecialchars($status) . "</span></td>";
-        echo "<td>
-            <button class='btn btn-info btn-sm info-inv' data-toggle='modal' data-target='#viewEquipModal' data-id='" . htmlspecialchars($row['inv_id']) . "'><i class='fas fa-eye'></i></button>
-            <button class='btn btn-primary btn-sm edit-inv' data-toggle='modal' data-target='#editEquipModal' data-id='" . htmlspecialchars($row['inv_id']) . "'><i class='fas fa-edit'></i></button>
-        </td>";
+
+        $action_buttons = "<button class='btn btn-info btn-sm info-inv' data-toggle='modal' data-target='#viewEquipModal' data-id='" . htmlspecialchars($row['inv_id']) . "' data-item-type='non-consumable'><i class='fas fa-eye'></i></button>";
+        if ($is_admin) {
+            $action_buttons .= " <button class='btn btn-primary btn-sm edit-inv' data-toggle='modal' data-target='#editEquipModal' data-id='" . htmlspecialchars($row['inv_id']) . "' data-item-type='non-consumable'><i class='fas fa-edit'></i></button>";
+            $action_buttons .= " <button class='btn btn-danger btn-sm report-missing' data-id='" . htmlspecialchars($row['inv_id']) . "' data-item-type='non-consumable' title='Report as Missing'><i class='fas fa-exclamation-triangle'></i></button>";
+        }
+        
+        echo "<td>" . $action_buttons . "</td>";
         echo "</tr>";
     }
 } else {
-    echo "<tr><td colspan='7'>No Equipment found</td></tr>";
+    echo "<tr><td colspan='9'>No Equipment found</td></tr>";
 }
 
 $conn->close();
