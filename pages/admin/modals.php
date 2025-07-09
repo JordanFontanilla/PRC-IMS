@@ -68,6 +68,26 @@
                         </div>
                     </div>
                     <hr>
+                    <!-- Fourth Row: Email and Phone Number -->
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="email" class="font-weight-bold">Email <span class="text-muted">(Optional)</span></label>
+                            <input type="email" class="form-control" id="email" placeholder="Enter Email">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="phoneNumber" class="font-weight-bold">Phone Number <span class="text-muted">(Optional)</span></label>
+                            <input type="text" class="form-control" id="phoneNumber" placeholder="Enter Phone Number">
+                        </div>
+                    </div>
+                    <hr>
+                    <!-- Fifth Row: Address -->
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="address" class="font-weight-bold">Address <span class="text-muted">(Optional)</span></label>
+                            <input type="text" class="form-control" id="address" placeholder="Enter Address">
+                        </div>
+                    </div>
+                    <hr>
                     <button type="submit" class="btn btn-primary btn-block">Create User</button>
                 </form>
             </div>
@@ -365,371 +385,493 @@ $(document).on('click', '#saveUserChanges', function() {
 
 
 <!-- Add Consumable Equipment Modal -->
-<div class="modal fade" id="addConsumableEquipModal" tabindex="-1" role="dialog" aria-labelledby="addConsumableEquipModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addConsumableEquipModalLabel">Add New Equipment</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="addConsumableEquipForm">
-                    <!-- First Row: Type, Brand, Model -->
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label for="cinv_type" class="font-weight-bold">Type</label>
-                            <select class="form-control" id="cinv_type" required>
-                                <option value="" disabled selected>Select Type</option>
-                                <?php
-                                require '../../function_connection.php';
-                                $query = "SELECT type_id, type_name FROM tbl_type WHERE type_origin = 'Consumable'";
-                                $result = $conn->query($query);
-                                if ($result->num_rows > 0) {
-                                    while ($row = $result->fetch_assoc()) {
-                                        echo "<option value='" . $row['type_id'] . "'>" . htmlspecialchars($row['type_name']) . "</option>";
-                                    }
-                                } else {
-                                    echo "<option value='' disabled>No Types Available</option>";
-                                }
-                                $conn->close();
-                                ?>
-                            </select>
+    <div class="modal fade" id="addConsumableEquipModal" tabindex="-1" role="dialog" aria-labelledby="addConsumableEquipModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addConsumableEquipModalLabel">Add New Consumable Equipment</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="addConsumableEquipForm">
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label for="cinv_type" class="font-weight-bold">Type <span class="text-danger">*</span></label>
+                                <select class="form-control" id="cinv_type" name="type_id" required>
+                                    <option value="" disabled selected>Select Type</option>
+                                    <!-- PHP code would populate this -->
+                                </select>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="cinv_bnm" class="font-weight-bold">Brand/Model <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="cinv_bnm" name="inv_bnm" placeholder="ex: MSI GF63" required>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="cinv_serialno" class="font-weight-bold">Serial Number <span class="text-muted">(Optional)</span></label>
+                                <input type="text" class="form-control" id="cinv_serialno" name="inv_serialno" placeholder="Enter Serial Number">
+                            </div>
                         </div>
-                        <div class="form-group col-md-3">
-                            <label for="cbrand" class="font-weight-bold">Brand</label>
-                            <input type="text" class="form-control" id="cbrand" placeholder="ex: MSI" required>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="cinv_propno" class="font-weight-bold">Property Number <span class="text-muted">(Optional)</span></label>
+                                <input type="text" class="form-control" id="cinv_propno" name="inv_propno" placeholder="Enter Property Number">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="cinv_propname" class="font-weight-bold">Property Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="cinv_propname" name="inv_propname" placeholder="Enter Property Name" required>
+                            </div>
                         </div>
-                        <div class="form-group col-md-3">
-                            <label for="cmodel" class="font-weight-bold">Model</label>
-                            <input type="text" class="form-control" id="cmodel" placeholder="Model" required>
+                        <div class="form-row">
+                            <div class="form-group col-md-3">
+                                <label for="cinv_status" class="font-weight-bold">Status <span class="text-danger">*</span></label>
+                                <select class="form-control" id="cinv_status" name="inv_status" required>
+                                    <option value="1" selected>Active</option>
+                                    <option value="0">Inactive</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="ccondition" class="font-weight-bold">Condition <span class="text-muted">(Optional)</span></label>
+                                <select class="form-control" id="ccondition" name="condition">
+                                    <option value="" selected disabled>Select Condition</option>
+                                    <option value="New">New</option>
+                                    <option value="Good">Good</option>
+                                    <option value="Fair">Fair</option>
+                                    <option value="Poor">Poor</option>
+                                    <option value="For Repair">For Repair</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="cinv_quantity" class="font-weight-bold">Quantity <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control" id="cinv_quantity" name="inv_quantity" min="1" value="1" required placeholder="Enter Quantity">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="cprice" class="font-weight-bold">Price <span class="text-muted">(Optional)</span></label>
+                                <input type="number" class="form-control" id="cprice" name="price" step="0.01" min="0" value="0.00" placeholder="0.00">
+                            </div>
                         </div>
-                    </div>
-
-                    <!-- Second Row: Serial Number -->
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label for="cserialno1" class="font-weight-bold">Serial Number</label>
-                            <input type="text" class="form-control" id="cserialno1" placeholder="Enter Serial Number" required>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="cdate_acquired" class="font-weight-bold">Date Acquired <span class="text-muted">(Optional)</span></label>
+                                <input type="date" class="form-control" id="cdate_acquired" name="date_acquired">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="cend_user" class="font-weight-bold">End User <span class="text-muted">(Optional)</span></label>
+                                <input type="text" class="form-control" id="cend_user" name="end_user" placeholder="Enter End User Name">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="caccounted_to" class="font-weight-bold">Accounted To <span class="text-muted">(Optional)</span></label>
+                                <input type="text" class="form-control" id="caccounted_to" name="accounted_to" placeholder="Enter Accountable Person">
+                            </div>
                         </div>
-                        <div class="form-group col-md-6">
-                            <label for="cpropertyno" class="font-weight-bold">Property Number</label>
-                            <input type="text" class="form-control" id="cpropertyno" placeholder="Enter Property Number" required>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group col-md-12">
-                            <label for="cpropertyname" class="font-weight-bold">Property Name</label>
-                            <input type="text" class="form-control" id="cpropertyname" placeholder="Enter Property Name" required>
-                        </div>
-                        <div class="form-group col-md-12">
-                            <label for="cquantity" class="font-weight-bold">Quanity</label>
-                            <input type="number" class="form-control" id="cquantity" min="1" placeholder="Enter Quantity, Leave blank for 1">
-                        </div>
-                    </div>
-
-                    <hr>
-
-                    <!-- Submit Button -->
-                    <button id="submitConsumable" type="button" class="btn btn-primary btn-block">Add Consumable Equipment</button>
-
-                </form>
+                        <hr>
+                        <button id="submitConsumable" type="button" class="btn btn-primary btn-block">
+                            <i class="fas fa-plus"></i> Add Consumable Equipment
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<script>
-$(document).ready(function() {
-    $(document).on('click', '#submitConsumable', function(e) {
-        e.preventDefault();
 
-        console.log("Submit button clicked!");
+    <!-- Add Non-Consumable Equipment Modal -->
+    <div class="modal fade" id="addNonConsumableEquipModal" tabindex="-1" role="dialog" aria-labelledby="addNonConsumableEquipModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addNonConsumableEquipModalLabel">Add Non-Consumable Equipment</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="addNonConsumableEquipForm">
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label for="ninv_type" class="font-weight-bold">Type <span class="text-danger">*</span></label>
+                                <select class="form-control" id="ninv_type" name="type_id" required>
+                                    <option value="" disabled selected>Select Type</option>
+                                    <!-- PHP code would populate this -->
+                                </select>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="ninv_bnm" class="font-weight-bold">Brand/Model <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="ninv_bnm" name="inv_bnm" placeholder="ex: MSI GF63" required>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="ninv_serialno" class="font-weight-bold">Serial Number <span class="text-muted">(Optional)</span></label>
+                                <input type="text" class="form-control" id="ninv_serialno" name="inv_serialno" placeholder="Enter Serial Number">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="ninv_propno" class="font-weight-bold">Property Number <span class="text-muted">(Optional)</span></label>
+                                <input type="text" class="form-control" id="ninv_propno" name="inv_propno" placeholder="Enter Property Number">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="ninv_propname" class="font-weight-bold">Property Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="ninv_propname" name="inv_propname" placeholder="Enter Property Name" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-3">
+                                <label for="ninv_status" class="font-weight-bold">Status <span class="text-danger">*</span></label>
+                                <select class="form-control" id="ninv_status" name="inv_status" required>
+                                    <option value="1" selected>Active</option>
+                                    <option value="0">Inactive</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="ncondition" class="font-weight-bold">Condition <span class="text-muted">(Optional)</span></label>
+                                <select class="form-control" id="ncondition" name="condition">
+                                    <option value="" selected disabled>Select Condition</option>
+                                    <option value="New">New</option>
+                                    <option value="Good">Good</option>
+                                    <option value="Fair">Fair</option>
+                                    <option value="Poor">Poor</option>
+                                    <option value="For Repair">For Repair</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="ninv_quantity" class="font-weight-bold">Quantity <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control" id="ninv_quantity" name="inv_quantity" min="1" value="1" required placeholder="Enter Quantity">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="nprice" class="font-weight-bold">Price <span class="text-muted">(Optional)</span></label>
+                                <input type="number" class="form-control" id="nprice" name="price" step="0.01" min="0" value="0.00" placeholder="0.00">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="ndate_acquired" class="font-weight-bold">Date Acquired <span class="text-muted">(Optional)</span></label>
+                                <input type="date" class="form-control" id="ndate_acquired" name="date_acquired">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="nend_user" class="font-weight-bold">End User <span class="text-muted">(Optional)</span></label>
+                                <input type="text" class="form-control" id="nend_user" name="end_user" placeholder="Enter End User Name">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="naccounted_to" class="font-weight-bold">Accounted To <span class="text-muted">(Optional)</span></label>
+                                <input type="text" class="form-control" id="naccounted_to" name="accounted_to" placeholder="Enter Accountable Person">
+                            </div>
+                        </div>
+                        <hr>
+                        <button id="submitNonConsumable" type="button" class="btn btn-primary btn-block">
+                            <i class="fas fa-plus"></i> Add Non-Consumable Equipment
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        var formData = {
-            cinv_type: $('#cinv_type').val(),
-            cbrand: $('#cbrand').val(),
-            cmodel: $('#cmodel').val(),
-            cserialno1: $('#cserialno1').val(),
-            cpropertyno: $('#cpropertyno').val(),
-            cpropertyname: $('#cpropertyname').val(),
-            cquantity: $('#cquantity').val() || 1
-        };
+    <script>
+    $(document).ready(function() {
+        // Consumable Equipment Submit
+        $(document).on('click', '#submitConsumable', function(e) {
+            e.preventDefault();
 
-        console.log("Collected Form Data:", formData);
+            console.log("Submit consumable button clicked!");
 
-        // Validate required fields
-        if (!formData.cinv_type || !formData.cbrand || !formData.cmodel || !formData.cserialno1 || !formData.cpropertyno || !formData.cpropertyname) {
+            var formData = {
+                type_id: $('#cinv_type').val(),
+                inv_bnm: $('#cinv_bnm').val() || '',
+                inv_serialno: $('#cinv_serialno').val() || '',
+                inv_propno: $('#cinv_propno').val() || '',
+                inv_propname: $('#cinv_propname').val() || '',
+                inv_status: $('#cinv_status').val() || 1,
+                condition: $('#ccondition').val() || '',
+                inv_quantity: $('#cinv_quantity').val() || 1,
+                price: $('#cprice').val() || 0.00,
+                date_acquired: $('#cdate_acquired').val() || '',
+                end_user: $('#cend_user').val() || '',
+                accounted_to: $('#caccounted_to').val() || ''
+            };
+
+            console.log("Collected Consumable Form Data:", formData);
+
+            // Validate required fields
+            var missingFields = [];
+            
+            if (!formData.type_id) missingFields.push("Equipment Type");
+            if (!formData.inv_bnm) missingFields.push("Brand/Model");
+            if (!formData.inv_propname) missingFields.push("Property Name");
+            if (!formData.inv_quantity || formData.inv_quantity <= 0) missingFields.push("Quantity (must be greater than 0)");
+
+            if (missingFields.length > 0) {
+                Swal.fire({
+                    title: "Missing Required Fields",
+                    text: "Please fill in the following required fields: " + missingFields.join(", "),
+                    icon: "warning"
+                });
+                return;
+            }
+
+            // Validate quantity is a positive number
+            if (isNaN(formData.inv_quantity) || parseFloat(formData.inv_quantity) <= 0) {
+                Swal.fire({
+                    title: "Invalid Quantity",
+                    text: "Quantity must be a positive number.",
+                    icon: "warning"
+                });
+                return;
+            }
+
+            // Validate price is a valid number (if provided)
+            if (formData.price && (isNaN(formData.price) || parseFloat(formData.price) < 0)) {
+                Swal.fire({
+                    title: "Invalid Price",
+                    text: "Price must be a valid number (0 or greater).",
+                    icon: "warning"
+                });
+                return;
+            }
+
             Swal.fire({
-                title: "Missing Fields",
-                text: "Please fill in all required fields.",
-                icon: "warning"
-            });
-            return;
-        }
+                title: "Are you sure?",
+                text: "Do you want to add this consumable equipment?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, add it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Show loading indicator
+                    Swal.fire({
+                        title: "Adding Equipment...",
+                        text: "Please wait while the equipment is being added.",
+                        icon: "info",
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
 
-        Swal.fire({
-            title: "Are you sure?",
-            text: "Do you want to add this equipment?",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, add it!"
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // 🆕 UPDATED AJAX
-                $.ajax({
-                    type: 'POST',
-                    url: 'pages/admin/process_addconsumable.php',
-                    data: formData,
-                    dataType: 'json',
-                    success: function(response) {
-                        console.log("AJAX Response:", response);
+                    $.ajax({
+                        type: 'POST',
+                        url: 'pages/admin/process_addconsumable.php',
+                        data: formData,
+                        dataType: 'json',
+                        success: function(response) {
+                            console.log("AJAX Response:", response);
 
-                        if (response.status === 'success') {
-                            Swal.fire({
-                                title: "Added!",
-                                text: response.message,
-                                icon: "success",
-                                timer: 1200,
-                                showConfirmButton: false
-                            }).then(() => {
-                                $('#addConsumableEquipModal').modal('hide');
-                                $('.modal-backdrop').remove();
-                                $('body').removeClass('modal-open');
-                                location.reload();
-                            });
+                            if (response.status === 'success') {
+                                Swal.fire({
+                                    title: "Added!",
+                                    text: response.message,
+                                    icon: "success",
+                                    timer: 1500,
+                                    showConfirmButton: false
+                                }).then(() => {
+                                    // Reset the form
+                                    $('#addConsumableEquipForm')[0].reset();
+                                    
+                                    // Close modal properly
+                                    $('#addConsumableEquipModal').modal('hide');
+                                    $('.modal-backdrop').remove();
+                                    $('body').removeClass('modal-open');
+                                    
+                                    // Reload page to show new data
+                                    location.reload();
+                                });
 
-                        } else if (response.status === 'confirm_duplicate') {
-                            // 🆕 When only some fields exist (Serial, Property No, Property Name)
-                            let duplicateFields = response.duplicates.join(', ');
+                            } else if (response.status === 'confirm_duplicate') {
+                                let duplicateFields = response.duplicates.join(', ');
 
-                            Swal.fire({
-                                title: "Some Fields Already Exist",
-                                text: "The following fields already exist: " + duplicateFields + ".\nDo you still want to add this equipment?",
-                                icon: "warning",
-                                showCancelButton: true,
-                                confirmButtonColor: "#3085d6",
-                                cancelButtonColor: "#d33",
-                                confirmButtonText: "Yes, add anyway"
-                            }).then((secondResult) => {
-                                if (secondResult.isConfirmed) {
-                                    // Second confirm to force insert
-                                    $.ajax({
-                                        type: 'POST',
-                                        url: 'pages/admin/process_addconsumable.php',
-                                        data: {...formData, force_insert: true}, // send force_insert flag
-                                        dataType: 'json',
-                                        success: function(forceResponse) {
-                                            if (forceResponse.status === 'success') {
-                                                Swal.fire({
-                                                    title: "Added!",
-                                                    text: forceResponse.message,
-                                                    icon: "success",
-                                                    timer: 1200,
-                                                    showConfirmButton: false
-                                                }).then(() => {
-                                                    $('#addConsumableEquipModal').modal('hide');
-                                                    $('.modal-backdrop').remove();
-                                                    $('body').removeClass('modal-open');
-                                                    location.reload();
-                                                });
-                                            } else {
+                                Swal.fire({
+                                    title: "Some Fields Already Exist",
+                                    text: "The following fields already exist: " + duplicateFields + ".\nDo you still want to add this equipment?",
+                                    icon: "warning",
+                                    showCancelButton: true,
+                                    confirmButtonColor: "#3085d6",
+                                    cancelButtonColor: "#d33",
+                                    confirmButtonText: "Yes, add anyway"
+                                }).then((secondResult) => {
+                                    if (secondResult.isConfirmed) {
+                                        // Show loading again
+                                        Swal.fire({
+                                            title: "Adding Equipment...",
+                                            text: "Please wait while the equipment is being added.",
+                                            icon: "info",
+                                            allowOutsideClick: false,
+                                            showConfirmButton: false,
+                                            didOpen: () => {
+                                                Swal.showLoading();
+                                            }
+                                        });
+
+                                        $.ajax({
+                                            type: 'POST',
+                                            url: 'pages/admin/process_addconsumable.php',
+                                            data: {...formData, force_insert: true},
+                                            dataType: 'json',
+                                            success: function(forceResponse) {
+                                                console.log("Force Insert Response:", forceResponse);
+                                                
+                                                if (forceResponse.status === 'success') {
+                                                    Swal.fire({
+                                                        title: "Added!",
+                                                        text: forceResponse.message,
+                                                        icon: "success",
+                                                        timer: 1500,
+                                                        showConfirmButton: false
+                                                    }).then(() => {
+                                                        // Reset the form
+                                                        $('#addConsumableEquipForm')[0].reset();
+                                                        
+                                                        // Close modal properly
+                                                        $('#addConsumableEquipModal').modal('hide');
+                                                        $('.modal-backdrop').remove();
+                                                        $('body').removeClass('modal-open');
+                                                        
+                                                        // Reload page to show new data
+                                                        location.reload();
+                                                    });
+                                                } else {
+                                                    Swal.fire({
+                                                        title: "Error!",
+                                                        text: forceResponse.message || "Unknown error occurred.",
+                                                        icon: "error"
+                                                    });
+                                                }
+                                            },
+                                            error: function(xhr, status, error) {
+                                                console.error("AJAX Error (Force Insert):", xhr.responseText, status, error);
                                                 Swal.fire({
                                                     title: "Error!",
-                                                    text: forceResponse.message,
+                                                    text: "Error in submitting form. Please check the console for details.",
                                                     icon: "error"
                                                 });
                                             }
-                                        },
-                                        error: function(xhr, status, error) {
-                                            console.error("AJAX Error:", xhr, status, error);
-                                            Swal.fire({
-                                                title: "Error!",
-                                                text: "Error in submitting form.",
-                                                icon: "error"
-                                            });
-                                        }
-                                    });
-                                }
-                            });
+                                        });
+                                    }
+                                });
 
-                        } else {
+                            } else {
+                                Swal.fire({
+                                    title: "Error!",
+                                    text: response.message || "Unknown error occurred.",
+                                    icon: "error"
+                                });
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error("AJAX Error:", xhr.responseText, status, error);
                             Swal.fire({
                                 title: "Error!",
-                                text: response.message,
+                                text: "Error in submitting form. Please check the console for details.",
                                 icon: "error"
                             });
                         }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error("AJAX Error:", xhr, status, error);
-                        Swal.fire({
-                            title: "Error!",
-                            text: "Error in submitting form.",
-                            icon: "error"
-                        });
-                    }
-                });
-            }
-        });
-    });
-});
-</script>
-
-
-<!-- Add Non- consumable Equipment Modal -->
-<div class="modal fade" id="addNonConsumableEquipModal" tabindex="-1" role="dialog" aria-labelledby="addNonConsumableEquipModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addNonConsumableEquipModalLabel">Add Non-Consumable Equipment</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="addNonConsumableEquipForm">
-                    <!-- First Row: Type, Brand, Model -->
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label for="inv_type" class="font-weight-bold">Type</label>
-                            <select class="form-control" id="inv_type" required>
-                                <option value="" disabled selected>Select Type</option>
-                                <?php
-                                require '../../function_connection.php';
-                                $query = "SELECT type_id, type_name, type_origin FROM tbl_type WHERE type_origin = 'Non-Consumable'";
-                                $result = $conn->query($query);
-                                if ($result->num_rows > 0) {
-                                    while ($row = $result->fetch_assoc()) {
-                                        echo "<option value='" . $row['type_id'] . "'>" . htmlspecialchars($row['type_name']) . "</option>";
-                                    }
-                                } else {
-                                    echo "<option value='' disabled>No Types Available</option>";
-                                }
-                                $conn->close();
-                                ?>
-                            </select>
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label for="brand" class="font-weight-bold">Brand</label>
-                            <input type="text" class="form-control" id="brand" placeholder="ex: MSI" required>
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label for="model" class="font-weight-bold">Model</label>
-                            <input type="text" class="form-control" id="model" placeholder="Model" required>
-                        </div>
-                    </div>  
-
-                    <!-- Second Row: Serial Number -->
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label for="serialno" class="font-weight-bold">Serial Number</label>
-                            <input type="text" class="form-control" id="serialno" placeholder="Enter Serial Number" required>
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label for="propertyno" class="font-weight-bold">Property Number*</label>
-                            <input type="text" class="form-control" id="propertyno" placeholder="Enter Property Number" required>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group col-md-12">
-                            <label for="propertyname" class="font-weight-bold">Division/Section*</label>
-                            <input type="text" class="form-control" id="propertyname" placeholder="Enter Division/Section" required>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group col-md-12">
-                            <label for="enduser" class="font-weight-bold">End User</label>
-                            <input type="text" class="form-control" id="enduser" placeholder="Enter End User Name">
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group col-md-12">
-                            <label for="accountedto" class="font-weight-bold">Accountable Personel</label>
-                            <input type="text" class="form-control" id="accountedto" placeholder="Enter Name of Accountable Personel">
-                        </div>
-                    </div>
-
-                    <hr>
-
-                    <!-- Submit Button -->
-                    <button  id="submitNonConsumable" type="button" class="btn btn-primary btn-block">Add NonCon Equipment</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>  
-
-<script>
-$(document).ready(function () {
-    $(document).on('click', '#submitNonConsumable', function(e) {
-        e.preventDefault();
-
-        var formData = {
-            type_id: $('#inv_type').val(),
-            brand: $('#brand').val().trim(),
-            model: $('#model').val().trim(),
-            serialno: $('#serialno').val().trim(),
-            propertyno: $('#propertyno').val().trim(),
-            propertyname: $('#propertyname').val().trim(),
-            enduser: $('#enduser').val().trim(),
-            accountedto: $('#accountedto').val().trim()
-        };
-
-        if (!formData.type_id || !formData.propertyno || !formData.propertyname) {
-            Swal.fire({
-                title: "Missing Important Fields",
-                text: "Please fill in all required fields.",
-                icon: "warning"
-            });
-            return;
-        }
-
-        // Alert if brand, model, and serialno are all empty
-        if (!formData.brand && !formData.model && !formData.serialno) {
-            Swal.fire({
-                title: "All Identification Fields Empty",
-                text: "Brand, Model, and Serial Number are empty. Are you sure you want to continue?",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonText: "Yes, continue",
-                cancelButtonText: "Cancel"
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    triggerMainConfirmation(formData);
+                    });
                 }
             });
-        } else {
-            triggerMainConfirmation(formData);
-        }
-    });
+        });
 
-    function triggerMainConfirmation(formData) {
-    Swal.fire({
-        title: "Are you sure?",
-        text: "Do you want to add this equipment?",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, add it!"
-    }).then((result) => {
-        if (result.isConfirmed) {
-            // First AJAX attempt
+        // Non-Consumable Equipment Submit
+        $(document).on('click', '#submitNonConsumable', function(e) {
+            e.preventDefault();
+
+            var formData = {
+                type_id: $('#ninv_type').val(),
+                inv_bnm: $('#ninv_bnm').val().trim(),
+                inv_serialno: $('#ninv_serialno').val().trim(),
+                inv_propno: $('#ninv_propno').val().trim(),
+                inv_propname: $('#ninv_propname').val().trim(),
+                inv_status: $('#ninv_status').val(),
+                condition: $('#ncondition').val(),
+                inv_quantity: $('#ninv_quantity').val() || 1,
+                price: $('#nprice').val() || 0.00,
+                date_acquired: $('#ndate_acquired').val(),
+                end_user: $('#nend_user').val().trim(),
+                accounted_to: $('#naccounted_to').val().trim()
+            };
+
+            console.log("Collected Non-Consumable Form Data:", formData);
+
+            // Validate required fields
+            var missingFields = [];
+            
+            if (!formData.type_id) missingFields.push("Equipment Type");
+            if (!formData.inv_bnm) missingFields.push("Brand/Model");
+            if (!formData.inv_propname) missingFields.push("Property Name");
+            if (!formData.inv_status) missingFields.push("Status");
+            if (!formData.inv_quantity || formData.inv_quantity <= 0) missingFields.push("Quantity (must be greater than 0)");
+
+            if (missingFields.length > 0) {
+                Swal.fire({
+                    title: "Missing Required Fields",
+                    text: "Please fill in the following required fields: " + missingFields.join(", "),
+                    icon: "warning"
+                });
+                return;
+            }
+
+            // Validate quantity is a positive number
+            if (isNaN(formData.inv_quantity) || parseFloat(formData.inv_quantity) <= 0) {
+                Swal.fire({
+                    title: "Invalid Quantity",
+                    text: "Quantity must be a positive number.",
+                    icon: "warning"
+                });
+                return;
+            }
+
+            // Validate price is a valid number (if provided)
+            if (formData.price && (isNaN(formData.price) || parseFloat(formData.price) < 0)) {
+                Swal.fire({
+                    title: "Invalid Price",
+                    text: "Price must be a valid number (0 or greater).",
+                    icon: "warning"
+                });
+                return;
+            }
+
+            Swal.fire({
+                title: "Are you sure?",
+                text: "Do you want to add this non-consumable equipment?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, add it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    submitNonConsumableEquipment(formData);
+                }
+            });
+        });
+
+        function submitNonConsumableEquipment(formData, forceInsert = false) {
+            // Add force_insert flag if this is a forced submission
+            if (forceInsert) {
+                formData.force_insert = true;
+            }
+
+            // Show loading indicator
+            Swal.fire({
+                title: "Adding Equipment...",
+                text: "Please wait while the equipment is being added.",
+                icon: "info",
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
             $.ajax({
                 type: 'POST',
                 url: 'pages/admin/process_addequipment_nonconsumable.php',
                 data: formData,
                 dataType: 'json',
                 success: function(response) {
+                    console.log("AJAX Response:", response);
+
                     if (response.status === 'warning') {
-                        // Handle partial duplicate warning (e.g., type_id + other fields)
                         Swal.fire({
                             title: "Possible Duplicate",
                             text: response.message,
@@ -741,42 +883,8 @@ $(document).ready(function () {
                             cancelButtonText: "Cancel"
                         }).then((result) => {
                             if (result.isConfirmed) {
-                                // Proceed with second request (force add)
-                                $.ajax({
-                                    type: 'POST',
-                                    url: 'pages/admin/process_addequipment_nonconsumable.php',
-                                    data: formData,
-                                    dataType: 'json',
-                                    success: function(response) {
-                                        if (response.status === 'success') {
-                                            Swal.fire({
-                                                title: "Added!",
-                                                text: response.message,
-                                                icon: "success",
-                                                timer: 1200,
-                                                showConfirmButton: false
-                                            }).then(() => {
-                                                $('#addNonConsumableEquipModal').modal('hide');
-                                                $('.modal-backdrop').remove();
-                                                $('body').removeClass('modal-open');
-                                                location.reload();
-                                            });
-                                        } else {
-                                            Swal.fire({
-                                                title: "Error!",
-                                                text: response.message,
-                                                icon: "error"
-                                            });
-                                        }
-                                    },
-                                    error: function() {
-                                        Swal.fire({
-                                            title: "Error!",
-                                            text: "Error in submitting form.",
-                                            icon: "error"
-                                        });
-                                    }
-                                });
+                                // Retry with force_insert = true
+                                submitNonConsumableEquipment(formData, true);
                             }
                         });
                     } else if (response.status === 'success') {
@@ -787,9 +895,15 @@ $(document).ready(function () {
                             timer: 1200,
                             showConfirmButton: false
                         }).then(() => {
+                            // Reset the form
+                            $('#addNonConsumableEquipForm')[0].reset();
+                            
+                            // Close modal properly
                             $('#addNonConsumableEquipModal').modal('hide');
                             $('.modal-backdrop').remove();
                             $('body').removeClass('modal-open');
+                            
+                            // Reload page to show new data
                             location.reload();
                         });
                     } else {
@@ -801,6 +915,7 @@ $(document).ready(function () {
                     }
                 },
                 error: function(xhr, status, error) {
+                    console.error("AJAX Error:", xhr, status, error);
                     Swal.fire({
                         title: "Error!",
                         text: "Error in submitting form.",
@@ -810,78 +925,8 @@ $(document).ready(function () {
             });
         }
     });
-}
-
-});
-</script>
-
-
-<!-- <script>
-document.getElementById("previewData").addEventListener("click", function() {
-    var fileInput = document.getElementById("excelFile");
-    if (!fileInput.files.length) {
-        alert("Please select an Excel file first.");
-        return;
-    }
-
-    var formData = new FormData();
-    formData.append("excel_file", fileInput.files[0]);
-
-    fetch("pages/admin/process_importfile.php", {
-        method: "POST",
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status === "success") {
-            let previewBody = document.getElementById("previewBody");
-            previewBody.innerHTML = ""; // Clear existing preview
-            data.records.forEach(row => {
-                let tr = document.createElement("tr");
-                row.forEach(cell => {
-                    let td = document.createElement("td");
-                    td.textContent = cell;
-                    tr.appendChild(td);
-                });
-                previewBody.appendChild(tr);
-            });
-            document.getElementById("previewTable").style.display = "block";
-        } else {
-            alert("Error: " + data.message);
-        }
-    })
-    .catch(error => console.error("Error:", error));
-});
-
-document.getElementById("importData").addEventListener("click", function() {
-    var fileInput = document.getElementById("excelFile");
-    if (!fileInput.files.length) {
-        alert("Please select an Excel file first.");
-        return;
-    }
-
-    var formData = new FormData();
-    formData.append("excel_file", fileInput.files[0]);
-    formData.append("confirm_import", true); // Send confirmation flag
-
-    fetch("pages/admin/process_importfile.php", {
-        method: "POST",
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status === "success") {
-            alert("Data imported successfully!");
-            location.reload();
-        } else {
-            alert("Error: " + data.message);
-        }
-    })
-    .catch(error => console.error("Error:", error));
-});
-</script> -->
-
-<!-- START OF IMPORT EQUIPMENT -->
+    </script>
+    
 <!-- Import Equipment Modal -->
 <div class="modal fade" id="importEquipModal" tabindex="-1" role="dialog" aria-labelledby="importEquipModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -1349,189 +1394,8 @@ function updateEquipment(invId, equipBrand, equipType, equipSerial, equipPropNo,
         }
     });
 }
-
 </script>
-<!-- edit Equipment Modal end -->
 
-
-
-<!-- edit equipment type -->
- <!-- Edit Type Modal -->
-<div class="modal fade" id="editTypeModal" tabindex="-1" role="dialog" aria-labelledby="editTypeModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editTypeModalLabel">Edit Inventory Type</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="editTypeForm">
-                    <input type="hidden" id="editTypeId" name="type_id">
-                    <div class="form-group">
-                        <label for="editTypeName">Type Name</label>
-                        <input type="text" class="form-control" id="editTypeName" name="type_name" required>
-
-                        <label for="editTypeOrigin">Origin</label>
-                        <select class="form-control" id="editTypeOrigin" name="type_origin" required>
-                            <option value="Consumable">Consumable</option>
-                            <option value="Non-Consumable">Non-Consumable</option>
-                        </select>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary">Update</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-$(document).ready(function() {
-    $(document).on('click', '.edit-type', function() {
-        var type_id = $(this).data('id');
-        
-        $.ajax({
-            url: 'pages/admin/fetch_typedetails.php', // Fetch details for the selected type
-            type: 'POST',
-            data: { type_id: type_id },
-            dataType: 'json',
-            success: function(response) {
-                if (response.success) {
-                    
-                    $('#editTypeId').val(response.data.type_id);
-                    $('#editTypeName').val(response.data.type_name);
-                    $('#editTypeOrigin').val(response.data.type_origin);
-                    $('#editTypeModal').modal('show');
-                } else {
-                    alert('Error fetching data.');
-                }
-            },
-            error: function() {
-                alert('Failed to fetch details.');
-            }
-        });
-    });
-
-    $('#editTypeForm').submit(function(e) {
-        e.preventDefault();
-        
-        $.ajax({
-            url: 'pages/admin/process_updatetype.php', // Process update request
-            type: 'POST',
-            data: $(this).serialize(),
-            dataType: 'json',
-            success: function(response) {
-                if (response.success) {
-                    alert('Type updated successfully!');
-                    location.reload(); // Reload page to reflect changes
-                } else {
-                    alert('Update failed.');
-                }
-            },
-            error: function() {
-                alert('Error processing request.');
-            }
-        });
-    });
-});
-</script>
-<!-- end equip edit type -->
-
-<script>
-$(document).ready(function() {
-    // On form submit
-    $('#editEquipForm').on('submit', function(e) {
-        e.preventDefault();  // Prevent default form submission
-        // Get the form data
-        var formData = {
-            type_id: $('#inv_type').val(),
-            brand: $('#brand').val(),
-            model: $('#model').val(),
-            serialno: $('#serialno').val(),
-            propertyno: $('#propertyno').val(),
-            propertyname: $('#propertyname').val()
-        };
-
-        // AJAX request
-        $.ajax({
-            type: 'POST',
-            url: 'pages/admin/process_addequipment.php',  // The PHP file to process the data
-            data: formData,
-            dataType: 'json',
-            success: function(response) {
-                // Handle response
-                if (response.status === 'success') {
-                    alert(response.message);  // Success message
-                    $('#editEquipModal').modal('hide');  // Hide the modal
-                    // Optionally, reload the equipment list or update the UI here
-                    
-                    // Ensure the backdrop (dim screen) is removed
-                    $('.modal-backdrop').remove(); // Remove the backdrop
-                    $('body').removeClass('modal-open');  // Remove modal-open class
-                } else {
-                    alert(response.message);  // Error message
-                }
-            },
-            error: function() {
-                alert('Error in submitting form.');
-            }
-        });
-    });
-});
-</script>
-<!-- end of edit equipment modal -->
-
-<!-- Start Select Equip Modal -->
-<div class="modal fade" id="selectEquipModal" tabindex="-1" role="dialog" aria-labelledby="selectEquipModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="selectEquipModalLabel">Select Equipment</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <table class="table table-bordered" id="equipTable" width="100%" cellspacing="0">
-                    <thead>
-                        <tr>
-                            <th>Equipment Type</th>
-                            <th>Brand Name</th>
-                            <th>Serial Number</th>
-                            <th>Property Number</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="equipTableBody">
-                        <!-- Equipment data will be inserted here by AJAX -->
-                    </tbody>
-                </table>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- End Select EQUIP MODAL -->
-
-<script>
-$(document).ready(function(){
-    $(".load-inv").click(function(){
-        $.ajax({
-            url: "modals.php",
-            type: "POST",
-            data: { action: "loadEquipmentModal" },
-            success: function(response){
-                $("#modalContainer").html(response);
-                $("#addEquipmentModal").modal("show"); // Show modal
-            }
-        });
-    });
-});
-</script>
 
 <!-- AddType Modal -->
 <div class="modal fade" id="addTypeModal" tabindex="-1" role="dialog" aria-labelledby="addTypeModalLabel" aria-hidden="true">
@@ -2039,7 +1903,7 @@ $(document).on('click', '.info-bulkreturn', function() {
                                 );
                             }
                         },
-                        error: function() {
+ error: function() {
                             Swal.fire(
                                 'Error!',
                                 'Failed to communicate with the server. Please try again later.',
@@ -2056,116 +1920,34 @@ $(document).on('click', '.info-bulkreturn', function() {
     });
 });
 
-</script>
-
-<!-- end viewreturningItemList -->
-
-<!-- Print Filter Modal -->
-<div class="modal fade" id="printFilterModal" tabindex="-1" role="dialog" aria-labelledby="printFilterModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-    
-      <div class="modal-header">
-        <h5 class="modal-title" id="printFilterModalLabel"><i class="fas fa-filter"></i> Print Inventory List</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-
-      <div class="modal-body">
-        <form id="printFilterForm">
-          <!-- Select Type -->
-          <div class="form-group">
-            <label for="filterType">Type</label>
-            <select class="form-control" id="filterType" name="filterType">
-              <option value="">All</option>
-              <?php
-              // Include DB connection
-              require '../../function_connection.php';
-
-              // Fetch types from the database
-              $typeQuery = "SELECT type_id, type_name FROM tbl_type ORDER BY type_name ASC";
-              $typeResult = $conn->query($typeQuery);
-
-              if ($typeResult && $typeResult->num_rows > 0) {
-                  while ($row = $typeResult->fetch_assoc()) {
-                      echo '<option value="' . htmlspecialchars($row['type_id']) . '">' . htmlspecialchars($row['type_name']) . '</option>';
-                  }
-              }
-              ?>
-            </select>
-          </div>
-
-          <!-- Select Status -->
-          <div class="form-group">
-            <label for="filterStatus">Status</label>
-            <select class="form-control" id="filterStatus" name="filterStatus">
-              <option value="">All</option>
-              <option value="1">Available</option>
-              <option value="2">Unavailable</option>
-              <option value="3">Pending</option>
-              <option value="4">Borrowed</option>
-              <option value="5">Returned</option>
-              <option value="6">Missing</option>
-            </select>
-          </div>
-        </form>
-      </div>
-
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">
-          <i class="fas fa-times"></i> Cancel
-        </button>
-        <button type="button" class="btn btn-success" id="applyPrintFilterBtn">
-          <i class="fas fa-print"></i> Print
-        </button>
-      </div>
-
-    </div>
-  </div>
-</div>
-
-<script>
-$('#applyPrintFilterBtn').on('click', function () {
-    const type = $('#filterType').val();
-    const status = $('#filterStatus').val();
-
-    $.ajax({
-        url: 'pages/admin/check_inventory_exists.php',
-        method: 'GET',
-        data: {
-            type: type,
-            status: status
-        },
-        dataType: 'json',
-        success: function (response) {
-            if (response.exists) {
-                // Build the URL
-                let url = 'pages/admin/process_createpdf.php?';
-                if (type) url += 'type=' + encodeURIComponent(type) + '&';
-                if (status) url += 'status=' + encodeURIComponent(status);
-
-                // Open the report
-                window.open(url, '_blank');
-
-                // Close the modal
-                $('#printFilterModal').modal('hide');
-            } else {
-                // Show SweetAlert if no data found
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'No matching data',
-                    text: 'No inventory items match the selected filters.',
-                    confirmButtonColor: '#007bff'
-                });
-            }
-        },
-        error: function () {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'Something went wrong while checking the data.',
-                confirmButtonColor: '#dc3545'
+$(document).on('click', '.report-missing', function() {
+    var invId = $(this).data('id');
+    Swal.fire({
+        title: 'Report as Missing',
+        text: 'Are you sure you want to report this equipment as missing?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, report as missing',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: 'pages/admin/process_report_missing.php',
+                type: 'POST',
+                data: { inv_id: invId },
+                dataType: 'json',
+                success: function(response) {
+                    if (response.status === 'success') {
+                        Swal.fire('Success', response.message, 'success');
+                        // Optionally, remove the row or reload the table
+                        location.reload();
+                    } else {
+                        Swal.fire('Error', response.message, 'error');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    Swal.fire('Error', 'AJAX error: ' + error, 'error');
+                }
             });
         }
     });
@@ -2173,61 +1955,153 @@ $('#applyPrintFilterBtn').on('click', function () {
 </script>
 
 
-
-<!-- Modal for Manual Add (Available Items) -->
-<style>
-    #dataTableModal {
-        font-size: 13px; /* Smaller font size */
-    }
-
-    #dataTableModal th,
-    #dataTableModal td {
-        padding: 4px 8px; /* Tighter cell padding */
-        white-space: nowrap; /* Prevent text from wrapping */
-        vertical-align: middle; /* Align text vertically center */
-    }
-
-    /* Optional: Reduce the header font size slightly */
-    #dataTableModal thead th {
-        font-size: 12.5px;
-    }
-</style>
-
-
-
+<!-- Manual Add Equipment Modal -->
 <div class="modal fade" id="manualAddModal" tabindex="-1" role="dialog" aria-labelledby="manualAddModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document" style="max-width: 60%;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="manualAddModalLabel">Available Items</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="manualAddModalLabel">Manual Add Equipment</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- Place your manual add form here -->
+        <form id="manualAddForm">
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="manualType">Type</label>
+              <select class="form-control" id="manualType" name="manualType"></select>
             </div>
-            <div class="modal-body">
-                <!-- Scrollable table container -->
-                <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
-                    <table id="dataTableReqItem" class="table table-bordered table-striped">
-                        <thead>
-                            <tr>
-                                <th>Type</th>
-                                <th>Brand/Model</th>
-                                <th>Serial No.</th>
-                                <th>Property No.</th>
-                                <th>Division/Section</th>
-                                <th>Select</th>
-                            </tr>
-                        </thead>
-                        <tbody id="modalItemTableBody">
-                            <!-- Data will be populated here from the database via AJAX -->
-                        </tbody>
-                    </table>
-                </div>
+            <div class="form-group col-md-6">
+              <label for="manualBrand">Brand/Model</label>
+              <input type="text" class="form-control" id="manualBrand" name="manualBrand" required>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="addSelectedItems">Add Selected Items</button>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="manualSerial">Serial No.</label>
+              <input type="text" class="form-control" id="manualSerial" name="manualSerial">
             </div>
-        </div>
+            <div class="form-group col-md-6">
+              <label for="manualPropNo">Property No.</label>
+              <input type="text" class="form-control" id="manualPropNo" name="manualPropNo">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="manualPropName">Property Name</label>
+              <input type="text" class="form-control" id="manualPropName" name="manualPropName" required>
+            </div>
+            <div class="form-group col-md-6">
+              <label for="manualQuantity">Quantity</label>
+              <input type="number" class="form-control" id="manualQuantity" name="manualQuantity" min="1" value="1" required>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">Add Equipment</button>
+        </form>
+      </div>
     </div>
+  </div>
 </div>
+
+<script>
+$(document).ready(function () {
+    // Manual Add Equipment form submission
+    $('#manualAddForm').on('submit', function (e) {
+        e.preventDefault();
+
+        var formData = {
+            manualType: $('#manualType').val(),
+            manualBrand: $('#manualBrand').val(),
+            manualSerial: $('#manualSerial').val(),
+            manualPropNo: $('#manualPropNo').val(),
+            manualPropName: $('#manualPropName').val(),
+            manualQuantity: $('#manualQuantity').val()
+        };
+
+        console.log("Manual Add Form Data:", formData); // Debugging line
+
+        // Validate required fields
+        var missingFields = [];
+        
+        if (!formData.manualType) missingFields.push("Type");
+        if (!formData.manualBrand) missingFields.push("Brand/Model");
+        if (!formData.manualPropName) missingFields.push("Property Name");
+        if (!formData.manualQuantity || formData.manualQuantity <= 0) missingFields.push("Quantity (must be greater than 0)");
+
+        if (missingFields.length > 0) {
+            Swal.fire({
+                title: "Missing Required Fields",
+                text: "Please fill in the following required fields: " + missingFields.join(", "),
+                icon: "warning"
+            });
+            return;
+        }
+
+        // Show loading indicator
+        Swal.fire({
+            title: "Adding Equipment...",
+            text: "Please wait while the equipment is being added.",
+            icon: "info",
+            allowOutsideClick: false,
+            showConfirmButton: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
+        $.ajax({
+            type: 'POST',
+            url: 'pages/admin/process_manual_add.php',
+            data: formData,
+            dataType: 'json',
+            success: function(response) {
+                console.log("Manual Add AJAX Response:", response);
+
+                if (response.status === 'success') {
+                    Swal.fire({
+                        title: "Added!",
+                        text: response.message,
+                        icon: "success",
+                        timer: 1500,
+                        showConfirmButton: false
+                    }).then(() => {
+                        // Reset the form
+                        $('#manualAddForm')[0].reset();
+                        
+                        // Close modal properly
+                        $('#manualAddModal').modal('hide');
+                        $('.modal-backdrop').remove();
+                        $('body').removeClass('modal-open');
+                        
+                        // Reload page to show new data
+                        location.reload();
+                    });
+
+                } else if (response.status === 'exists') {
+                    Swal.fire({
+                        title: "Duplicate Entry",
+                        text: "This equipment already exists in the system.",
+                        icon: "info"
+                    });
+                } else {
+                    Swal.fire({
+                        title: "Error!",
+                        text: response.message || "Unknown error occurred.",
+                        icon: "error"
+                    });
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error("AJAX Error:", xhr.responseText, status, error);
+                Swal.fire({
+                    title: "Error!",
+                    text: "Error in submitting form. Please check the console for details.",
+                    icon: "error"
+                });
+            }
+        });
+    });
+});
+</script>

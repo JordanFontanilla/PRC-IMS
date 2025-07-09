@@ -14,7 +14,8 @@ $queryPend = "SELECT COUNT(*) AS count4 FROM tbl_borrow_request WHERE breq_statu
 $queryBorr = "SELECT COUNT(*) AS count5 FROM tbl_inv WHERE inv_status = 4";
 $queryBorr2 = "SELECT COUNT(*) AS count6 FROM tbl_inv WHERE inv_status = 3";
 $queryNonCon = "SELECT COUNT(*) AS count7 FROM tbl_inv left join tbl_type ON tbl_inv.type_id = tbl_type.type_id WHERE tbl_type.type_origin = 'Non-Consumable'";
-$queryCon = "SELECT COUNT(*) AS count8 FROM tbl_inv left join tbl_type ON tbl_inv.type_id = tbl_type.type_id WHERE tbl_type.type_origin = 'Consumable'";
+// FIX: Use tbl_inv_consumables for consumables count
+$queryCon = "SELECT COUNT(*) AS count8 FROM tbl_inv_consumables";
 
 $resultAll = mysqli_query($conn, $queryAll);
 $resultAvail = mysqli_query($conn, $queryAvail);

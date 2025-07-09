@@ -15,9 +15,6 @@
         <button type="button" class="btn btn-warning" id="exportExcelNonConsum"><i class="fas fa-file-export"></i>
             Export
         </button>
-        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#printFilterModal">
-            <i class="fas fa-print"></i> Print
-        </button>
     </div>
 </div>
 <hr>
@@ -98,12 +95,21 @@
         <table class="table table-bordered" id="dataTableNonConsumable" width="100%" cellspacing="0">
             <thead>
                 <tr>
-                    <th>Type</th>
-                    <th>Brand/Model</th>
+                    <th>ID</th>
+                    <th>Type ID</th>
                     <th>Serial No.</th>
                     <th>Property No.</th>
-                    <th>Division/Section</th>
+                    <th>Property Name</th>
+                    <th>Inventory Price</th>
                     <th>Status</th>
+                    <th>Brand/Model</th>
+                    <th>Date Added</th>
+                    <th>Date Acquired</th>
+                    <th>Price</th>
+                    <th>Condition</th>
+                    <th>Quantity</th>
+                    <th>End User</th>
+                    <th>Accounted To</th>
                     <th>Action</th>
                 </tr>
             </thead>    
@@ -129,28 +135,26 @@ document.getElementById("exportExcelNonConsum").addEventListener("click", functi
         showConfirmButton: false
     });
 
-    fetch('pages/admin/process_exporttoexcel.php')
+    // Get selected type filter value
+    var selectedType = document.getElementById("typeFilter") ? document.getElementById("typeFilter").value : "";
+
+    fetch('pages/admin/process_exporttoexcel.php?type=' + encodeURIComponent(selectedType) + '&origin=nonconsumable')
         .then(response => {
             if (!response.ok) {
                 throw new Error("Network response was not ok");
             }
-            return response.blob(); // Convert response to blob
+            return response.blob();
         })
         .then(blob => {
             const filename = "EQUIPMENTLIST_" + new Date().toISOString().slice(0,10).replace(/-/g, '') + ".xlsx";
-
-            // Create download link
             const link = document.createElement("a");
             const url = window.URL.createObjectURL(blob);
             link.href = url;
             link.download = filename;
             document.body.appendChild(link);
             link.click();
-
-            // Cleanup
             window.URL.revokeObjectURL(url);
             link.remove();
-
             Swal.fire({
                 title: "Export Successful!",
                 text: "Your Excel file has been downloaded.",

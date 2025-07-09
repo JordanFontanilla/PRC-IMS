@@ -88,8 +88,9 @@
           <input type="text" class="form-control" id="borrowerName" placeholder="Enter Name" required>
         </div>
         <div class="form-group">
-          <label for="searchItem">Add via Serial Number:</label>
-          <input type="text" class="form-control" id="searchItem" placeholder="Serial Number">
+          <label for="searchItem">Add via Serial/Name/Model:</label>
+          <input type="text" class="form-control" id="searchItem" placeholder="Serial, Name, or Model">
+          <div id="searchDropdown" class="dropdown-menu w-100" style="max-height:200px; overflow-y:auto; position:absolute;"></div>
         </div>
         <div class="form-group">
           <label for="borrowerRemark">Reason:</label>
@@ -141,14 +142,78 @@ let selectedItemsList = {}; // Using an object to track selected item IDs
 
 // Function to handle the input event for the barcode scan
 $(document).on('input', '#searchItem', function () {
-    const serial = $(this).val().trim();
+    const query = $(this).val().trim();
+    const $dropdown = $('#searchDropdown');
+    $dropdown.empty().hide();
 
-    // If input is valid (at least 3 characters), process the serial
-    if (serial.length >= 1) {
+    if (query.length >= 1) {
         clearTimeout(debounceTimeout);
         debounceTimeout = setTimeout(function () {
-            checkSerial(serial); // Check the serial number against the database
+            $.ajax({
+                url: 'pages/admin/fetch_available_items.php',
+                type: 'GET',
+                data: { search: query },
+                success: function (response) {
+                    let data;
+                    try {
+                        data = JSON.parse(response);
+                    } catch (e) {
+                        data = [];
+                    }
+                    if (Array.isArray(data) && data.length > 0) {
+                        $dropdown.empty();
+                        data.forEach(item => {
+                            $dropdown.append(`
+                                <a class="dropdown-item search-suggestion" href="#" data-id="${item.inv_id}">
+                                    <strong>${item.inv_bnm}</strong> <small>(${item.type_name})</small><br>
+                                    <span style="font-size:11px;">Serial: ${item.inv_serialno} | PropNo: ${item.inv_propno}</span>
+                                </a>
+                            `);
+                        });
+                        $dropdown.show();
+                    } else {
+                        $dropdown.html('<span class="dropdown-item disabled">No match found</span>').show();
+                    }
+                },
+                error: function () {
+                    $dropdown.html('<span class="dropdown-item disabled">Error searching</span>').show();
+                }
+            });
         }, debounceDelay);
+    } else {
+        $dropdown.empty().hide();
+    }
+});
+
+// Handle click on dropdown suggestion
+$(document).on('click', '.search-suggestion', function (e) {
+    e.preventDefault();
+    const invId = $(this).data('id');
+    // Fetch full item details by ID and add to table
+    $.ajax({
+        url: 'pages/admin/fetch_available_items.php',
+        type: 'GET',
+        data: { inv_id: invId },
+        success: function (response) {
+            let data;
+            try {
+                data = JSON.parse(response);
+            } catch (e) {
+                data = [];
+            }
+            if (Array.isArray(data) && data.length > 0) {
+                addItemToTable(data[0]);
+            }
+            $('#searchDropdown').empty().hide();
+            $('#searchItem').val('');
+        }
+    });
+});
+
+// Hide dropdown if clicking outside
+$(document).on('click', function (e) {
+    if (!$(e.target).closest('#searchItem, #searchDropdown').length) {
+        $('#searchDropdown').empty().hide();
     }
 });
 

@@ -78,14 +78,22 @@
         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
             <thead>
                 <tr>
-                    <th>Type</th>
-                    <th>Brand/Model</th>
+                    <th>ID</th>
+                    <th>Type ID</th>
                     <th>Serial No.</th>
                     <th>Property No.</th>
                     <th>Property Name</th>
+                    <th>Inventory Price</th>
                     <th>Status</th>
+                    <th>Brand/Model</th>
+                    <th>Date Added</th>
+                    <th>Date Acquired</th>
+                    <th>Price</th>
+                    <th>Condition</th>
+                    <th>Quantity</th>
+                    <th>End User</th>
+                    <th>Accounted To</th>
                     <th>Action</th>
-                    
                 </tr>
             </thead>    
             <tbody>
@@ -101,37 +109,43 @@ $('#generatePDFBtn').click(function() {
     window.open('pages/admin/process_createpdf.php', '_blank'); // Opens in a new tab
 });
 
-document.getElementById("exportExcelConsum").addEventListener("click", function() {
-    $.ajax({
-        url: 'pages/admin/process_exporttoexcel.php',
-        type: 'GET',
-        dataType: 'json',
-        beforeSend: function() {
+document.getElementById("exportExcelConsum").addEventListener("click", function () {
+    Swal.fire({
+        title: "Exporting...",
+        text: "Please wait while the file is being generated.",
+        icon: "info",
+        allowOutsideClick: false,
+        showConfirmButton: false
+    });
+
+    fetch('pages/admin/process_exporttoexcel.php?origin=consumable')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+            return response.blob();
+        })
+        .then(blob => {
+            const filename = "EQUIPMENTLIST_" + new Date().toISOString().slice(0,10).replace(/-/g, '') + ".xlsx";
+            const link = document.createElement("a");
+            const url = window.URL.createObjectURL(blob);
+            link.href = url;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            window.URL.revokeObjectURL(url);
+            link.remove();
             Swal.fire({
-                title: "Exporting...",
-                text: "Please wait while the file is being generated.",
-                icon: "info",
-                allowOutsideClick: false,
+                title: "Export Successful!",
+                text: "Your Excel file has been downloaded.",
+                icon: "success",
+                timer: 2000,
                 showConfirmButton: false
             });
-        },
-        success: function(response) {
-            if (response.status === "success") {
-                Swal.fire({
-                    title: "Export Successful!",
-                    text: response.message,
-                    icon: "success",
-                    timer: 2000,
-                    timerProgressBar: true,
-                    confirmButtonText: "OK"
-                });
-            } else {
-                Swal.fire("Error", "Failed to export data.", "error");
-            }
-        },
-        error: function() {
+        })
+        .catch(error => {
+            console.error("Export failed:", error);
             Swal.fire("Error", "An error occurred during export.", "error");
-        }
-    });
+        });
 });
 </script>
