@@ -1,4 +1,4 @@
-<?php include 'modals.php';
+<?php
 ?>
 
 <!-- Include the modal -->
@@ -185,10 +185,92 @@ $(document).ready(function () {
   $('#typeFilter').on('change', function () {
     var selectedType = $(this).val();
     invTable
-      .column(0) // "Type" column is index 0
+      .column(1) // "Type" column is index 1
       .search(selectedType)
       .draw();
   });
+
+  $(document).on('click', '.report-missing', function() {
+    var invId = $(this).data('id');
+    var origin = $(this).data('origin');
+
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "This item will be reported as missing.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, report it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: 'pages/admin/process_report_missing.php',
+                type: 'POST',
+                data: { inv_id: invId, origin: origin },
+                dataType: 'json',
+                success: function(response) {
+                    if (response.status === 'success') {
+                        Swal.fire(
+                            'Reported!',
+                            'The item has been reported as missing.',
+                            'success'
+                        ).then(() => {
+                            location.reload();
+                        });
+                    } else {
+                        Swal.fire(
+                            'Error!',
+                            response.message,
+                            'error'
+                        );
+                    }
+                }
+            });
+        }
+    });
+});
+
+    $(document).on('click', '.delete-inv', function() {
+    var invId = $(this).data('id');
+    var origin = $(this).data('origin');
+
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: 'pages/admin/process_delete_inventory.php',
+                type: 'POST',
+                data: { inv_id: invId, origin: origin },
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success) {
+                        Swal.fire(
+                            'Deleted!',
+                            'The record has been deleted.',
+                            'success'
+                        ).then(() => {
+                            location.reload();
+                        });
+                    } else {
+                        Swal.fire(
+                            'Error!',
+                            response.message,
+                            'error'
+                        );
+                    }
+                }
+            });
+        }
+    });
+});
 });
 </script>
 <style>

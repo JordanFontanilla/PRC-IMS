@@ -1,15 +1,11 @@
-
 <?php
 ?>
 
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h1 class="h3 mb-0 text-gray-800">Inventory Type List</h1>
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addTypeModal">
-        Add Type
-    </button>
+    <h1 class="h3 mb-0 text-gray-800">Consumed Items</h1>
 </div>
 <hr>
-<!-- Begin Page Content -->
+
 <div class="container-fluid">
     <style>
         .dataTables_filter {
@@ -55,23 +51,22 @@
     </style>
 
     <div class="card-body">
-    <div class="table-static">
-        <table class="table table-bordered" id="dataTableInvType" width="100%" cellspacing="0">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Origin</th>
-                    <th>Action</th>
-                </tr>
-            </thead>    
-            <tbody>
-            
-            </tbody>
-        </table>
+        <div class="table-static">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Date Consumed</th>
+                        <th>Item Name</th>
+                        <th>Quantity</th>
+                        <th>Consumed By</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php require 'fetch_consumed_items.php'; ?>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
-<?php include '../../sources2.php'; ?>
-<script>
 
-</script>
+<?php include '../../sources2.php'; ?>

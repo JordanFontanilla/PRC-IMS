@@ -30,6 +30,8 @@
             <hr>
             <a class="collapse-item load-borrowedlist" href="javascript:void(0);">Borrowed Equipment</a>
             <a class="collapse-item load-returnlist" href="javascript:void(0);">Returned Equipment</a>
+            <a class="collapse-item load-missinglist" href="#">Missing List</a>
+            <a class="collapse-item load-consumeditems" href="#">Consumed Items</a>
         </div>
     </div>
 </li>

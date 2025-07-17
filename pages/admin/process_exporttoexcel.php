@@ -15,6 +15,12 @@ try {
     $sheet = $spreadsheet->getActiveSheet();
     $sheet->setTitle('Inventory Report');
 
+    // Add title
+    $sheet->mergeCells('A1:O1');
+    $sheet->setCellValue('A1', 'Inventory Report - Non-Consumable');
+    $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(16);
+    $sheet->getStyle('A1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+
     if ($origin === 'nonconsumable') {
         // Headers for non-consumable
         $headers = [
@@ -24,11 +30,11 @@ try {
         // Set headers
         $col = 'A';
         foreach ($headers as $header) {
-            $sheet->setCellValue($col . '1', $header);
+            $sheet->setCellValue($col . '3', $header);
             $col++;
         }
         // Style header
-        $headerRange = 'A1:' . chr(ord('A') + $colCount - 1) . '1';
+        $headerRange = 'A3:' . chr(ord('A') + $colCount - 1) . '3';
         $sheet->getStyle($headerRange)->applyFromArray([
             'font' => [ 'bold' => true, 'color' => ['rgb' => 'FFFFFF'] ],
             'fill' => [ 'fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => '007bff'] ],
@@ -54,7 +60,7 @@ try {
         }
         $stmt->execute();
         $result = $stmt->get_result();
-        $row = 2;
+        $row = 4;
         while ($record = $result->fetch_assoc()) {
             // Map status
             switch ($record['inv_status']) {
@@ -91,24 +97,30 @@ try {
             $sheet->setCellValue('O' . $row, $record['accounted_to']);
             $row++;
         }
-        if ($row > 2) {
-            $dataRange = 'A2:' . chr(ord('A') + $colCount - 1) . ($row - 1);
+        if ($row > 4) {
+            $dataRange = 'A4:' . chr(ord('A') + $colCount - 1) . ($row - 1);
             $sheet->getStyle($dataRange)->applyFromArray([
                 'borders' => [ 'allBorders' => [ 'borderStyle' => Border::BORDER_THIN, 'color' => ['rgb' => '000000'] ] ]
             ]);
         }
     } elseif ($origin === 'consumable') {
+        // Add title
+        $sheet->mergeCells('A1:I1');
+        $sheet->setCellValue('A1', 'Inventory Report - Consumable');
+        $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(16);
+        $sheet->getStyle('A1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+
         // Headers for consumable
         $headers = [
-            'ID', 'Type ID', 'Brand/Model', 'Serial No.', 'Property No.', 'Property Name', 'Status', 'Date Added', 'Date Acquired', 'Price', 'Quantity', 'End User', 'Accounted To'
+            'Stock No.', 'Acceptance Date', 'RIS No.', 'Item Description', 'Receipt', 'Issuance', 'End User', 'Unit'
         ];
         $colCount = count($headers);
         $col = 'A';
         foreach ($headers as $header) {
-            $sheet->setCellValue($col . '1', $header);
+            $sheet->setCellValue($col . '3', $header);
             $col++;
         }
-        $headerRange = 'A1:' . chr(ord('A') + $colCount - 1) . '1';
+        $headerRange = 'A3:' . chr(ord('A') + $colCount - 1) . '3';
         $sheet->getStyle($headerRange)->applyFromArray([
             'font' => [ 'bold' => true, 'color' => ['rgb' => 'FFFFFF'] ],
             'fill' => [ 'fillType' => Fill::FILL_SOLID, 'startColor' => ['rgb' => '007bff'] ],
@@ -118,44 +130,22 @@ try {
         foreach (range('A', chr(ord('A') + $colCount - 1)) as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
-        $sql = "SELECT c.inv_id, c.type_id, c.inv_bnm, c.inv_serialno, c.inv_propno, c.inv_propname, c.inv_status, c.inv_date_added, c.date_acquired, c.price, c.inv_quantity, c.end_user, c.accounted_to FROM tbl_inv_consumables c LEFT JOIN tbl_type t ON c.type_id = t.type_id ORDER BY c.inv_date_added DESC";
+        $sql = "SELECT c.stock_number, c.acceptance_date, c.ris_no, c.item_description, c.receipt, c.issuance, c.end_user_issuance, c.unit FROM tbl_inv_consumables c ORDER BY c.acceptance_date DESC";
         $result = $conn->query($sql);
-        $row = 2;
+        $row = 4;
         while ($record = $result->fetch_assoc()) {
-            switch ($record['inv_status']) {
-                case 1:
-                case '1': $status = 'Available'; break;
-                case 2:
-                case '2': $status = 'Unavailable'; break;
-                case 3:
-                case '3': $status = 'Pending For Approval'; break;
-                case 4:
-                case '4': $status = 'Borrowed'; break;
-                case 5:
-                case '5': $status = 'Returned'; break;
-                case 6:
-                case '6': $status = 'Missing'; break;
-                case 7:
-                case '7': $status = 'In Use'; break;
-                default: $status = $record['inv_status']; break;
-            }
-            $sheet->setCellValue('A' . $row, $record['inv_id']);
-            $sheet->setCellValue('B' . $row, $record['type_id']);
-            $sheet->setCellValue('C' . $row, $record['inv_bnm']);
-            $sheet->setCellValue('D' . $row, $record['inv_serialno']);
-            $sheet->setCellValue('E' . $row, $record['inv_propno']);
-            $sheet->setCellValue('F' . $row, $record['inv_propname']);
-            $sheet->setCellValue('G' . $row, $status);
-            $sheet->setCellValue('H' . $row, $record['inv_date_added']);
-            $sheet->setCellValue('I' . $row, $record['date_acquired']);
-            $sheet->setCellValue('J' . $row, $record['price']);
-            $sheet->setCellValue('K' . $row, $record['inv_quantity']);
-            $sheet->setCellValue('L' . $row, $record['end_user']);
-            $sheet->setCellValue('M' . $row, $record['accounted_to']);
+            $sheet->setCellValue('A' . $row, $record['stock_number']);
+            $sheet->setCellValue('B' . $row, $record['acceptance_date']);
+            $sheet->setCellValue('C' . $row, $record['ris_no']);
+            $sheet->setCellValue('D' . $row, $record['item_description']);
+            $sheet->setCellValue('E' . $row, $record['receipt']);
+            $sheet->setCellValue('F' . $row, $record['issuance']);
+            $sheet->setCellValue('G' . $row, $record['end_user_issuance']);
+            $sheet->setCellValue('H' . $row, $record['unit']);
             $row++;
         }
-        if ($row > 2) {
-            $dataRange = 'A2:' . chr(ord('A') + $colCount - 1) . ($row - 1);
+        if ($row > 4) {
+            $dataRange = 'A4:' . chr(ord('A') + $colCount - 1) . ($row - 1);
             $sheet->getStyle($dataRange)->applyFromArray([
                 'borders' => [ 'allBorders' => [ 'borderStyle' => Border::BORDER_THIN, 'color' => ['rgb' => '000000'] ] ]
             ]);

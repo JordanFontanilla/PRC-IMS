@@ -72,5 +72,9 @@ $(document).ready(function () {
     $(document).on('click', '.load-requestpage', function () {
         loadContent('pages/admin/page_itemrequest.php');
     });
+
+    $(document).on('click', '.load-consumeditems', function () {
+        loadContent('pages/admin/page_consumeditems.php');
+    });
 });
 </script>

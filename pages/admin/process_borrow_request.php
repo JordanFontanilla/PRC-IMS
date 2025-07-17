@@ -76,54 +76,20 @@ if (
 
         // Insert borrowed items with the PRC token
         foreach ($items as $item) {
-            $query = "INSERT INTO tbl_borrow_request_items 
-                        (inv_id, breq_token) 
-                        VALUES (?, ?)";
-            $stmt = $conn->prepare($query);
-            $stmt->bind_param("is", $item['invId'], $breqToken);  // Removed 'br_item_id' from the statement
-            $stmt->execute();
-  
-            
-            // Update inventory status
-            $query = "UPDATE tbl_inv SET inv_status = ? WHERE inv_id = ?";
-            $stmt = $conn->prepare($query);
-            $status = 3; // Assuming 3 means "borrowed"
-            $stmt->bind_param("ii", $status, $item['invId']);
-            $stmt->execute();
-        }
+            if ($item['origin'] === 'consumable') {
+                // Handle consumable items
+                $inv_id = $item['invId'];
+                $quantity = $item['quantity'];
 
-        $conn->commit();
+                // Update the quantity of the consumable item in the inventory
+                $update_query = "UPDATE tbl_inv_consumables SET receipt = receipt - ? WHERE inv_id = ?";
+                $stmt_update = $conn->prepare($update_query);
+                $stmt_update->bind_param("ii", $quantity, $inv_id);
+                $stmt_update->execute();
 
-        echo json_encode([
-            'success' => true,
-            'message' => 'Request processed successfully',
-            'breqId' => $breqId,
-            'breqToken' => $breqToken,
-            'signatureFile' => $signatureFilePath
-        ]);
-
-    } catch (Exception $e) {
-        $conn->rollback();
-        error_log('Error: ' . $e->getMessage());
-        echo json_encode([
-            'success' => false,
-            'message' => 'Failed to process borrow request: ' . $e->getMessage()
-        ]);
-    }
-} else {
-    $missingFields = [];
-    if (empty($_POST['borrowerName'])) $missingFields[] = 'borrowerName';
-    if (empty($_POST['borrowerRemark'])) $missingFields[] = 'borrowerRemark';
-    if (empty($_POST['signatureData'])) $missingFields[] = 'signatureData';
-    if (empty($_POST['items'])) $missingFields[] = 'items';
-
-    error_log('Missing fields: ' . implode(', ', $missingFields));
-
-    echo json_encode([
-        'success' => false,
-        'message' => 'Missing required data: ' . implode(', ', $missingFields)
-    ]);
-}
-
-$conn->close();
-?>
+                // Add the consumed item to the consumed items table
+                $insert_query = "INSERT INTO tbl_consumed_items (inv_id, quantity, consumed_by, date_consumed) VALUES (?, ?, ?, NOW())";
+                $stmt_insert = $conn->prepare($insert_query);
+                $stmt_insert->bind_param("iis", $inv_id, $quantity, $borrowerName);
+                $stmt_insert->execute();
+            } else {

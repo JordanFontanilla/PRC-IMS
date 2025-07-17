@@ -1,4 +1,4 @@
-<?php include 'modals.php'; ?> <!-- Include your modal PHP -->
+<?php ?>
 
 <!-- Main Content -->
 <div class="container-fluid">
@@ -88,6 +88,17 @@
           <input type="text" class="form-control" id="borrowerName" placeholder="Enter Name" required>
         </div>
         <div class="form-group">
+          <label>Item Type:</label>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="itemType" id="nonConsumableRadio" value="Non-Consumable" checked>
+            <label class="form-check-label" for="nonConsumableRadio">Non-Consumable</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="itemType" id="consumableRadio" value="Consumable">
+            <label class="form-check-label" for="consumableRadio">Consumable</label>
+          </div>
+        </div>
+        <div class="form-group">
           <label for="searchItem">Add via Serial/Name/Model:</label>
           <input type="text" class="form-control" id="searchItem" placeholder="Serial, Name, or Model">
           <div id="searchDropdown" class="dropdown-menu w-100" style="max-height:200px; overflow-y:auto; position:absolute;"></div>
@@ -121,6 +132,7 @@
             <th>Serial No.</th>
             <th>Property No.</th>
             <th>Division/Section</th>
+            <th>Quantity</th>
             <th style="width: 5px;"></th>
           </tr>
         </thead>
@@ -149,22 +161,18 @@ $(document).on('input', '#searchItem', function () {
     if (query.length >= 1) {
         clearTimeout(debounceTimeout);
         debounceTimeout = setTimeout(function () {
+            const itemType = $('input[name="itemType"]:checked').val();
             $.ajax({
                 url: 'pages/admin/fetch_available_items.php',
                 type: 'GET',
-                data: { search: query },
-                success: function (response) {
-                    let data;
-                    try {
-                        data = JSON.parse(response);
-                    } catch (e) {
-                        data = [];
-                    }
+                data: { search: query, origin: itemType },
+                dataType: 'json',
+                success: function (data) {
+                    $dropdown.empty();
                     if (Array.isArray(data) && data.length > 0) {
-                        $dropdown.empty();
                         data.forEach(item => {
                             $dropdown.append(`
-                                <a class="dropdown-item search-suggestion" href="#" data-id="${item.inv_id}">
+                                <a class="dropdown-item search-suggestion" href="#" data-id="${item.inv_id}" data-origin="${item.origin}">
                                     <strong>${item.inv_bnm}</strong> <small>(${item.type_name})</small><br>
                                     <span style="font-size:11px;">Serial: ${item.inv_serialno} | PropNo: ${item.inv_propno}</span>
                                 </a>
@@ -189,18 +197,14 @@ $(document).on('input', '#searchItem', function () {
 $(document).on('click', '.search-suggestion', function (e) {
     e.preventDefault();
     const invId = $(this).data('id');
+    const origin = $(this).data('origin');
     // Fetch full item details by ID and add to table
     $.ajax({
         url: 'pages/admin/fetch_available_items.php',
         type: 'GET',
-        data: { inv_id: invId },
-        success: function (response) {
-            let data;
-            try {
-                data = JSON.parse(response);
-            } catch (e) {
-                data = [];
-            }
+        data: { inv_id: invId, origin: origin },
+        dataType: 'json',
+        success: function (data) {
             if (Array.isArray(data) && data.length > 0) {
                 addItemToTable(data[0]);
             }
@@ -253,7 +257,7 @@ function checkSerial(serial) {
 function addItemToTable(item) {
     // Check if the item is already in the table by ID
     const existsInTable = $('#selectedInvs tbody tr').toArray().some(function (row) {
-        return $(row).data('id') == item.inv_id;
+        return $(row).data('id') == item.inv_id && $(row).data('origin') == item.origin;
     });
 
     if (existsInTable) {
@@ -267,14 +271,20 @@ function addItemToTable(item) {
         return;
     }
 
+    let quantityInput = '1';
+    if (item.origin === 'consumable') {
+        quantityInput = `<input type="number" class="form-control quantity-input" value="1" min="1" max="${item.inv_quantity}" style="width: 70px;">`;
+    }
+
     // Add the item as a new row to the table
     const row = ` 
-        <tr data-id="${item.inv_id}">
+        <tr data-id="${item.inv_id}" data-origin="${item.origin}">
             <td>${item.type_name}</td>
             <td>${item.inv_bnm}</td>
-            <td>${item.inv_serialno}</td>
-            <td>${item.inv_propno}</td>
+            <td>${item.inv_serialno || 'N/A'}</td>
+            <td>${item.inv_propno || 'N/A'}</td>
             <td>${item.inv_propname}</td>
+            <td class="text-center">${quantityInput}</td>
             <td class="text-center">
                 <i class="fa fa-trash toggle-icon bg-danger text-white rounded-circle p-2" data-id="${item.inv_id}"></i>
             </td>
@@ -282,7 +292,7 @@ function addItemToTable(item) {
     $('#selectedInvs tbody').append(row);
 
     // Track added item by ID
-    selectedItemsList[item.inv_id] = true;
+    selectedItemsList[item.inv_id] = { origin: item.origin };
 }
 
 // Event listener for deleting an item when the trash icon is clicked
@@ -433,19 +443,26 @@ if (selectedCount === 0) {
                     $('#selectedInvs tbody tr').each(function () {
                         const row = $(this);
                         const invId = $(this).data('id');
+                        const origin = $(this).data('origin');
                         const type = row.find('td:nth-child(1)').text();
                         const brand = row.find('td:nth-child(2)').text();
                         const serial = row.find('td:nth-child(3)').text();
                         const propertyNo = row.find('td:nth-child(4)').text();
                         const propertyName = row.find('td:nth-child(5)').text();
+                        let quantity = 1;
+                        if (origin === 'consumable') {
+                            quantity = row.find('.quantity-input').val();
+                        }
 
                         items.push({
                             invId: invId,
+                            origin: origin,
                             type: type,
                             brand: brand,
                             serial: serial,
                             propertyNo: propertyNo,
-                            propertyName: propertyName
+                            propertyName: propertyName,
+                            quantity: quantity
                         });
                     });
 

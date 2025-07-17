@@ -4,40 +4,30 @@ header('Content-Type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $inv_id = isset($_POST['inv_id']) ? intval($_POST['inv_id']) : 0;
+    $origin = isset($_POST['origin']) ? $_POST['origin'] : '';
+
     if ($inv_id <= 0) {
         echo json_encode(['status' => 'error', 'message' => 'Invalid equipment ID.']);
         exit;
     }
 
-    // Fetch the equipment row
-    $query = "SELECT * FROM tbl_inv WHERE inv_id = ?";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param('i', $inv_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $equipment = $result->fetch_assoc();
-    $stmt->close();
-
-    if (!$equipment) {
-        echo json_encode(['status' => 'error', 'message' => 'Equipment not found.']);
+    if ($origin === 'consumable') {
+        // For consumables, we can't mark them as missing in the same way.
+        // You might want to log this event or handle it differently.
+        echo json_encode(['status' => 'error', 'message' => 'Consumable items cannot be reported as missing through this process.']);
         exit;
-    }
-
-    // Insert into missing table (if you have a separate table, e.g., tbl_missing_inv)
-    // If not, you can skip this and just update the status
-    // $insert = $conn->prepare("INSERT INTO tbl_missing_inv (...) VALUES (...)");
-    // $insert->execute();
-    // $insert->close();
-
-    // Update status to missing (status = 6)
-    $update = $conn->prepare("UPDATE tbl_inv SET inv_status = 6 WHERE inv_id = ?");
-    $update->bind_param('i', $inv_id);
-    if ($update->execute()) {
-        echo json_encode(['status' => 'success', 'message' => 'Equipment reported as missing.']);
     } else {
-        echo json_encode(['status' => 'error', 'message' => 'Failed to update status.']);
+        // For non-consumables, update the status to missing (6)
+        $update = $conn->prepare("UPDATE tbl_inv SET inv_status = 6 WHERE inv_id = ?");
+        $update->bind_param('i', $inv_id);
+        if ($update->execute()) {
+            echo json_encode(['status' => 'success', 'message' => 'Equipment reported as missing.']);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Failed to update status.']);
+        }
+        $update->close();
     }
-    $update->close();
+
     $conn->close();
     exit;
 } else {

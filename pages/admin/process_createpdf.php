@@ -70,7 +70,7 @@ $pdf->AddPage();
 
 // Add logo image above the title
 $logoPath = __DIR__ . '/../../img/logo.png'; // Path to the logo image
-$logoWidth = 25; // Set logo width
+$logoWidth = 20; // Set logo width
 $logoHeight = 0; // Auto scale height
 
 // Center the logo horizontally on the page

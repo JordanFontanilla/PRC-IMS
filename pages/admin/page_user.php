@@ -1,5 +1,6 @@
 
-<?php include 'modals.php'; ?> <!-- Include the modal -->
+<?php
+?>
 
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h1 class="h3 mb-0 text-gray-800">User Management</h1>

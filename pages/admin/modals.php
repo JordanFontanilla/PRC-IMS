@@ -398,73 +398,41 @@ $(document).on('click', '#saveUserChanges', function() {
                     <form id="addConsumableEquipForm">
                         <div class="form-row">
                             <div class="form-group col-md-4">
-                                <label for="cinv_type" class="font-weight-bold">Type <span class="text-danger">*</span></label>
-                                <select class="form-control" id="cinv_type" name="type_id" required>
-                                    <option value="" disabled selected>Select Type</option>
-                                    <!-- PHP code would populate this -->
-                                </select>
+                                <label for="stock_number" class="font-weight-bold">Stock Number <span class="text-muted">(Optional)</span></label>
+                                <input type="text" class="form-control" id="stock_number" name="stock_number" placeholder="Enter Stock Number">
                             </div>
                             <div class="form-group col-md-4">
-                                <label for="cinv_bnm" class="font-weight-bold">Brand/Model <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="cinv_bnm" name="inv_bnm" placeholder="ex: MSI GF63" required>
+                                <label for="acceptance_date" class="font-weight-bold">Acceptance Date <span class="text-danger">*</span></label>
+                                <input type="date" class="form-control" id="acceptance_date" name="acceptance_date" required>
                             </div>
                             <div class="form-group col-md-4">
-                                <label for="cinv_serialno" class="font-weight-bold">Serial Number <span class="text-muted">(Optional)</span></label>
-                                <input type="text" class="form-control" id="cinv_serialno" name="inv_serialno" placeholder="Enter Serial Number">
+                                <label for="ris_no" class="font-weight-bold">RIS No. <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="ris_no" name="ris_no" placeholder="Enter RIS No." required>
                             </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="item_description" class="font-weight-bold">Item Description <span class="text-danger">*</span></label>
+                            <textarea class="form-control" id="item_description" name="item_description" rows="3" placeholder="Enter Item Description" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="unit" class="font-weight-bold">Unit <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="unit" name="unit" placeholder="e.g., pcs, box, ream" required>
                         </div>
                         <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label for="cinv_propno" class="font-weight-bold">Property Number <span class="text-muted">(Optional)</span></label>
-                                <input type="text" class="form-control" id="cinv_propno" name="inv_propno" placeholder="Enter Property Number">
+                            <div class="form-group col-md-4">
+                                <label for="receipt" class="font-weight-bold">Receipt <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control" id="receipt" name="receipt" min="0" value="0" required placeholder="Enter Receipt Quantity">
                             </div>
-                            <div class="form-group col-md-6">
-                                <label for="cinv_propname" class="font-weight-bold">Property Name <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="cinv_propname" name="inv_propname" placeholder="Enter Property Name" required>
+                            <div class="form-group col-md-4">
+                                <label for="issuance" class="font-weight-bold">Issuance <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control" id="issuance" name="issuance" min="0" value="0" required placeholder="Enter Issuance Quantity">
                             </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-3">
-                                <label for="cinv_status" class="font-weight-bold">Status <span class="text-danger">*</span></label>
-                                <select class="form-control" id="cinv_status" name="inv_status" required>
-                                    <option value="1" selected>Active</option>
-                                    <option value="0">Inactive</option>
-                                </select>
-                            </div>
-                            <div class="form-group col-md-3">
-                                <label for="ccondition" class="font-weight-bold">Condition <span class="text-muted">(Optional)</span></label>
-                                <select class="form-control" id="ccondition" name="condition">
-                                    <option value="" selected disabled>Select Condition</option>
-                                    <option value="New">New</option>
-                                    <option value="Good">Good</option>
-                                    <option value="Fair">Fair</option>
-                                    <option value="Poor">Poor</option>
-                                    <option value="For Repair">For Repair</option>
-                                </select>
-                            </div>
-                            <div class="form-group col-md-3">
-                                <label for="cinv_quantity" class="font-weight-bold">Quantity <span class="text-danger">*</span></label>
-                                <input type="number" class="form-control" id="cinv_quantity" name="inv_quantity" min="1" value="1" required placeholder="Enter Quantity">
-                            </div>
-                            <div class="form-group col-md-3">
-                                <label for="cprice" class="font-weight-bold">Price <span class="text-muted">(Optional)</span></label>
-                                <input type="number" class="form-control" id="cprice" name="price" step="0.01" min="0" value="0.00" placeholder="0.00">
+                            <div class="form-group col-md-4">
+                                <label for="end_user_issuance" class="font-weight-bold">End User of Issuance <span class="text-muted">(Optional)</span></label>
+                                <input type="text" class="form-control" id="end_user_issuance" name="end_user_issuance" placeholder="Enter End User">
                             </div>
                         </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label for="cdate_acquired" class="font-weight-bold">Date Acquired <span class="text-muted">(Optional)</span></label>
-                                <input type="date" class="form-control" id="cdate_acquired" name="date_acquired">
-                            </div>
-                            <div class="form-group col-md-3">
-                                <label for="cend_user" class="font-weight-bold">End User <span class="text-muted">(Optional)</span></label>
-                                <input type="text" class="form-control" id="cend_user" name="end_user" placeholder="Enter End User Name">
-                            </div>
-                            <div class="form-group col-md-3">
-                                <label for="caccounted_to" class="font-weight-bold">Accounted To <span class="text-muted">(Optional)</span></label>
-                                <input type="text" class="form-control" id="caccounted_to" name="accounted_to" placeholder="Enter Accountable Person">
-                            </div>
-                        </div>
+                        
                         <hr>
                         <button id="submitConsumable" type="button" class="btn btn-primary btn-block">
                             <i class="fas fa-plus"></i> Add Consumable Equipment
@@ -568,6 +536,39 @@ $(document).on('click', '#saveUserChanges', function() {
 
     <script>
     $(document).ready(function() {
+        // Function to load equipment types into a dropdown
+        function loadEquipmentTypes(modalType, origin) {
+            var dropdownId = (modalType === 'consumable') ? '#cinv_type' : '#ninv_type';
+            var url = 'pages/admin/get_equipment_types.php?origin=' + origin;
+
+            $.ajax({
+                url: url,
+                type: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    if (response.status === 'success') {
+                        var dropdown = $(dropdownId);
+                        dropdown.empty(); // Clear existing options
+                        dropdown.append('<option value="" disabled selected>Select Type</option>');
+                        
+                        response.types.forEach(function(type) {
+                            dropdown.append('<option value="' + type.type_id + '">' + type.type_name + '</option>');
+                        });
+                    } else {
+                        console.error('Failed to load types:', response.message);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX error:', error);
+                }
+            });
+        }
+
+        // Load types when the non-consumable modal is shown
+        $('#addNonConsumableEquipModal').on('show.bs.modal', function() {
+            loadEquipmentTypes('non-consumable', 'Non-Consumable');
+        });
+
         // Consumable Equipment Submit
         $(document).on('click', '#submitConsumable', function(e) {
             e.preventDefault();
@@ -575,18 +576,14 @@ $(document).on('click', '#saveUserChanges', function() {
             console.log("Submit consumable button clicked!");
 
             var formData = {
-                type_id: $('#cinv_type').val(),
-                inv_bnm: $('#cinv_bnm').val() || '',
-                inv_serialno: $('#cinv_serialno').val() || '',
-                inv_propno: $('#cinv_propno').val() || '',
-                inv_propname: $('#cinv_propname').val() || '',
-                inv_status: $('#cinv_status').val() || 1,
-                condition: $('#ccondition').val() || '',
-                inv_quantity: $('#cinv_quantity').val() || 1,
-                price: $('#cprice').val() || 0.00,
-                date_acquired: $('#cdate_acquired').val() || '',
-                end_user: $('#cend_user').val() || '',
-                accounted_to: $('#caccounted_to').val() || ''
+                stock_number: $('#stock_number').val(),
+                acceptance_date: $('#acceptance_date').val(),
+                ris_no: $('#ris_no').val(),
+                item_description: $('#item_description').val(),
+                unit: $('#unit').val(),
+                receipt: $('#receipt').val(),
+                issuance: $('#issuance').val(),
+                end_user_issuance: $('#end_user_issuance').val()
             };
 
             console.log("Collected Consumable Form Data:", formData);
@@ -594,35 +591,14 @@ $(document).on('click', '#saveUserChanges', function() {
             // Validate required fields
             var missingFields = [];
             
-            if (!formData.type_id) missingFields.push("Equipment Type");
-            if (!formData.inv_bnm) missingFields.push("Brand/Model");
-            if (!formData.inv_propname) missingFields.push("Property Name");
-            if (!formData.inv_quantity || formData.inv_quantity <= 0) missingFields.push("Quantity (must be greater than 0)");
+            if (!formData.acceptance_date) missingFields.push("Acceptance Date");
+            if (!formData.ris_no) missingFields.push("RIS No.");
+            if (!formData.item_description) missingFields.push("Item Description");
 
             if (missingFields.length > 0) {
                 Swal.fire({
                     title: "Missing Required Fields",
                     text: "Please fill in the following required fields: " + missingFields.join(", "),
-                    icon: "warning"
-                });
-                return;
-            }
-
-            // Validate quantity is a positive number
-            if (isNaN(formData.inv_quantity) || parseFloat(formData.inv_quantity) <= 0) {
-                Swal.fire({
-                    title: "Invalid Quantity",
-                    text: "Quantity must be a positive number.",
-                    icon: "warning"
-                });
-                return;
-            }
-
-            // Validate price is a valid number (if provided)
-            if (formData.price && (isNaN(formData.price) || parseFloat(formData.price) < 0)) {
-                Swal.fire({
-                    title: "Invalid Price",
-                    text: "Price must be a valid number (0 or greater).",
                     icon: "warning"
                 });
                 return;
@@ -759,10 +735,10 @@ $(document).on('click', '#saveUserChanges', function() {
                             }
                         },
                         error: function(xhr, status, error) {
-                            console.error("AJAX Error:", xhr.responseText, status, error);
+                            console.error("AJAX Error:", status, error, xhr.responseText);
                             Swal.fire({
                                 title: "Error!",
-                                text: "Error in submitting form. Please check the console for details.",
+                                text: "Error in submitting form. Please check the console for details. Server response: " + xhr.responseText,
                                 icon: "error"
                             });
                         }
@@ -941,11 +917,50 @@ $(document).on('click', '#saveUserChanges', function() {
                 <form id="importForm" enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="excelFile">Choose Excel File</label>
-                        <input type="file" name="excelFile" id="excelFile" class="form-control" required>
+                        <input type="file" name="excelFile" id="excelFile" class="form-control" required accept=".xlsx, .xls">
                     </div>
-                    <button type="submit" class="btn btn-primary">Import</button>
+                    <div class="form-group">
+                        <label>Item Type:</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="importItemType" id="importNonConsumableRadio" value="Non-Consumable" checked>
+                            <label class="form-check-label" for="importNonConsumableRadio">Non-Consumable</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="importItemType" id="importConsumableRadio" value="Consumable">
+                            <label class="form-check-label" for="importConsumableRadio">Consumable</label>
+                        </div>
+                    </div>
+                    <!-- Format Instructions -->
+                    <div id="nonConsumableFormat" class="mt-2">
+                        <small class="form-text text-muted">
+                            <strong>Non-Consumable Format:</strong><br>
+                            Columns: <strong>Type ID, Serial No, Property No, Property Name, Brand/Model, End User, Accounted To</strong>.<br>
+                            Data must start from <strong>row 2</strong> (row 1 is for headers).
+                        </small>
+                    </div>
+                    <div id="consumableFormat" class="mt-2" style="display: none;">
+                        <small class="form-text text-muted">
+                            <strong>Consumable Format:</strong><br>
+                            Columns: <strong>Stock No., Acceptance Date, RIS No., Item Description, Receipt, Issuance, End User, Unit</strong>.<br>
+                            Data must start from <strong>row 5</strong> (first 4 rows are for headers).
+                        </small>
+                    </div>
+                    <div class="form-group mt-3">
+                        <label for="excelSheet">Choose Sheet</label>
+                        <div class="input-group">
+                            <select name="excelSheet" id="excelSheet" class="form-control" required disabled>
+                                <option value="">Select a file first</option>
+                            </select>
+                            <div class="input-group-append" id="sheetLoadingSpinner" style="display: none;">
+                                <span class="input-group-text">
+                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary" disabled>Import</button>
                 </form>
-                <div id="importStatus" style="margin-top: 10px;"></div> <!-- Status message after import -->
+                <div id="importStatus" class="mt-3"></div>
             </div>
         </div>
     </div>
@@ -953,116 +968,140 @@ $(document).on('click', '#saveUserChanges', function() {
 
 <script>
 $(function() {
+    const $importModal = $('#importEquipModal');
     const $importForm = $('#importForm');
     const $fileInput = $('#excelFile');
-    const $statusDiv = $('#importStatus');
+    const $sheetSelect = $('#excelSheet');
     const $submitBtn = $importForm.find('button[type="submit"]');
+    const $spinner = $('#sheetLoadingSpinner');
+    const $nonConsumableFormat = $('#nonConsumableFormat');
+    const $consumableFormat = $('#consumableFormat');
 
-    // Initialize modal events
-    $('#importEquipModal').on('hidden.bs.modal', resetModal);
+    // Function to toggle format instructions
+    function toggleFormatInstructions() {
+        if ($('input[name="importItemType"]:checked').val() === 'Consumable') {
+            $consumableFormat.show();
+            $nonConsumableFormat.hide();
+        } else {
+            $nonConsumableFormat.show();
+            $consumableFormat.hide();
+        }
+    }
+
+    // Handle item type change
+    $('input[name="importItemType"]').on('change', toggleFormatInstructions);
+
+    // Handle file input change to fetch sheet names
+    $fileInput.on('change', function() {
+        if (this.files.length === 0) {
+            $sheetSelect.html('<option value="">Select a file first</option>').prop('disabled', true);
+            $submitBtn.prop('disabled', true);
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('excelFile', this.files[0]);
+
+        $spinner.show();
+        $sheetSelect.prop('disabled', true);
+
+        $.ajax({
+            url: 'pages/admin/fetch_sheets.php',
+            method: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            dataType: 'json',
+            success: function(response) {
+                if (response.error) {
+                    Swal.fire('Error', response.error, 'error');
+                    $sheetSelect.html('<option value="">Could not load sheets</option>');
+                    $submitBtn.prop('disabled', true);
+                } else {
+                    $sheetSelect.empty();
+                    response.sheets.forEach(function(sheetName) {
+                        $sheetSelect.append(`<option value="${sheetName}">${sheetName}</option>`);
+                    });
+                    $sheetSelect.prop('disabled', false);
+                    $submitBtn.prop('disabled', false);
+                }
+            },
+            error: function() {
+                Swal.fire('Error', 'Could not retrieve sheet names from the server.', 'error');
+                $sheetSelect.html('<option value="">Error loading sheets</option>');
+                $submitBtn.prop('disabled', true);
+            },
+            complete: function() {
+                $spinner.hide();
+            }
+        });
+    });
 
     // Handle form submission
     $importForm.on('submit', function(e) {
         e.preventDefault();
-        clearStatus();
 
-        if (!hasSelectedFile()) {
-            showError('Please select a file first.');
+        if ($fileInput[0].files.length === 0) {
+            Swal.fire('Warning', 'Please select a file first.', 'warning');
             return;
         }
 
-        disableForm(true);
-        showInfo('Importing, please wait...');
+        Swal.fire({
+            title: 'Importing...',
+            text: 'Please wait while the data is being imported.',
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
 
         const formData = new FormData(this);
 
-        sendImportRequest(formData);
-    });
-
-    // Check if file was selected
-    function hasSelectedFile() {
-        return $fileInput[0].files.length > 0;
-    }
-
-    // Send AJAX request to server
-    function sendImportRequest(formData) {
         $.ajax({
             url: 'pages/admin/process_importfile.php',
             method: 'POST',
             data: formData,
             contentType: false,
             processData: false,
-            success: handleServerResponse,
-            error: handleAjaxError,
-            complete: () => disableForm(false)
+            dataType: 'json',
+            success: function(response) {
+                if (response.error) {
+                    Swal.fire('Import Failed', response.error, 'error');
+                } else {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Import Successful',
+                        text: `Inserted ${response.inserted} records. Found ${response.redundant} duplicate records.`,
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        location.reload();
+                    });
+                }
+            },
+            error: function(xhr) {
+                let errorMsg = 'An unexpected error occurred.';
+                if (xhr.responseJSON && xhr.responseJSON.error) {
+                    errorMsg = xhr.responseJSON.error;
+                }
+                Swal.fire('Import Failed', errorMsg, 'error');
+            }
         });
-    }
+    });
 
-    // Handle server JSON response
-    function handleServerResponse(response) {
-        let result;
-
-        try {
-            result = typeof response === 'object' ? response : JSON.parse(response);
-        } catch (err) {
-            console.error('JSON parse error:', err, 'Response:', response);
-            showError('Unexpected response from server.');
-            return;
-        }
-
-        if (result.error) {
-            showError(result.error);
-        } else {
-            showSuccessAlert(result.inserted, result.redundant);
-        }
-    }
-
-    // Handle communication failure
-    function handleAjaxError(xhr, status, error) {
-        console.error('AJAX error:', status, error);
-        showError('Failed to communicate with the server.');
-    }
-
-    // SweetAlert success display
-    function showSuccessAlert(inserted, redundant) {
-        Swal.fire({
-            icon: 'success',
-            title: 'Import Status',
-            text: `Inserted ${inserted} equipment. Contained ${redundant} redundant equipment.`,
-            confirmButtonText: 'OK'
-        }).then(() => location.reload());
-    }
-
-    // UI utilities
-    function disableForm(disable) {
-        $submitBtn.prop('disabled', disable);
-    }
-
-    function clearStatus() {
-        $statusDiv.html('');
-    }
-
-    function showError(message) {
-        $statusDiv.html(`<div class="alert alert-danger">${message}</div>`);
-    }
-
-    function showInfo(message) {
-        $statusDiv.html(`<div class="alert alert-info">${message}</div>`);
-    }
-
-    function resetModal() {
+    // Reset modal on close
+    $importModal.on('hidden.bs.modal', function() {
         $importForm[0].reset();
-        clearStatus();
-        disableForm(false);
-    }
+        $sheetSelect.html('<option value="">Select a file first</option>').prop('disabled', true);
+        $submitBtn.prop('disabled', true);
+        toggleFormatInstructions(); // Reset to default view
+    });
+
+    // Initial setup
+    toggleFormatInstructions();
 });
 </script>
 
 <!-- END OF IMPORT EQUIPMENT -->
-
-<!-- END OF IMPORT EQUIPMEMT -->
-<!-- End of Add Equipment Modal -->
-
 
 
 <!-- View Equipment Modal -->
@@ -1080,7 +1119,7 @@ $(function() {
             <div class="modal-body">
                 <div class="row">
                     <!-- Left side: Equipment table -->
-                    <div class="col-md-8">
+                    <div class="col-md-12">
                         <table class="table table-bordered">
                             <tr><th>Type</th><td id="equipType"></td></tr>
                             <tr><th>Brand/Model</th><td id="equipBrand"></td></tr>
@@ -1092,11 +1131,6 @@ $(function() {
                             <tr><th>End User</th><td id="equipenduser"></td></tr>
                             <tr><th>Accounted to</th><td id="equipaccountedto"></td></tr>
                         </table>
-                    </div>
-
-                    <!-- Right side: QR Code -->
-                    <div class="col-md-4 d-flex align-items-center justify-content-center">
-                        <img id="equipQR" src="" alt="QR Code" style="max-width: 100%; height: auto;">
                     </div>
                 </div>
             </div>
@@ -1112,35 +1146,44 @@ $(function() {
 $(document).ready(function() {
     $(document).on('click', '.info-inv', function() {
         var inv_id = $(this).data('id');
+        var origin = $(this).data('origin'); // Get the origin (consumable/non_consumable)
         
         $.ajax({
             url: 'pages/admin/fetch_inventorydetails.php', // Endpoint to fetch details
             type: 'POST',
-            data: { inv_id: inv_id },
+            data: { inv_id: inv_id, item_origin: origin },
             dataType: 'json',
             success: function(response) {
+                console.log("Response from fetch_inventorydetails.php:", response);
                 if (response.success) {
-                    $('#equipType').text(response.data.type_name);
-                    $('#equipBrand').text(response.data.inv_bnm);
-                    $('#equipSerial').text(response.data.inv_serialno);
-                    $('#equipPropNo').text(response.data.inv_propno);
-                    $('#equipPropName').text(response.data.inv_propname);
-                    $('#equipStatus').text(response.data.status);
-                    $('#equipDateAdded').text(response.data.inv_date_added);
-                    $('#equipenduser').text(response.data.end_user);
-                    $('#equipaccountedto').text(response.data.accounted_to);
-
-                    // Dynamically generate QR code image src
-                    const qrSrc = `pages/admin/generate_qr.php?type=${encodeURIComponent(response.data.type_name)}&brand=${encodeURIComponent(response.data.inv_bnm)}&serial=${encodeURIComponent(response.data.inv_serialno)}&propno=${encodeURIComponent(response.data.inv_propno)}&propname=${encodeURIComponent(response.data.inv_propname)}&status=${encodeURIComponent(response.data.status)}`;
-
-
-                    $('#equipQR').attr('src', qrSrc);
+                    if (response.data.item_origin === 'consumable') {
+                        $('#equipType').text(response.data.type_name || 'N/A');
+                        $('#equipBrand').text(response.data.item_description || 'N/A');
+                        $('#equipSerial').text(response.data.stock_number || 'N/A'); // Use stock_number for serial
+                        $('#equipPropNo').text(response.data.ris_no || 'N/A');
+                        $('#equipPropName').text(response.data.unit || 'N/A'); // Use unit for property name
+                        $('#equipStatus').text('N/A'); // Consumables don't have inv_status
+                        $('#equipDateAdded').text(response.data.acceptance_date || 'N/A');
+                        $('#equipenduser').text(response.data.end_user_issuance || 'N/A');
+                        $('#equipaccountedto').text('N/A'); // Consumables don't have accounted_to
+                    } else {
+                        $('#equipType').text(response.data.type_name);
+                        $('#equipBrand').text(response.data.inv_bnm);
+                        $('#equipSerial').text(response.data.inv_serialno);
+                        $('#equipPropNo').text(response.data.inv_propno);
+                        $('#equipPropName').text(response.data.inv_propname);
+                        $('#equipStatus').text(response.data.status);
+                        $('#equipDateAdded').text(response.data.inv_date_added);
+                        $('#equipenduser').text(response.data.end_user);
+                        $('#equipaccountedto').text(response.data.accounted_to);
+                    }
                 } else {
                     alert('Error fetching data.');
                 }
             },
-            error: function() {
-                alert('Failed to fetch details.');
+            error: function(xhr, status, error) {
+                console.error('AJAX Error fetching details:', status, error, xhr.responseText);
+                alert('Failed to fetch details. Check console for more info.');
             }
         });
     });
@@ -1149,7 +1192,6 @@ $(document).ready(function() {
 <!-- view equipment modal end -->
 
 
-<!-- Edit Equipment Modal -->
 <!-- Edit Equipment Modal -->
 <div class="modal fade" id="editEquipModal" tabindex="-1" role="dialog" aria-labelledby="editEquipModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -1162,57 +1204,99 @@ $(document).ready(function() {
             </div>
             <div class="modal-body">
                 <form id="editEquipForm">
-                    <table class="table table-bordered">
-                        <input type="hidden" id="editequipId">
+                    <input type="hidden" id="editequipId">
+                    <input type="hidden" id="editequipOrigin">
 
-                        <tr>
-                            <th>Type</th>
-                            <td>
-                                <select id="editequipType" class="form-control"></select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Brand/Model</th>
-                            <td><input type="text" id="editequipBrand" class="form-control" /></td>
-                        </tr>
-                        <tr>
-                            <th>Serial No.</th>
-                            <td><input type="text" id="editequipSerial" class="form-control" /></td>
-                        </tr>
-                        <tr>
-                            <th>Property No.</th>
-                            <td><input type="text" id="editequipPropNo" class="form-control" /></td>
-                        </tr>
-                        <tr>
-                            <th>Division/Section</th>
-                            <td><input type="text" id="editequipPropName" class="form-control" /></td>
-                        </tr>
-                        <tr>
-                            <th>Status</th>
-                            <td>
-                                <select id="editequipStatus" class="form-control">
-                                    <option value="1">Available</option>
-                                    <option value="2">Unavailable</option>
-                                    <option value="3">Pending For Approval</option>
-                                    <option value="4">Borrowed</option>
-                                    <option value="5">Returned</option>
-                                    <option value="6">Missing</option>
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Date Added</th>
-                            <td><input type="text" id="editequipDateAdded" class="form-control" disabled /></td>
-                        </tr>
-                        <tr>
-                            <th>End User</th>
-                            <td><input type="text" id="editequipenduser" class="form-control" /></td>
-                        </tr>
-                        <tr>
-                            <th>Accountable Personel</th>
-                            <td><input type="text" id="editequipaccountedto" class="form-control" /></td>
-                        </tr>
-                    </table>
+                    <!-- Non-Consumable Fields -->
+                    <div id="nonConsumableFields">
+                        <table class="table table-bordered">
+                            <tr>
+                                <th>Type</th>
+                                <td>
+                                    <select id="editequipType" class="form-control"></select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Brand/Model</th>
+                                <td><input type="text" id="editequipBrand" class="form-control" /></td>
+                            </tr>
+                            <tr>
+                                <th>Serial No.</th>
+                                <td><input type="text" id="editequipSerial" class="form-control" /></td>
+                            </tr>
+                            <tr>
+                                <th>Property No.</th>
+                                <td><input type="text" id="editequipPropNo" class="form-control" /></td>
+                            </tr>
+                            <tr>
+                                <th>Division/Section</th>
+                                <td><input type="text" id="editequipPropName" class="form-control" /></td>
+                            </tr>
+                            <tr>
+                                <th>Status</th>
+                                <td>
+                                    <select id="editequipStatus" class="form-control">
+                                        <option value="1">Available</option>
+                                        <option value="2">Unavailable</option>
+                                        <option value="3">Pending For Approval</option>
+                                        <option value="4">Borrowed</option>
+                                        <option value="5">Returned</option>
+                                        <option value="6">Missing</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Date Added</th>
+                                <td><input type="text" id="editequipDateAdded" class="form-control" disabled /></td>
+                            </tr>
+                            <tr>
+                                <th>End User</th>
+                                <td><input type="text" id="editequipenduser" class="form-control" /></td>
+                            </tr>
+                            <tr>
+                                <th>Accountable Personel</th>
+                                <td><input type="text" id="editequipaccountedto" class="form-control" /></td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <!-- Consumable Fields -->
+                    <div id="consumableFields" style="display: none;">
+                        <table class="table table-bordered">
+                            <tr>
+                                <th>Stock Number</th>
+                                <td><input type="text" id="editStockNumber" class="form-control" /></td>
+                            </tr>
+                            <tr>
+                                <th>Acceptance Date</th>
+                                <td><input type="date" id="editAcceptanceDate" class="form-control" /></td>
+                            </tr>
+                            <tr>
+                                <th>RIS No.</th>
+                                <td><input type="text" id="editRisNo" class="form-control" /></td>
+                            </tr>
+                            <tr>
+                                <th>Item Description</th>
+                                <td><textarea id="editItemDescription" class="form-control"></textarea></td>
+                            </tr>
+                            <tr>
+                                <th>Unit</th>
+                                <td><input type="text" id="editUnit" class="form-control" /></td>
+                            </tr>
+                            <tr>
+                                <th>Receipt</th>
+                                <td><input type="number" id="editReceipt" class="form-control" /></td>
+                            </tr>
+                            <tr>
+                                <th>Issuance</th>
+                                <td><input type="number" id="editIssuance" class="form-control" /></td>
+                            </tr>
+                            <tr>
+                                <th>End User of Issuance</th>
+                                <td><input type="text" id="editEndUserIssuance" class="form-control" /></td>
+                            </tr>
+                        </table>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">
@@ -1223,10 +1307,8 @@ $(document).ready(function() {
     </div>
 </div>
 
-<!-- edit Equipment Modal end -->
-
 <script>
-// Load types into dropdown
+// Load types into dropdown (for non-consumables)
 function loadTypeOptions(selectedTypeId) {
     $.ajax({
         url: 'pages/admin/fetch_alltypes.php',
@@ -1249,33 +1331,52 @@ function loadTypeOptions(selectedTypeId) {
 // Handle edit button click
 $(document).on('click', '.edit-inv', function() {
     var invId = $(this).data('id');
-    $('#editEquipModal').data('inv-id', invId);
+    var origin = $(this).data('origin'); // Get the origin (consumable/non_consumable)
+    
+    $('#editequipId').val(invId);
+    $('#editequipOrigin').val(origin);
 
     $.ajax({
         url: 'pages/admin/fetch_inventorydetails.php',
         method: 'POST',
-        data: { inv_id: invId },
+        data: { inv_id: invId, item_origin: origin },
         dataType: 'json',
         success: function(response) {
             if (response.success) {
-                $('#editequipId').val(response.data.inv_id);
-                $('#editequipBrand').val(response.data.inv_bnm);
-                $('#editequipSerial').val(response.data.inv_serialno);
-                $('#editequipPropNo').val(response.data.inv_propno);
-                $('#editequipPropName').val(response.data.inv_propname);
-                $('#editequipStatus').val(getStatusValue(response.data.status));
-                $('#editequipDateAdded').val(response.data.inv_date_added);
-                $('#editequipenduser').val(response.data.end_user);
-                $('#editequipaccountedto').val(response.data.accounted_to);
+                if (response.data.item_origin === 'consumable') {
+                    $('#nonConsumableFields').hide();
+                    $('#consumableFields').show();
 
-                // Load dropdown with types and select current
-                loadTypeOptions(response.data.type_id);
+                    $('#editStockNumber').val(response.data.stock_number);
+                    $('#editAcceptanceDate').val(response.data.acceptance_date);
+                    $('#editRisNo').val(response.data.ris_no);
+                    $('#editItemDescription').val(response.data.item_description);
+                    $('#editUnit').val(response.data.unit);
+                    $('#editReceipt').val(response.data.receipt);
+                    $('#editIssuance').val(response.data.issuance);
+                    $('#editEndUserIssuance').val(response.data.end_user_issuance);
+                } else {
+                    $('#consumableFields').hide();
+                    $('#nonConsumableFields').show();
+
+                    $('#editequipBrand').val(response.data.inv_bnm);
+                    $('#editequipSerial').val(response.data.inv_serialno);
+                    $('#editequipPropNo').val(response.data.inv_propno);
+                    $('#editequipPropName').val(response.data.inv_propname);
+                    $('#editequipStatus').val(getStatusValue(response.data.status));
+                    $('#editequipDateAdded').val(response.data.inv_date_added);
+                    $('#editequipenduser').val(response.data.end_user);
+                    $('#editequipaccountedto').val(response.data.accounted_to);
+                    loadTypeOptions(response.data.type_id);
+                }
+                $('#editEquipModal').modal('show');
             } else {
                 alert('Failed to fetch inventory details: ' + response.message);
             }
         },
-        error: function() {
-            alert('Error fetching inventory details.');
+        error: function(xhr, status, error) {
+            console.error('AJAX Error fetching details:', status, error, xhr.responseText);
+            alert('Failed to fetch details. Check console for more info.');
         }
     });
 });
@@ -1287,74 +1388,116 @@ function getStatusValue(statusText) {
         'Pending For Approval': 3,
         'Borrowed': 4,
         'Returned': 5,
-        'Missing': 6
+        'Missing': 6,
+        'In Use': 7
     };
     return statusMap[statusText] || 1;
 }
 
 $(document).on('click', '#saveChangesBtn', function() {
-    var invId = $('#editEquipModal').data('inv-id');
-    var equipBrand = $('#editequipBrand').val();
-    var equipType = $('#editequipType').val();
-    var equipSerial = $('#editequipSerial').val();
-    var equipPropNo = $('#editequipPropNo').val();
-    var equipPropName = $('#editequipPropName').val();
-    var equipStatus = $('#editequipStatus').val();
-    var editequipenduser = $('#editequipenduser').val();
-    var editequipaccountedto = $('#editequipaccountedto').val();
+    var invId = $('#editequipId').val();
+    var origin = $('#editequipOrigin').val();
 
-    $.ajax({
-        url: 'pages/admin/process_updateequipment.php',
-        method: 'POST',
-        data: {
+    if (origin === 'consumable') {
+        var formData = {
             inv_id: invId,
-            equipSerial: equipSerial,
-            equipPropNo: equipPropNo,
-            equipPropName: equipPropName,
-            equipType: equipType,
-            checkDuplicates: true
-        },
-        dataType: 'json',
-        success: function(response) {
-            if (response.blockUpdate) {
-                Swal.fire({
-                    title: 'Update Blocked',
-                    html: 'Serial No., Property No., Property Name, and Type all match an existing record.<br><strong>Update cannot proceed.</strong>',
-                    icon: 'error',
-                    confirmButtonText: 'OK'
-                });
-            } else if (response.duplicate) {
-                let duplicateFields = [];
-                if (response.duplicateSerial) duplicateFields.push("Serial No.");
-                if (response.duplicatePropNo) duplicateFields.push("Property No.");
-                if (response.duplicatePropName) duplicateFields.push("Property Name");
-                if (response.duplicateType) duplicateFields.push("Type");
-
-                Swal.fire({
-                    title: 'Duplicate Warning',
-                    html: `<strong>The following field(s) already exist:</strong><br><br> 
-                           <ul style="text-align: left;">
-                               ${duplicateFields.map(field => `<li>${field}</li>`).join('')}
-                           </ul><br>Would you like to save anyway?`,
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, Save',
-                    cancelButtonText: 'No, Cancel'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        updateEquipment(invId, equipBrand, equipType, equipSerial, equipPropNo, equipPropName, equipStatus, editequipenduser, editequipaccountedto);
-                    }
-                });
-            } else {
-                updateEquipment(invId, equipBrand, equipType, equipSerial, equipPropNo, equipPropName, equipStatus, editequipenduser, editequipaccountedto);
+            acceptance_date: $('#editAcceptanceDate').val(),
+            ris_no: $('#editRisNo').val(),
+            item_description: $('#editItemDescription').val(),
+            unit: $('#editUnit').val(),
+            receipt: $('#editReceipt').val(),
+            issuance: $('#editIssuance').val(),
+            end_user_issuance: $('#editEndUserIssuance').val(),
+            updateConsumable: true
+        };
+        $.ajax({
+            url: 'pages/admin/process_updateconsumable.php', // New PHP for consumables
+            method: 'POST',
+            data: formData,
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    Swal.fire({
+                        title: 'Success!',
+                        text: response.message,
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        $('#editEquipModal').modal('hide');
+                        location.reload();
+                    });
+                } else {
+                    Swal.fire('Error', response.message, 'error');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('AJAX Error updating consumable:', status, error, xhr.responseText);
+                Swal.fire('Error', 'Error updating consumable equipment.', 'error');
             }
-        },
-        error: function() {
-            Swal.fire('Error', 'Error checking for duplicates.', 'error');
-        }
-    });
+        });
+    } else {
+        var equipBrand = $('#editequipBrand').val();
+        var equipType = $('#editequipType').val();
+        var equipSerial = $('#editequipSerial').val();
+        var equipPropNo = $('#editequipPropNo').val();
+        var equipPropName = $('#editequipPropName').val();
+        var equipStatus = $('#editequipStatus').val();
+        var editequipenduser = $('#editequipenduser').val();
+        var editequipaccountedto = $('#editequipaccountedto').val();
+
+        $.ajax({
+            url: 'pages/admin/process_updateequipment.php',
+            method: 'POST',
+            data: {
+                inv_id: invId,
+                equipSerial: equipSerial,
+                equipPropNo: equipPropNo,
+                equipPropName: equipPropName,
+                equipType: equipType,
+                checkDuplicates: true
+            },
+            dataType: 'json',
+            success: function(response) {
+                if (response.blockUpdate) {
+                    Swal.fire({
+                        title: 'Update Blocked',
+                        html: 'Serial No., Property No., Property Name, and Type all match an existing record.<br><strong>Update cannot proceed.</strong>',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                } else if (response.duplicate) {
+                    let duplicateFields = [];
+                    if (response.duplicateSerial) duplicateFields.push("Serial No.");
+                    if (response.duplicatePropNo) duplicateFields.push("Property No.");
+                    if (response.duplicatePropName) duplicateFields.push("Property Name");
+                    if (response.duplicateType) duplicateFields.push("Type");
+
+                    Swal.fire({
+                        title: 'Duplicate Warning',
+                        html: `<strong>The following field(s) already exist:</strong><br><br> 
+                               <ul style="text-align: left;">
+                                   ${duplicateFields.map(field => `<li>${field}</li>`).join('')}
+                               </ul><br>Would you like to save anyway?`,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, Save',
+                        cancelButtonText: 'No, Cancel'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            updateEquipment(invId, equipBrand, equipType, equipSerial, equipPropNo, equipPropName, equipStatus, editequipenduser, editequipaccountedto);
+                        }
+                    });
+                } else {
+                    updateEquipment(invId, equipBrand, equipType, equipSerial, equipPropNo, equipPropName, equipStatus, editequipenduser, editequipaccountedto);
+                }
+            },
+            error: function() {
+                Swal.fire('Error', 'Error checking for duplicates.', 'error');
+            }
+        });
+    }
 });
 
 function updateEquipment(invId, equipBrand, equipType, equipSerial, equipPropNo, equipPropName, equipStatus, editequipenduser, editequipaccountedto) {
@@ -1507,6 +1650,27 @@ $(document).ready(function() {
     });
 });
 </script>
+
+<!-- Report Generation Modal -->
+<div class="modal fade" id="reportGenerationModal" tabindex="-1" role="dialog" aria-labelledby="reportGenerationModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="reportGenerationModalLabel">Generate Consumable Report</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Click the button below to generate the consumable report as an Excel file.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <a href="pages/admin/process_generate_consumable_report.php" class="btn btn-primary">Generate Report</a>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- End of AddType Modal -->
 
@@ -1733,11 +1897,8 @@ $(document).on('click', '.info-bulkdecline', function() {
 
 
 
-
-
 </script>
 <!-- end viewPendingItemList -->
-
 
 
 <!-- Modal for Returning Items -->
@@ -1827,7 +1988,6 @@ $(document).on('click', '.info-returningrequest', function() {
 });
 
 
-
 $(document).on('click', '.info-bulkreturn', function() {
     var breq_token = $(this).data('id'); // Get breq_token from button
 
@@ -1868,7 +2028,7 @@ $(document).on('click', '.info-bulkreturn', function() {
                 preConfirm: () => {
                     var returnerName = document.getElementById('returnerName').value.trim();
                     if (!returnerName) {
-                        Swal.showValidationMessage('Returner\'s Name is required!');
+                        Swal.showValidationMessage('Returner's Name is required!');
                     }
                     return returnerName;
                 }
@@ -1969,139 +2129,30 @@ $(document).on('click', '.report-missing', function() {
         <!-- Place your manual add form here -->
         <form id="manualAddForm">
           <div class="form-row">
-            <div class="form-group col-md-6">
-              <label for="manualType">Type</label>
-              <select class="form-control" id="manualType" name="manualType"></select>
-            </div>
-            <div class="form-group col-md-6">
-              <label for="manualBrand">Brand/Model</label>
-              <input type="text" class="form-control" id="manualBrand" name="manualBrand" required>
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group col-md-6">
-              <label for="manualSerial">Serial No.</label>
-              <input type="text" class="form-control" id="manualSerial" name="manualSerial">
-            </div>
-            <div class="form-group col-md-6">
-              <label for="manualPropNo">Property No.</label>
-              <input type="text" class="form-control" id="manualPropNo" name="manualPropNo">
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group col-md-6">
-              <label for="manualPropName">Property Name</label>
-              <input type="text" class="form-control" id="manualPropName" name="manualPropName" required>
-            </div>
-            <div class="form-group col-md-6">
-              <label for="manualQuantity">Quantity</label>
-              <input type="number" class="form-control" id="manualQuantity" name="manualQuantity" min="1" value="1" required>
-            </div>
-          </div>
-          <button type="submit" class="btn btn-primary">Add Equipment</button>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script>
-$(document).ready(function () {
-    // Manual Add Equipment form submission
-    $('#manualAddForm').on('submit', function (e) {
-        e.preventDefault();
-
-        var formData = {
-            manualType: $('#manualType').val(),
-            manualBrand: $('#manualBrand').val(),
-            manualSerial: $('#manualSerial').val(),
-            manualPropNo: $('#manualPropNo').val(),
-            manualPropName: $('#manualPropName').val(),
-            manualQuantity: $('#manualQuantity').val()
-        };
-
-        console.log("Manual Add Form Data:", formData); // Debugging line
-
-        // Validate required fields
-        var missingFields = [];
-        
-        if (!formData.manualType) missingFields.push("Type");
-        if (!formData.manualBrand) missingFields.push("Brand/Model");
-        if (!formData.manualPropName) missingFields.push("Property Name");
-        if (!formData.manualQuantity || formData.manualQuantity <= 0) missingFields.push("Quantity (must be greater than 0)");
-
-        if (missingFields.length > 0) {
-            Swal.fire({
-                title: "Missing Required Fields",
-                text: "Please fill in the following required fields: " + missingFields.join(", "),
-                icon: "warning"
-            });
-            return;
-        }
-
-        // Show loading indicator
-        Swal.fire({
-            title: "Adding Equipment...",
-            text: "Please wait while the equipment is being added.",
-            icon: "info",
-            allowOutsideClick: false,
-            showConfirmButton: false,
-            didOpen: () => {
-                Swal.showLoading();
-            }
-        });
-
-        $.ajax({
-            type: 'POST',
-            url: 'pages/admin/process_manual_add.php',
-            data: formData,
-            dataType: 'json',
-            success: function(response) {
-                console.log("Manual Add AJAX Response:", response);
-
-                if (response.status === 'success') {
-                    Swal.fire({
-                        title: "Added!",
-                        text: response.message,
-                        icon: "success",
-                        timer: 1500,
-                        showConfirmButton: false
-                    }).then(() => {
-                        // Reset the form
-                        $('#manualAddForm')[0].reset();
-                        
-                        // Close modal properly
-                        $('#manualAddModal').modal('hide');
-                        $('.modal-backdrop').remove();
-                        $('body').removeClass('modal-open');
-                        
-                        // Reload page to show new data
-                        location.reload();
-                    });
-
-                } else if (response.status === 'exists') {
-                    Swal.fire({
-                        title: "Duplicate Entry",
-                        text: "This equipment already exists in the system.",
-                        icon: "info"
-                    });
-                } else {
-                    Swal.fire({
-                        title: "Error!",
-                        text: response.message || "Unknown error occurred.",
-                        icon: "error"
-                    });
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error("AJAX Error:", xhr.responseText, status, error);
-                Swal.fire({
-                    title: "Error!",
-                    text: "Error in submitting form. Please check the console for details.",
-                    icon: "error"
-                });
-            }
-        });
-    });
-});
-</script>
+                            <div class="form-group col-md-6">
+                                <label for="acceptance_date" class="font-weight-bold">Acceptance Date <span class="text-danger">*</span></label>
+                                <input type="date" class="form-control" id="acceptance_date" name="acceptance_date" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="ris_no" class="font-weight-bold">RIS No. <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="ris_no" name="ris_no" placeholder="Enter RIS No." required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="item_description" class="font-weight-bold">Item Description <span class="text-danger">*</span></label>
+                            <textarea class="form-control" id="item_description" name="item_description" rows="3" placeholder="Enter Item Description" required></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label for="receipt" class="font-weight-bold">Receipt <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control" id="receipt" name="receipt" min="0" value="0" required placeholder="Enter Receipt Quantity">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="issuance" class="font-weight-bold">Issuance <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control" id="issuance" name="issuance" min="0" value="0" required placeholder="Enter Issuance Quantity">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="end_user_issuance" class="font-weight-bold">End User of Issuance <span class="text-muted">(Optional)</span></label>
+                                <input type="text" class="form-control" id="end_user_issuance" name="end_user_issuance" placeholder="Enter End User">
+                            </div>
+                        </div>

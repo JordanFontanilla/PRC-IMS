@@ -123,6 +123,8 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['username'])) {
             </div>
         </div>
     </div>
+<?php include 'pages/admin/modals.php'; ?>
+</body>
 </body>
 <script type="text/javascript">
     // Get the session details from PHP and log them in the console
