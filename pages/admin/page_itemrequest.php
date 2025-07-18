@@ -87,15 +87,11 @@
           <label for="borrowerName">Borrower's Name:</label>
           <input type="text" class="form-control" id="borrowerName" placeholder="Enter Name" required>
         </div>
-        <div class="form-group">
+        <div class="form-group" style="display: none;">
           <label>Item Type:</label>
           <div class="form-check">
             <input class="form-check-input" type="radio" name="itemType" id="nonConsumableRadio" value="Non-Consumable" checked>
             <label class="form-check-label" for="nonConsumableRadio">Non-Consumable</label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="itemType" id="consumableRadio" value="Consumable">
-            <label class="form-check-label" for="consumableRadio">Consumable</label>
           </div>
         </div>
         <div class="form-group">
@@ -271,11 +267,6 @@ function addItemToTable(item) {
         return;
     }
 
-    let quantityInput = '1';
-    if (item.origin === 'consumable') {
-        quantityInput = `<input type="number" class="form-control quantity-input" value="1" min="1" max="${item.inv_quantity}" style="width: 70px;">`;
-    }
-
     // Add the item as a new row to the table
     const row = ` 
         <tr data-id="${item.inv_id}" data-origin="${item.origin}">
@@ -284,7 +275,7 @@ function addItemToTable(item) {
             <td>${item.inv_serialno || 'N/A'}</td>
             <td>${item.inv_propno || 'N/A'}</td>
             <td>${item.inv_propname}</td>
-            <td class="text-center">${quantityInput}</td>
+            <td class="text-center">1</td>
             <td class="text-center">
                 <i class="fa fa-trash toggle-icon bg-danger text-white rounded-circle p-2" data-id="${item.inv_id}"></i>
             </td>
@@ -443,26 +434,17 @@ if (selectedCount === 0) {
                     $('#selectedInvs tbody tr').each(function () {
                         const row = $(this);
                         const invId = $(this).data('id');
-                        const origin = $(this).data('origin');
-                        const type = row.find('td:nth-child(1)').text();
-                        const brand = row.find('td:nth-child(2)').text();
-                        const serial = row.find('td:nth-child(3)').text();
-                        const propertyNo = row.find('td:nth-child(4)').text();
-                        const propertyName = row.find('td:nth-child(5)').text();
-                        let quantity = 1;
-                        if (origin === 'consumable') {
-                            quantity = row.find('.quantity-input').val();
-                        }
+                        const origin = $(this).data('origin'); // Should always be 'non_consumable' now
 
                         items.push({
                             invId: invId,
                             origin: origin,
-                            type: type,
-                            brand: brand,
-                            serial: serial,
-                            propertyNo: propertyNo,
-                            propertyName: propertyName,
-                            quantity: quantity
+                            type: row.find('td:nth-child(1)').text(),
+                            brand: row.find('td:nth-child(2)').text(),
+                            serial: row.find('td:nth-child(3)').text(),
+                            propertyNo: row.find('td:nth-child(4)').text(),
+                            propertyName: row.find('td:nth-child(5)').text(),
+                            quantity: 1 // Always 1 for non-consumables
                         });
                     });
 
@@ -476,36 +458,31 @@ if (selectedCount === 0) {
                             signatureData: signatureData,
                             items: JSON.stringify(items)
                         },
-                        success: function (response) {
-                            console.log('Response from server:', response);
-                            try {
-                                const data = JSON.parse(response);
-                                if (data.success) {
-                                    Swal.fire({
-                                        title: 'Success',
-                                        html: 'Request has been sent! <br> Please wait for Administrator approval.',
-                                        icon: 'success',
-                                        timer: 2000,
-                                        timerProgressBar: true
-                                    }).then(() => {
-                                        // Optionally reset the form here
-                                        $('#borrowerName').val('');
-                                        $('#borrowerRemark').val('');
-                                        $('#selectedInvs tbody').empty();
-                                        selectedItemsList = {};
-                                    });
-                                } else {
-                                    Swal.fire('Error', data.message || 'There was an error processing your request.', 'error');
-                                }
-                            } catch (e) {
-                                Swal.fire('Error', 'Invalid server response.', 'error');
+                        dataType: 'json',
+                        success: function (data) {
+                            if (data.success) {
+                                Swal.fire({
+                                    title: 'Success',
+                                    html: 'Request has been sent! <br> Please wait for Administrator approval.',
+                                    icon: 'success',
+                                    timer: 2000,
+                                    timerProgressBar: true
+                                }).then(() => {
+                                    // Reset the form
+                                    $('#borrowerName').val('');
+                                    $('#borrowerRemark').val('');
+                                    $('#selectedInvs tbody').empty();
+                                    selectedItemsList = {};
+                                    resolve(true); // Resolve the promise to close the modal
+                                });
+                            } else {
+                                Swal.fire('Error', data.message || 'There was an error processing your request.', 'error');
+                                resolve(false); // Resolve with false to keep modal open or show validation message
                             }
-                            resolve(true);
                         },
                         error: function (xhr, status, error) {
-                            console.error('AJAX Error:', status, error);
-                            Swal.fire('Error', 'There was an error with the request. Please try again later.', 'error');
-                            resolve(false);
+                            Swal.fire('Error', 'Invalid server response. Please try again.', 'error');
+                            resolve(false); // Resolve with false on AJAX error
                         }
                     });
                 });

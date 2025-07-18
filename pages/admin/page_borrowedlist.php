@@ -67,6 +67,8 @@ if (isset($_SESSION['is_active']) && $_SESSION['is_active'] == 1) {
                     <th>Date Approved</th>
                     <th>Borrower's Name</th>
                     <th>No. of Items</th>
+                    <th>Item Name/s</th>
+                    <th>Item Description/s</th>
                     <th>Action</th>
                 </tr>
             </thead>    

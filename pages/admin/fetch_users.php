@@ -24,13 +24,18 @@ if ($result && $result->num_rows > 0) {
         echo "<td>" . htmlspecialchars($row['user_level']) . "</td>";
         echo "<td><span class='badge " . $badgeClass . "'>" . $status . "</span></td>";
         echo "<td>
-                <button class='btn btn-info btn-sm view-user' data-toggle='modal' data-target='#viewUserModal' data-username='" . htmlspecialchars($row['username']) . "'>
+                <button class='btn btn-info btn-sm view-user' data-username='" . htmlspecialchars($row['username']) . "'>
                     <i class='fas fa-eye'></i>
                 </button>
                 <button class='btn btn-primary btn-sm edit-user' data-toggle='modal' data-target='#editUserModal' data-id='" . htmlspecialchars($row['username']) . "'>
                     <i class='fas fa-edit'></i>
-                </button>
-              </td>";
+                </button>";
+        if (isset($_SESSION['user_level']) && $_SESSION['user_level'] == 'Admin') {
+            echo "<button class='btn btn-danger btn-sm delete-user' data-id='" . htmlspecialchars($row['username']) . "'>
+                    <i class='fas fa-trash'></i>
+                </button>";
+        }
+        echo "</td>";
         echo "</tr>";
     }
 } else {

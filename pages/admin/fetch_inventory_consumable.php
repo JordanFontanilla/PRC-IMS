@@ -45,7 +45,11 @@ if ($result->num_rows > 0) {
         echo "<td>" . htmlspecialchars($row['end_user_issuance'] ?? 'N/A') . "</td>";
         
         // Add action buttons (view, edit, report as missing)
-        echo "<td>\n"            . "<button class='btn btn-info btn-sm info-inv' data-toggle='modal' data-target='#viewEquipModal' data-id='" . htmlspecialchars($row['inv_id']) . "' data-origin='consumable'><i class='fas fa-eye'></i></button>\n"            . "<button class='btn btn-primary btn-sm edit-inv' data-toggle='modal' data-target='#editEquipModal' data-id='" . htmlspecialchars($row['inv_id']) . "' data-origin='consumable'><i class='fas fa-edit'></i></button>\n"            . "<button class='btn btn-danger btn-sm delete-inv' data-id='" . htmlspecialchars($row['inv_id']) . "' data-origin='consumable'><i class='fas fa-trash'></i></button>\n"            . "<button class='btn btn-warning btn-sm report-missing' title='Report as Missing' data-id='" . htmlspecialchars($row['inv_id']) . "' data-origin='consumable'><i class='fas fa-search'></i></button>\n"            . "</td>";
+        echo "<td>\n"            . "<button class='btn btn-info btn-sm info-inv' data-toggle='modal' data-target='#viewEquipModal' data-id='" . htmlspecialchars($row['inv_id']) . "' data-origin='consumable'><i class='fas fa-eye'></i></button>\n"            . "<button class='btn btn-primary btn-sm edit-inv' data-toggle='modal' data-target='#editEquipModal' data-id='" . htmlspecialchars($row['inv_id']) . "' data-origin='consumable'><i class='fas fa-edit'></i></button>\n";
+        if (isset($_SESSION['user_level']) && $_SESSION['user_level'] == 'Admin') {
+            echo "<button class='btn btn-danger btn-sm delete-inv' data-id='" . htmlspecialchars($row['inv_id']) . "' data-origin='consumable'><i class='fas fa-trash'></i></button>\n"            . "<button class='btn btn-warning btn-sm report-missing' title='Report as Missing' data-id='" . htmlspecialchars($row['inv_id']) . "' data-origin='consumable'><i class='fas fa-search'></i></button>\n";
+        }
+        echo "</td>";
         echo "</tr>";
     }
 } else {

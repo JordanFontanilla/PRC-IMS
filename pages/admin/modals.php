@@ -218,6 +218,13 @@
                             <input type="text" class="form-control text-center" id="viewFullName" readonly>
                         </div>
                     </div>
+                    <!-- Password Row: Only for Admins -->
+                    <div class="form-row justify-content-center" id="viewPasswordRow" style="display: none;">
+                        <div class="form-group col-md-9 text-center">
+                            <label for="viewPassword" class="font-weight-bold">Password (Hashed)</label>
+                            <input type="text" class="form-control text-center" id="viewPassword" readonly>
+                        </div>
+                    </div>
                     <hr>
                     <button type="button" class="btn btn-secondary btn-block" data-dismiss="modal">Close</button>
                 </form>
@@ -227,30 +234,38 @@
 </div>
 
 <script>
-   $(document).ready(function () {
-    $(".view-user").click(function () {
-        var username = $(this).data("username");
+$(document).on('click', '.view-user', function () {
+    var username = $(this).data("username");
 
-        $.ajax({
-            url: "pages/admin/fetch_user_details.php", // Ensure the correct path
-            method: "POST",
-            data: { username: username },
-            dataType: "json",
-            success: function (response) {
-                if (response.error) {
-                    alert(response.error);
+    $.ajax({
+        url: "pages/admin/fetch_user_details.php",
+        method: "POST",
+        data: { username: username },
+        dataType: "json",
+        success: function (response) {
+            console.log(response); // Log the response for debugging
+            if (response.error) {
+                alert(response.error);
+            } else {
+                $("#viewUsername").val(response.username);
+                $("#viewUserLevel").val(response.user_level);
+                $("#viewFullName").val(response.full_name);
+                $("#viewUserStatus").val(response.user_status);
+
+                if (response.is_admin_viewer && response.user_password) {
+                    $("#viewPassword").val(response.user_password);
+                    $("#viewPasswordRow").show();
                 } else {
-                    $("#viewUsername").val(response.username);
-                    $("#viewUserLevel").val(response.user_level);
-                    $("#viewFullName").val(response.full_name);
-                    $("#viewUserStatus").val(response.user_status); // Updated for status
-                    $("#viewUserModal").modal("show");
+                    $("#viewPasswordRow").hide();
                 }
-            },
-            error: function () {
-                alert("Error fetching user data.");
-            },
-        });
+
+                $("#viewUserModal").modal("show");
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error("AJAX Error:", status, error, xhr.responseText);
+            alert("Error fetching user data. Check the console for details.");
+        },
     });
 });
 </script>
@@ -1551,58 +1566,65 @@ function updateEquipment(invId, equipBrand, equipType, equipSerial, equipPropNo,
         </button>
       </div>
       <form id="addTypeForm" method="POST">
-  <div class="modal-body">
-    <div class="form-group">
-      <label for="typeName">Type Name</label>
-      <input type="text" class="form-control" id="typeName" name="typeName" placeholder="Enter Inventory Type" required>
-      
-      <label for="typeOrigin">Type Origin</label>
-      <select class="form-control" id="typeOrigin" name="typeOrigin" required>
-        <option value="" disabled selected>Select Origin</option>
-        <option value="Consumable">Consumable</option>
-        <option value="Non-Consumable">Non-Consumable</option>
-      </select>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="typeName">Type Name</label>
+            <input type="text" class="form-control" id="typeName" name="typeName" placeholder="Enter Inventory Type" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Add</button>
+        </div>
+      </form>
     </div>
   </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-    <button type="submit" class="btn btn-primary">Add</button>
-  </div>
-</form>
+</div>
 
+<!-- EditType Modal -->
+<div class="modal fade" id="editTypeModal" tabindex="-1" role="dialog" aria-labelledby="editTypeModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editTypeModalLabel">Edit Inventory Type</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form id="editTypeForm" method="POST">
+        <div class="modal-body">
+          <input type="hidden" id="editTypeId" name="type_id">
+          <div class="form-group">
+            <label for="editTypeName">Type Name</label>
+            <input type="text" class="form-control" id="editTypeName" name="typeName" required>
+          </div>
+          <div class="form-group">
+            <label for="editTypeOrigin">Type Origin</label>
+            <select class="form-control" id="editTypeOrigin" name="typeOrigin" required>
+              <option value="Consumable">Consumable</option>
+              <option value="Non-Consumable">Non-Consumable</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </div>
+      </form>
     </div>
   </div>
 </div>
 
 <script>
-$(document).ready(function () {
-    $('#dataTableInvType').DataTable({
-        ajax: 'pages/admin/fetch_invtype.php',
-        columns: [
-            { title: "ID" },
-            { title: "Name" },
-            { title: "Origin" },
-            { title: "Action", orderable: false }
-        ],
-        order: [],
-        responsive: true
-    });
-});
-
 $(document).ready(function() {
     $('#addTypeForm').on('submit', function(e) {
         e.preventDefault(); // Prevent default form submission
 
         var typeName = $('#typeName').val().trim();
-        var typeOrigin = $('#typeOrigin').val().trim();
+        var typeOrigin = 'Non-Consumable'; // Set default value
 
         if (typeName === '') {
             Swal.fire('Missing Input', 'Please enter a type name.', 'warning');
-            return;
-        }
-
-        if (typeOrigin === '') {
-            Swal.fire('Missing Input', 'Please select a type origin.', 'warning');
             return;
         }
 
@@ -1613,9 +1635,8 @@ $(document).ready(function() {
                 typeName: typeName,
                 typeOrigin: typeOrigin
             },
+            dataType: 'json',
             success: function(response) {
-                console.log("Server Response:", response); // Check the object
-
                 if (response.status === 'success') {
                     Swal.fire({
                         title: 'Success!',
@@ -1626,25 +1647,73 @@ $(document).ready(function() {
                         timerProgressBar: true
                     }).then(() => {
                         $('#addTypeModal').modal('hide');
-
-                    // Reload DataTable via AJAX
-                    $('#dataTableInvType').DataTable().ajax.reload(null, false);
-
-                    // Reset form
-                    $('#addTypeForm')[0].reset();
+                        $('#dataTableInvType').DataTable().ajax.reload(null, false);
+                        $('#addTypeForm')[0].reset();
                     });
                 } else if (response.status === 'exists') {
                     Swal.fire('Duplicate Type', 'This type name already exists.', 'info');
-                } else if (response.status === 'empty') {
-                    Swal.fire('Missing Data', 'Type name cannot be empty.', 'warning');
                 } else {
-                    Swal.fire('Unexpected Response', JSON.stringify(response), 'question');
+                    Swal.fire('Error', response.message || 'An unknown error occurred.', 'error');
                 }
             },
-
-            error: function(xhr, status, error) {
-                console.log("AJAX Error: ", status, error);
+            error: function() {
                 Swal.fire('Request Failed', 'An error occurred while processing the request.', 'error');
+            }
+        });
+    });
+
+    // Handle Edit Type button click
+    $(document).on('click', '.edit-type', function() {
+        var typeId = $(this).data('id');
+        $.ajax({
+            url: 'pages/admin/fetch_typedetails.php',
+            method: 'POST',
+            data: { type_id: typeId },
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    $('#editTypeId').val(response.data.type_id);
+                    $('#editTypeName').val(response.data.type_name);
+                    $('#editTypeOrigin').val(response.data.type_origin);
+                    $('#editTypeModal').modal('show');
+                } else {
+                    Swal.fire('Error', response.message, 'error');
+                }
+            }
+        });
+    });
+
+    // Handle Edit Type form submission
+    $('#editTypeForm').on('submit', function(e) {
+        e.preventDefault();
+        var typeId = $('#editTypeId').val();
+        var typeName = $('#editTypeName').val().trim();
+        var typeOrigin = $('#editTypeOrigin').val();
+
+        $.ajax({
+            url: 'pages/admin/process_updatetype.php',
+            method: 'POST',
+            data: {
+                type_id: typeId,
+                type_name: typeName,
+                type_origin: typeOrigin
+            },
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    $('#editTypeModal').modal('hide');
+                    Swal.fire({
+                        title: 'Success!',
+                        text: response.message,
+                        icon: 'success',
+                        timer: 1500,
+                        showConfirmButton: false
+                    }).then(() => {
+                        $('#dataTableInvType').DataTable().ajax.reload(null, false);
+                    });
+                } else {
+                    Swal.fire('Error', response.message, 'error');
+                }
             }
         });
     });
@@ -1991,65 +2060,46 @@ $(document).on('click', '.info-returningrequest', function() {
 $(document).on('click', '.info-bulkreturn', function() {
     var breq_token = $(this).data('id'); // Get breq_token from button
 
-    // Fetch item details via AJAX
-    $.ajax({
-        url: 'pages/admin/fetch_pendingitems.php', // Adjust the file path
-        method: 'POST',
-        data: { breq_token: breq_token },
-        success: function(response) {
-            var tableContent = response; // The response is the table rows from PHP
-
-            // SweetAlert with Returner Name input & dynamically loaded table
+    Swal.fire({
+        title: 'Confirm Return?',
+        text: "Are you sure you want to mark this equipment as returned?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, return it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
             Swal.fire({
-                title: 'Return this batch of Equipment?',
-                width: '75%',
-                heightAuto: false,
-                html: `
-                    <p>All items under this batch will be made available and cannot be undone.</p>
-                    <input id="returnerName" class="swal2-input" placeholder="Enter Returner Name">
-                    <hr>
-                    <div class="swal2-overflow">
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Type</th>
-                                    <th>Brand/Model</th>
-                                    <th>Property No.</th>
-                                    <th>Property Name</th>
-                                </tr>
-                            </thead>
-                            <tbody>${tableContent}</tbody>
-                        </table>
-                    </div>
-                `,
+                title: 'Enter Returner\'s Name',
+                input: 'text',
+                inputPlaceholder: 'Name of person returning the item',
                 showCancelButton: true,
-                confirmButtonText: 'Yes, return it!',
-                cancelButtonText: 'No, cancel',
-                preConfirm: () => {
-                    var returnerName = document.getElementById('returnerName').value.trim();
+                confirmButtonText: 'Submit',
+                showLoaderOnConfirm: true,
+                preConfirm: (returnerName) => {
                     if (!returnerName) {
-                        Swal.showValidationMessage('Returner's Name is required!');
+                        Swal.showValidationMessage('Returner\'s name is required.');
                     }
                     return returnerName;
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    var returnerName = result.value;
-                    var selectedRequests = [breq_token];
-
-                    // Send the selected request tokens and returner's name via AJAX
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            }).then((nameResult) => {
+                if (nameResult.isConfirmed) {
+                    const returnerName = nameResult.value;
                     $.ajax({
                         url: 'pages/admin/process_bulkreturn.php',
                         method: 'POST',
                         data: {
-                            request_ids: selectedRequests,
+                            request_ids: [breq_token], // Send as an array
                             returner_name: returnerName
                         },
+                        dataType: 'json',
                         success: function(response) {
-                            if (response === 'success') {
+                            if (response.success) {
                                 Swal.fire(
                                     'Returned!',
-                                    'The selected request(s) have been returned.',
+                                    response.message,
                                     'success'
                                 );
                                 setTimeout(function() {
@@ -2058,12 +2108,12 @@ $(document).on('click', '.info-bulkreturn', function() {
                             } else {
                                 Swal.fire(
                                     'Error!',
-                                    'An error occurred while returning the request(s). Please try again.',
+                                    response.message,
                                     'error'
                                 );
                             }
                         },
- error: function() {
+                        error: function() {
                             Swal.fire(
                                 'Error!',
                                 'Failed to communicate with the server. Please try again later.',
@@ -2073,12 +2123,10 @@ $(document).on('click', '.info-bulkreturn', function() {
                     });
                 }
             });
-        },
-        error: function() {
-            Swal.fire('Error!', 'Failed to fetch items. Please try again.', 'error');
         }
     });
 });
+
 
 $(document).on('click', '.report-missing', function() {
     var invId = $(this).data('id');

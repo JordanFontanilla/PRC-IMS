@@ -1,4 +1,9 @@
 <?php
+session_start();
+if (!isset($_SESSION['user_level']) || $_SESSION['user_level'] != 'Admin') {
+    echo "<div class='alert alert-danger'>Access Denied. You do not have permission to view this page.</div>";
+    exit;
+}
 ?>
 
 <div class="d-flex justify-content-between align-items-center mb-3">

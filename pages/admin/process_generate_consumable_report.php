@@ -119,17 +119,44 @@ $sheet->getStyle('F' . ($recap_start_row + 1) . ':I' . ($recap_start_row + 1))->
 // Define end of recap area for borders
 $recap_end_row = $recap_start_row + 15; // As per screenshot, it has some height
 
+// Merge cells for UACS Object Code column and apply borders
+for ($i = $recap_start_row + 2; $i <= $recap_end_row; $i++) {
+    $sheet->mergeCells('H' . $i . ':I' . $i);
+    $sheet->getStyle('H' . $i . ':I' . $i)->applyFromArray([
+        'borders' => [
+            'outline' => [
+                'borderStyle' => Border::BORDER_THIN,
+            ],
+            'vertical' => [
+                'borderStyle' => Border::BORDER_NONE, // Remove vertical borders
+            ],
+        ],
+    ]);
+}
+
 // Add footer information, positioned after recapitulation
-$footer_start_row = $recap_end_row + 2;
+$footer_start_row = $recap_end_row + 2; // This is the starting row for the first line of footer
+$footer_sig_row_offset = 3; // Number of empty rows to add
+
+// "I hereby certify..."
 $sheet->mergeCells('A' . $footer_start_row . ':D' . $footer_start_row);
 $sheet->setCellValue('A' . $footer_start_row, 'I hereby certify to the correctness of the above information.');
-$sheet->mergeCells('A' . ($footer_start_row + 2) . ':D' . ($footer_start_row + 2));
-$sheet->setCellValue('A' . ($footer_start_row + 2), 'Signature over Printed Name of Supply and/or Property Custodian');
+// Add thin line below "I hereby certify..."
+$sheet->getStyle('A' . ($footer_start_row + 3) . ':C' . ($footer_start_row + 3))->getBorders()->getBottom()->setBorderStyle(Border::BORDER_THIN);
 
-$sheet->mergeCells('G' . $footer_start_row . ':I' . $footer_start_row);
-$sheet->setCellValue('G' . $footer_start_row, 'Posted by:');
-$sheet->mergeCells('G' . ($footer_start_row + 2) . ':I' . ($footer_start_row + 2));
-$sheet->setCellValue('G' . ($footer_start_row + 2), 'Signature over Printed Name of Designated Accounting Staff');
+// "Signature over Printed Name of Supply and/or Property Custodian"
+$sheet->mergeCells('A' . ($footer_start_row + 2 + $footer_sig_row_offset) . ':D' . ($footer_start_row + 2 + $footer_sig_row_offset));
+$sheet->setCellValue('A' . ($footer_start_row + 2 + $footer_sig_row_offset), 'Signature over Printed Name of Supply and/or Property Custodian');
+
+// "Posted by:"
+$sheet->mergeCells('F' . $footer_start_row . ':H' . $footer_start_row);
+$sheet->setCellValue('F' . $footer_start_row, 'Posted by:');
+// Add thin line below "Posted by:"
+$sheet->getStyle('F' . ($footer_start_row + 3) . ':H' . ($footer_start_row + 3))->getBorders()->getBottom()->setBorderStyle(Border::BORDER_THIN);
+
+// "Signature over Printed Name of Designated Accounting Staff"
+$sheet->mergeCells('F' . ($footer_start_row + 2 + $footer_sig_row_offset) . ':H' . ($footer_start_row + 2 + $footer_sig_row_offset));
+$sheet->setCellValue('F' . ($footer_start_row + 2 + $footer_sig_row_offset), 'Signature over Printed Name of Designated Accounting Staff');
 
 // Set column widths
 $sheet->getColumnDimension('A')->setWidth(15);
@@ -164,7 +191,7 @@ $thickBorderStyle = [
         ],
     ],
 ];
-$sheet->getStyle('A1:I' . ($footer_start_row + 3))->applyFromArray($thickBorderStyle);
+$sheet->getStyle('A1:I' . ($footer_start_row + 10 + $footer_sig_row_offset))->applyFromArray($thickBorderStyle);
 
 // Output the file to the browser
 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');

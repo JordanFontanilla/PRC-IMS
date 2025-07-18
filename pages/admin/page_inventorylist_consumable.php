@@ -1,4 +1,5 @@
 <?php
+session_start();
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -9,12 +10,14 @@ error_reporting(E_ALL);
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h1 class="h3 mb-0 text-gray-800">Inventory List: Consumable</h1>
     <div class="ml-auto">
+        <?php if (isset($_SESSION['user_level']) && $_SESSION['user_level'] == 'Admin'): ?>
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addConsumableEquipModal"><i class="fas fa-plus"></i>
             Add
         </button>
         <button type="button" class="btn btn-info" data-toggle="modal" data-target="#importEquipModal"><i class="fas fa-file-import"></i>
             Import
         </button>
+        <?php endif; ?>
         <button type="button" class="btn btn-warning" id="exportExcelConsum"><i class="fas fa-file-export"></i>
             Export
         </button>

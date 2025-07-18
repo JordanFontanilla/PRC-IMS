@@ -1,12 +1,15 @@
 
 <?php
+session_start();
 ?>
 
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h1 class="h3 mb-0 text-gray-800">Inventory Type List</h1>
+    <?php if (isset($_SESSION['user_level']) && $_SESSION['user_level'] == 'Admin'): ?>
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addTypeModal">
         Add Type
     </button>
+    <?php endif; ?>
 </div>
 <hr>
 <!-- Begin Page Content -->
@@ -73,5 +76,17 @@
 </div>
 <?php include '../../sources2.php'; ?>
 <script>
-
+$(document).ready(function () {
+    $('#dataTableInvType').DataTable({
+        ajax: 'pages/admin/fetch_invtype.php',
+        columns: [
+            { title: "ID" },
+            { title: "Name" },
+            { title: "Origin" },
+            { title: "Action", orderable: false }
+        ],
+        order: [],
+        responsive: true
+    });
+});
 </script>

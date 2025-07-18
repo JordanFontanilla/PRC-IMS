@@ -1,12 +1,15 @@
 
 <?php
+session_start();
 ?>
 
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h1 class="h3 mb-0 text-gray-800">User Management</h1>
+    <?php if (isset($_SESSION['user_level']) && $_SESSION['user_level'] == 'Admin'): ?>
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addUserModal">
         Add User
     </button>
+    <?php endif; ?>
 </div>
 <hr>
 <!-- Begin Page Content -->
@@ -84,30 +87,71 @@
 
 
 <?php include '../../sources2.php'; ?>
-<style>
-    #dataTableUser_length {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
+<script>
+$(document).ready(function() {
+    var table;
+    if ($.fn.dataTable.isDataTable('#dataTableUser')) {
+        table = $('#dataTableUser').DataTable();
+    } else {
+        table = $('#dataTableUser').DataTable({
+            "order": [], // Example option
+            "columnDefs": [{
+                "targets": -1, // Last column (Action)
+                "orderable": false
+            }]
+        });
+    }
 
-#userLevelFilter {
-    min-width: 120px;
-    font-weight: 800;  /* or use “bold” */
-    font-size: 0.875rem;
-    border-radius: 0.375rem; /* rounded */
-    background-color:rgb(16, 155, 255); /* Bootstrap primary */
-    color: #fff; /* white text */
-    border: none;
-    padding: 0.25rem 0.75rem;
-    cursor: pointer;
-    transition: background-color 0.2s ease-in-out;
-}
+    // Move the custom filter dropdown into the DataTables wrapper
+    var filterContainer = $('#userLevelFilterContainer');
+    var filterHtml = filterContainer.html();
+    filterContainer.remove();
+    $('#dataTableUser_length').append(filterHtml);
 
-#userLevelFilter:hover {
-    background-color:rgba(0, 105, 217, 0.7); /* darker on hover */
-}
+    // Apply the filter
+    $(document).on('change', '#userLevelFilter', function() {
+        table.column(2).search($(this).val()).draw();
+    });
 
+    // Handle delete button click
+    $(document).on('click', '.delete-user', function() {
+        var username = $(this).data('id');
 
-
-</style>
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: 'pages/admin/process_delete_user.php',
+                    type: 'POST',
+                    data: { username: username },
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.success) {
+                            Swal.fire(
+                                'Deleted!',
+                                'The user has been deleted.',
+                                'success'
+                            ).then(() => {
+                                location.reload();
+                            });
+                        } else {
+                            Swal.fire(
+                                'Error!',
+                                response.message,
+                                'error'
+                            );
+                        }
+                    }
+                });
+            }
+        });
+    });
+});
+</script>

@@ -10,7 +10,7 @@ if (isset($_GET['search'])) {
     $searchSql = "%" . $search . "%";
     
     $query = "
-        (SELECT 
+        SELECT 
             i.inv_id, 
             i.inv_serialno, 
             i.inv_propno, 
@@ -27,27 +27,12 @@ if (isset($_GET['search'])) {
                 OR i.inv_propname LIKE ? 
                 OR t.type_name LIKE ?
             )
-        )
-        UNION ALL
-        (SELECT 
-            c.inv_id, 
-            c.item_description, 
-            c.receipt, 
-            c.issuance, 
-            c.end_user_issuance,
-            'consumable' as origin
-        FROM tbl_inv_consumables c
-        WHERE (
-                c.item_description LIKE ? 
-                OR c.ris_no LIKE ?
-            )
-        )
         ORDER BY inv_bnm ASC
         LIMIT 15
     ";
 
-    $stmt = $conn->prepare('ssssssss', $searchSql, $searchSql, $searchSql, $searchSql, $searchSql, $searchSql, $searchSql, $searchSql);
-    $stmt->bind_param('ssssssss', $searchSql, $searchSql, $searchSql, $searchSql, $searchSql, $searchSql, $searchSql, $searchSql);
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param('ssss', $searchSql, $searchSql, $searchSql, $searchSql);
     $stmt->execute();
     $result = $stmt->get_result();
     $items = [];
@@ -82,20 +67,6 @@ if (isset($_GET['inv_id']) && isset($_GET['origin'])) {
                 WHERE i.inv_id = ? 
                 LIMIT 1");
         $stmt->bind_param('i', $inv_id);
-    } elseif ($origin === 'consumable') {
-        $stmt = $conn->prepare("SELECT 
-                    c.inv_id, 
-                    c.acceptance_date, 
-                    c.ris_no, 
-                    c.item_description, 
-                    c.receipt, 
-                    c.issuance, 
-                    c.end_user_issuance,
-                    'consumable' as origin
-                FROM tbl_inv_consumables c
-                WHERE c.inv_id = ? 
-                LIMIT 1");
-        $stmt->bind_param('i', $inv_id);
     } else {
         echo json_encode([]);
         $conn->close();
@@ -118,24 +89,21 @@ if (isset($_GET['inv_id']) && isset($_GET['origin'])) {
 
 // Default: output as table rows for manual add modal
 $query = "
-    (SELECT 
+    SELECT 
         i.inv_id, i.inv_serialno, i.inv_propno, i.inv_propname, i.inv_bnm, t.type_name, 'non_consumable' as origin
     FROM tbl_inv i
     LEFT JOIN tbl_type t ON i.type_id = t.type_id 
-    WHERE i.inv_status = 1)
-    UNION ALL
-    (SELECT 
-        c.inv_id, c.item_description, c.receipt, c.issuance, c.end_user_issuance, 'consumable' as origin
-    FROM tbl_inv_consumables c)
+    WHERE i.inv_status = 1
 ";
 
 $result = $conn->query($query);
 if ($result && $result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
         echo "<tr>";
-        echo "<td>" . htmlspecialchars($row['item_description']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['receipt']) . "</td>";
-        echo "<td>" . htmlspecialchars($row['issuance']) . "</td>";
+        echo "<td>" . htmlspecialchars($row['inv_bnm']) . "</td>";
+        echo "<td>" . htmlspecialchars($row['inv_serialno']) . "</td>";
+        echo "<td>" . htmlspecialchars($row['inv_propno']) . "</td>";
+        echo "<td>" . htmlspecialchars($row['inv_propname']) . "</td>";
         echo "<td class='text-center align-middle'>
         <div class='d-inline-flex justify-content-center align-items-center'>
             <i class='fa fa-plus fa-sm toggle-icon bg-success text-white rounded-circle p-2' data-id='" . htmlspecialchars($row['inv_id']) . "' data-origin='" . htmlspecialchars($row['origin']) . "' data-state='plus'></i>
