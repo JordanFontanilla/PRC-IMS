@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 17, 2025 at 06:07 AM
+-- Generation Time: Jul 22, 2025 at 09:48 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -1276,7 +1276,421 @@ INSERT INTO `tbl_auditlog` (`auditlog_id`, `auditlog_empname`, `auditlog_action`
 (1234, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-17 10:24:23'),
 (1235, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-17 10:31:32'),
 (1236, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-17 10:56:46'),
-(1237, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-17 10:56:47');
+(1237, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-17 10:56:47'),
+(1238, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-17 13:24:37'),
+(1239, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-17 13:24:37'),
+(1240, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-17 13:49:45'),
+(1241, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-17 13:49:46'),
+(1242, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-17 13:53:26'),
+(1243, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-17 13:53:27'),
+(1244, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-17 14:16:58'),
+(1245, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-17 14:16:59'),
+(1246, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-17 14:17:40'),
+(1247, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-17 14:22:28'),
+(1248, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-17 14:22:28'),
+(1249, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-17 14:22:29'),
+(1250, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-17 14:22:33'),
+(1251, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-17 14:23:39'),
+(1252, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-17 14:23:39'),
+(1253, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-17 14:23:56'),
+(1254, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-17 14:23:56'),
+(1255, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-17 14:31:22'),
+(1256, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-17 14:31:22'),
+(1257, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-17 14:40:28'),
+(1258, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-17 14:40:29'),
+(1259, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-17 14:40:31'),
+(1260, 'Admin', 'Clicked User Management Side Nav', '2025-07-17 14:44:05'),
+(1261, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-17 14:44:06'),
+(1262, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-17 14:44:06'),
+(1263, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-17 14:48:52'),
+(1264, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-17 14:48:52'),
+(1265, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-17 14:48:54'),
+(1266, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-17 14:51:57'),
+(1267, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-17 14:51:58'),
+(1268, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-17 15:10:02'),
+(1269, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-17 15:10:03'),
+(1270, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-17 15:10:05'),
+(1271, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-17 15:25:55'),
+(1272, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-17 15:25:55'),
+(1273, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-17 15:26:16'),
+(1274, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-17 15:26:43'),
+(1275, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-17 15:42:04'),
+(1276, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-17 15:42:05'),
+(1277, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-17 15:48:20'),
+(1278, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-17 15:48:21'),
+(1279, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-17 15:56:48'),
+(1280, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-17 15:56:48'),
+(1281, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-17 16:03:13'),
+(1282, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-17 16:03:14'),
+(1283, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-17 16:49:06'),
+(1284, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-17 16:49:07'),
+(1285, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-17 16:51:42'),
+(1286, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-17 16:51:42'),
+(1287, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-17 16:56:31'),
+(1288, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-17 16:56:32'),
+(1289, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-17 17:01:51'),
+(1290, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-17 17:01:51'),
+(1291, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-17 17:05:07'),
+(1292, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-17 17:05:08'),
+(1293, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-17 17:08:56'),
+(1294, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-17 17:08:57'),
+(1295, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 08:13:42'),
+(1296, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 08:13:47'),
+(1297, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 08:13:49'),
+(1298, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 08:13:56'),
+(1299, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 08:13:57'),
+(1300, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 08:13:59'),
+(1301, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 08:14:00'),
+(1302, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 08:14:00'),
+(1303, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 08:14:00'),
+(1304, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 08:14:01'),
+(1305, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 08:14:03'),
+(1306, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 08:14:03'),
+(1307, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 08:14:04'),
+(1308, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 08:14:21'),
+(1309, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 08:14:21'),
+(1310, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 08:14:40'),
+(1311, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 08:14:42'),
+(1312, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 08:14:43'),
+(1313, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 08:14:43'),
+(1314, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 08:18:12'),
+(1315, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 08:20:12'),
+(1316, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 08:20:14'),
+(1317, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 08:26:20'),
+(1318, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 08:26:20'),
+(1319, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 08:29:49'),
+(1320, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 08:29:49'),
+(1321, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 08:39:36'),
+(1322, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 08:39:36'),
+(1323, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 08:48:57'),
+(1324, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 08:48:57'),
+(1325, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 09:04:22'),
+(1326, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 09:04:22'),
+(1327, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 09:04:57'),
+(1328, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 09:04:57'),
+(1329, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 09:04:58'),
+(1330, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 09:04:58'),
+(1331, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 09:05:00'),
+(1332, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 09:05:02'),
+(1333, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 09:07:44'),
+(1334, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 09:07:45'),
+(1335, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 09:10:34'),
+(1336, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 09:10:34'),
+(1337, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 09:10:35'),
+(1338, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 09:10:36'),
+(1339, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 09:10:37'),
+(1340, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 09:10:37'),
+(1341, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 09:10:38'),
+(1342, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 09:22:52'),
+(1343, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 09:22:53'),
+(1344, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 09:22:57'),
+(1345, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 09:22:57'),
+(1346, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 09:48:41'),
+(1347, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 09:48:42'),
+(1348, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 09:51:37'),
+(1349, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 09:51:38'),
+(1350, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 09:52:52'),
+(1351, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 09:52:53'),
+(1352, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 09:52:54');
+INSERT INTO `tbl_auditlog` (`auditlog_id`, `auditlog_empname`, `auditlog_action`, `auditlog_dateandtime`) VALUES
+(1353, 'Admin', 'Clicked User Management Side Nav', '2025-07-18 09:52:54'),
+(1354, 'Admin', 'Clicked User Management Side Nav', '2025-07-18 09:52:57'),
+(1355, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 09:52:58'),
+(1356, 'Admin', 'Clicked search item option', '2025-07-18 09:53:08'),
+(1357, 'Admin', 'Clicked search item option', '2025-07-18 09:53:12'),
+(1358, 'Admin', 'Clicked search item option', '2025-07-18 09:53:25'),
+(1359, 'Admin', 'Clicked search item option', '2025-07-18 09:59:24'),
+(1360, 'Admin', 'Clicked search item option', '2025-07-18 09:59:25'),
+(1361, 'Admin', 'Clicked search item option', '2025-07-18 10:01:37'),
+(1362, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 10:01:41'),
+(1363, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 10:01:42'),
+(1364, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 10:01:47'),
+(1365, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 10:01:56'),
+(1366, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 10:01:58'),
+(1367, 'Admin', 'Clicked search item option', '2025-07-18 10:02:03'),
+(1368, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 10:02:18'),
+(1369, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 10:02:19'),
+(1370, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 10:02:19'),
+(1371, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 10:02:21'),
+(1372, 'Admin', 'Clicked User Management Side Nav', '2025-07-18 13:23:45'),
+(1373, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 13:23:46'),
+(1374, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 13:23:47'),
+(1375, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 13:23:54'),
+(1376, 'Admin', 'Clicked search item option', '2025-07-18 13:23:58'),
+(1377, 'Admin', 'Clicked search item option', '2025-07-18 13:24:13'),
+(1378, 'Admin', 'Clicked search item option', '2025-07-18 13:24:17'),
+(1379, 'Admin', 'Clicked search item option', '2025-07-18 13:24:20'),
+(1380, 'Admin', 'Clicked proceed', '2025-07-18 13:24:32'),
+(1381, 'Admin', 'Clicked proceed', '2025-07-18 13:24:44'),
+(1382, 'Admin', 'Clicked proceed', '2025-07-18 13:24:46'),
+(1383, 'Admin', 'Clicked search item option', '2025-07-18 13:27:37'),
+(1384, 'Admin', 'Clicked proceed', '2025-07-18 13:27:51'),
+(1385, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 13:36:27'),
+(1386, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 13:36:27'),
+(1387, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 13:36:28'),
+(1388, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 13:36:40'),
+(1389, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 13:39:31'),
+(1390, 'Admin', 'Clicked search item option', '2025-07-18 13:44:11'),
+(1391, 'Admin', 'Clicked search item option', '2025-07-18 13:44:12'),
+(1392, 'Admin', 'Clicked proceed', '2025-07-18 13:44:19'),
+(1393, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 13:47:16'),
+(1394, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 13:47:21'),
+(1395, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 13:53:22'),
+(1396, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 13:53:23'),
+(1397, 'Admin', 'Clicked search item option', '2025-07-18 13:57:39'),
+(1398, 'Admin', 'Clicked proceed', '2025-07-18 13:57:45'),
+(1399, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 14:09:59'),
+(1400, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 14:27:21'),
+(1401, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 14:27:21'),
+(1402, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 14:27:22'),
+(1403, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 14:27:29'),
+(1404, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 14:27:30'),
+(1405, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 14:27:50'),
+(1406, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 14:29:22'),
+(1407, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 14:29:23'),
+(1408, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 14:31:01'),
+(1409, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 14:31:01'),
+(1410, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 14:34:48'),
+(1411, 'Admin', 'Clicked search item option', '2025-07-18 14:34:52'),
+(1412, 'Admin', 'Clicked proceed', '2025-07-18 14:34:57'),
+(1413, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 14:35:22'),
+(1414, 'Admin', 'Clicked search item option', '2025-07-18 14:38:09'),
+(1415, 'Admin', 'Clicked proceed', '2025-07-18 14:38:15'),
+(1416, 'Admin', 'Clicked search item option', '2025-07-18 14:40:42'),
+(1417, 'Admin', 'Clicked search item option', '2025-07-18 14:40:44'),
+(1418, 'Admin', 'Clicked proceed', '2025-07-18 14:40:48'),
+(1419, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 14:42:56'),
+(1420, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 14:42:56'),
+(1421, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 14:42:58'),
+(1422, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 14:42:58'),
+(1423, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 14:44:27'),
+(1424, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 14:44:34'),
+(1425, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 14:48:53'),
+(1426, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 14:48:56'),
+(1427, 'Admin', 'Clicked search item option', '2025-07-18 14:48:57'),
+(1428, 'Admin', 'Clicked search item option', '2025-07-18 14:48:59'),
+(1429, 'Admin', 'Clicked proceed', '2025-07-18 14:49:02'),
+(1430, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 14:49:28'),
+(1431, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 14:49:29'),
+(1432, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 14:49:37'),
+(1433, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 14:49:44'),
+(1434, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 14:49:45'),
+(1435, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 14:49:48'),
+(1436, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 14:51:31'),
+(1437, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 14:51:33'),
+(1438, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 14:51:34'),
+(1439, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 14:51:34'),
+(1440, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 14:51:35'),
+(1441, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 14:56:00'),
+(1442, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 14:56:01'),
+(1443, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 14:56:01'),
+(1444, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 14:56:02'),
+(1445, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 15:03:40'),
+(1446, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 15:06:13'),
+(1447, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 15:06:13'),
+(1448, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 15:06:19'),
+(1449, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 15:06:21'),
+(1450, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 15:06:22'),
+(1451, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 15:06:42'),
+(1452, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 15:06:43'),
+(1453, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 15:06:44'),
+(1454, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 15:06:51'),
+(1455, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 15:07:10'),
+(1456, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 15:07:18'),
+(1457, 'Admin', 'Clicked search item option', '2025-07-18 15:09:38'),
+(1458, 'Admin', 'Clicked proceed', '2025-07-18 15:09:43'),
+(1459, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 15:09:50'),
+(1460, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 15:09:51'),
+(1461, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 15:09:52'),
+(1462, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 15:12:33'),
+(1463, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 15:12:34'),
+(1464, 'Admin', 'Clicked search item option', '2025-07-18 15:12:38'),
+(1465, 'Admin', 'Clicked proceed', '2025-07-18 15:13:30'),
+(1466, 'Admin', 'Clicked search item option', '2025-07-18 15:17:09'),
+(1467, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 15:17:13'),
+(1468, 'Admin', 'Clicked search item option', '2025-07-18 15:17:17'),
+(1469, 'Admin', 'Clicked proceed', '2025-07-18 15:17:22'),
+(1470, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 15:17:30'),
+(1471, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 15:17:46'),
+(1472, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 15:19:32'),
+(1473, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 15:19:32'),
+(1474, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 15:19:34'),
+(1475, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 15:19:37'),
+(1476, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 15:19:51'),
+(1477, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 15:19:57'),
+(1478, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 15:19:57'),
+(1479, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 15:20:05'),
+(1480, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 15:20:20'),
+(1481, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 15:20:21'),
+(1482, 'Admin', 'Clicked search item option', '2025-07-18 15:20:23'),
+(1483, 'Admin', 'Clicked proceed', '2025-07-18 15:20:27'),
+(1484, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 15:20:31'),
+(1485, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 15:20:50'),
+(1486, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 15:20:51'),
+(1487, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 15:20:52'),
+(1488, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 15:20:53'),
+(1489, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 15:20:54'),
+(1490, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 15:20:54'),
+(1491, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 15:21:01'),
+(1492, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 15:21:07'),
+(1493, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 15:21:14'),
+(1494, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 15:21:28'),
+(1495, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 15:21:28'),
+(1496, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 15:21:30'),
+(1497, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 15:21:35'),
+(1498, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 15:21:56'),
+(1499, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 15:22:07'),
+(1500, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 15:22:09'),
+(1501, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 15:22:42'),
+(1502, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 15:22:42'),
+(1503, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 15:26:35'),
+(1504, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 15:26:36'),
+(1505, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 15:27:49'),
+(1506, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 15:27:50'),
+(1507, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 15:28:33'),
+(1508, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 15:28:34'),
+(1509, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 15:29:19'),
+(1510, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 15:29:20'),
+(1511, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 16:01:10'),
+(1512, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 16:01:11'),
+(1513, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 16:01:11'),
+(1514, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 16:01:17'),
+(1515, 'Admin', 'Clicked User Management Side Nav', '2025-07-18 16:01:18'),
+(1516, 'Admin', 'Clicked Dashboard Side Nav', '2025-07-18 16:01:27'),
+(1517, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 16:01:29'),
+(1518, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 16:01:30'),
+(1519, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 16:09:42'),
+(1520, 'Admin', 'Clicked User Management Side Nav', '2025-07-18 16:09:43'),
+(1521, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 16:09:44'),
+(1522, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 16:09:44'),
+(1523, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 16:09:45'),
+(1524, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 16:09:47'),
+(1525, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 16:09:47'),
+(1526, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 16:09:57'),
+(1527, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 16:09:59'),
+(1528, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 16:10:01'),
+(1529, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 16:10:03'),
+(1530, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 16:10:04'),
+(1531, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 16:10:23'),
+(1532, 'Admin', 'Clicked User Management Side Nav', '2025-07-18 16:10:31'),
+(1533, 'Admin', 'Clicked Dashboard Side Nav', '2025-07-18 16:10:32'),
+(1534, 'Admin', 'Clicked User Management Side Nav', '2025-07-18 16:10:38'),
+(1535, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 16:16:54'),
+(1536, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 16:16:54'),
+(1537, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 16:16:58'),
+(1538, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 16:17:32'),
+(1539, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 16:17:32'),
+(1540, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 16:33:44'),
+(1541, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 16:33:44'),
+(1542, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 16:33:45'),
+(1543, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 16:33:46'),
+(1544, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 16:34:13'),
+(1545, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 16:34:14'),
+(1546, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 16:34:14'),
+(1547, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 16:34:16'),
+(1548, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 16:34:18'),
+(1549, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 16:34:18'),
+(1550, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 16:34:41'),
+(1551, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 16:34:41'),
+(1552, 'Admin', 'Clicked Dashboard Side Nav', '2025-07-18 16:35:13'),
+(1553, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 16:35:17'),
+(1554, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 16:35:17'),
+(1555, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 16:35:19'),
+(1556, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 16:35:22'),
+(1557, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 16:35:59'),
+(1558, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 16:35:59'),
+(1559, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 16:36:00'),
+(1560, 'Admin', 'Clicked User Management Side Nav', '2025-07-18 16:36:10'),
+(1561, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 16:40:20'),
+(1562, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 16:40:21'),
+(1563, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 16:40:26'),
+(1564, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 16:40:27'),
+(1565, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 16:40:27'),
+(1566, 'Admin', 'Clicked User Management Side Nav', '2025-07-18 16:40:28'),
+(1567, 'PRC -. CAR', 'Updated User Level of Rodulfo G. Dacocot : to Employee', '2025-07-18 16:41:05'),
+(1568, 'PRC -. CAR', 'Updated User Level of Rodulfo G. Dacocot : to Admin', '2025-07-18 16:41:13'),
+(1569, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 16:44:07'),
+(1570, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 16:44:07'),
+(1571, 'Admin', 'Clicked User Management Side Nav', '2025-07-18 16:44:08'),
+(1572, 'Admin', 'Created user: Employee (Employee)', '2025-07-18 16:45:30'),
+(1573, 'Admin', 'Clicked User Management Side Nav', '2025-07-18 16:45:40'),
+(1574, 'Admin', 'Clicked User Management Side Nav', '2025-07-18 16:45:41'),
+(1575, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 16:47:39'),
+(1576, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 16:47:39'),
+(1577, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 16:47:40'),
+(1578, 'Admin', 'Clicked User Management Side Nav', '2025-07-18 16:47:40'),
+(1579, 'Admin', 'Created user: Employee (Employee)', '2025-07-18 16:52:52'),
+(1580, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 16:52:57'),
+(1581, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 16:52:57'),
+(1582, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 16:52:58'),
+(1583, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 16:52:59'),
+(1584, 'Admin', 'Clicked User Management Side Nav', '2025-07-18 16:53:07'),
+(1585, 'Admin', 'Clicked Dashboard Side Nav', '2025-07-18 16:53:09'),
+(1586, 'Admin', 'Clicked User Management Side Nav', '2025-07-18 16:53:10'),
+(1587, 'Employee', 'Clicked Dashboard Side Nav', '2025-07-18 16:53:23'),
+(1588, 'Employee', 'Clicked Dashboard Side Nav', '2025-07-18 16:58:27'),
+(1589, 'Employee', 'Clicked Dashboard Side Nav', '2025-07-18 16:59:13'),
+(1590, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 16:59:48'),
+(1591, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 16:59:55'),
+(1592, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 16:59:56'),
+(1593, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 16:59:56'),
+(1594, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 17:00:53'),
+(1595, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 17:00:54'),
+(1596, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 17:01:05'),
+(1597, 'Admin', 'Clicked User Management Side Nav', '2025-07-18 17:01:06'),
+(1598, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 17:06:23'),
+(1599, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 17:06:25'),
+(1600, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 17:06:28'),
+(1601, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 17:06:28'),
+(1602, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 17:06:35'),
+(1603, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 17:06:36'),
+(1604, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 17:10:15'),
+(1605, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 17:12:18'),
+(1606, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-18 17:13:25'),
+(1607, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 17:13:26'),
+(1608, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 17:21:43'),
+(1609, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 17:26:03'),
+(1610, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 17:26:04'),
+(1611, 'Admin', 'Clicked User Management Side Nav', '2025-07-18 17:28:12'),
+(1612, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-18 17:29:00'),
+(1613, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-18 17:29:07'),
+(1614, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-22 11:53:58'),
+(1615, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-22 11:54:00'),
+(1616, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-22 11:54:16'),
+(1617, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-22 13:34:15'),
+(1618, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-22 13:34:16'),
+(1619, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-22 13:40:09'),
+(1620, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-22 13:40:10'),
+(1621, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-22 13:50:31'),
+(1622, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-22 13:50:32'),
+(1623, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-22 13:50:39'),
+(1624, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-22 14:02:36'),
+(1625, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-22 14:10:49'),
+(1626, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-22 14:11:46'),
+(1627, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-22 14:41:23'),
+(1628, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-22 14:41:23'),
+(1629, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-22 14:41:30'),
+(1630, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-22 14:41:31'),
+(1631, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-22 14:42:43'),
+(1632, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-22 14:46:39'),
+(1633, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-22 14:46:39'),
+(1634, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-22 14:46:42'),
+(1635, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-22 14:46:45'),
+(1636, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-22 14:46:45'),
+(1637, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-22 14:46:58'),
+(1638, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-22 14:47:02'),
+(1639, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-22 14:47:05'),
+(1640, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-22 14:59:06'),
+(1641, 'Admin', 'Clicked Inventory Dropdown Side Nav', '2025-07-22 15:08:53'),
+(1642, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-22 15:08:54'),
+(1643, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-22 15:12:53'),
+(1644, 'Admin', 'Clicked Request Equipment Side Nav', '2025-07-22 15:14:02'),
+(1645, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-22 15:14:03'),
+(1646, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-22 15:18:27'),
+(1647, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-22 15:18:28'),
+(1648, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-22 15:18:31'),
+(1649, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-22 15:23:42'),
+(1650, 'Admin', 'Clicked Inventory List Side Nav', '2025-07-22 15:23:44');
 
 -- --------------------------------------------------------
 
@@ -1300,16 +1714,16 @@ CREATE TABLE `tbl_borrow_request` (
 --
 
 INSERT INTO `tbl_borrow_request` (`breq_id`, `breq_token`, `emp_name`, `breq_status`, `breq_date`, `breq_decisiondate`, `breq_remarks`, `breq_signature`) VALUES
-(1, 'PRC-000001', 'Josh', 5, '2025-07-02 09:32:18', '2025-07-03 08:29:31', 'Borrow', 'signatures/PRC-000001.png'),
-(2, 'PRC-000002', 'Josh', 5, '2025-07-03 14:08:30', '2025-07-03 14:40:56', 'FOR PRINTING', 'signatures/PRC-000002.png'),
-(3, 'PRC-000003', 'JADE', 5, '2025-07-03 14:40:22', '2025-07-03 14:40:52', 'For borrowing', 'signatures/PRC-000003.png'),
-(4, 'PRC-000004', 'Josh', 5, '2025-07-04 08:29:08', '2025-07-04 09:21:41', 'For gaming', 'signatures/PRC-000004.png'),
-(5, 'PRC-000005', 'Joshi', 5, '2025-07-07 11:55:12', '2025-07-07 11:55:37', 'Borrow', 'signatures/PRC-000005.png'),
-(6, 'PRC-000006', 'Joshig', 5, '2025-07-07 16:45:36', '2025-07-07 16:46:05', 'Mobile', 'signatures/PRC-000006.png'),
-(7, 'PRC-000007', 'JADE', 5, '2025-07-10 12:01:42', '2025-07-10 12:02:05', 'For cleaning toilet', 'signatures/PRC-000007.png'),
-(8, 'PRC-000008', 'ADAM', 5, '2025-07-10 12:03:10', '2025-07-10 12:03:43', 'For gaming', 'signatures/PRC-000008.png'),
-(9, 'PRC-000009', 'Josh', 4, '2025-07-10 14:18:03', '2025-07-10 14:18:12', 'For cleaning FAD CR', 'signatures/PRC-000009.png'),
-(10, 'PRC-000010', 'rod', 3, '2025-07-10 14:47:02', '', 'CLEANINGGGGGGGG', 'signatures/PRC-000010.png');
+(11, 'PRC-000001', 'Josh', 5, '2025-07-18 13:57:47', '2025-07-18 15:06:03', 'xfghjkl;\'', 'signatures/PRC-000001.png'),
+(17, 'PRC-000002', 'JADE', 5, '2025-07-18 14:49:06', '2025-07-18 15:06:10', 'asdfghjkl', 'signatures/PRC-000002.png'),
+(18, 'PRC-000003', 'ADAM', 6, '2025-07-18 15:07:07', '2025-07-18 15:09:58', '12345678erty', 'signatures/PRC-000003.png'),
+(19, 'PRC-000004', 'ADAMyy', 6, '2025-07-18 15:09:46', '2025-07-18 15:09:56', 'asdfghjkl;', 'signatures/PRC-000004.png'),
+(20, 'PRC-000005', 'Josh', 6, '2025-07-18 15:13:38', '2025-07-18 15:17:43', 'fghjkl;', 'signatures/PRC-000005.png'),
+(21, 'PRC-000006', 'Josh', 6, '2025-07-18 15:17:26', '2025-07-18 15:17:33', 'dfghjkl', 'signatures/PRC-000006.png'),
+(22, 'PRC-000007', 'Joshig123', 6, '2025-07-18 15:19:48', '2025-07-18 15:19:55', 'qwretyurtyu', 'signatures/PRC-000007.png'),
+(23, 'PRC-000008', 'Josh', 5, '2025-07-18 15:20:28', '2025-07-18 15:21:25', 'WSQERTYUI', 'signatures/PRC-000008.png'),
+(24, 'PRC-000009', 'Joshig', 5, '2025-07-18 15:21:47', '2025-07-18 15:22:04', 'XCVBNM', 'signatures/PRC-000009.png'),
+(25, 'PRC-000010', 'Bella', 4, '2025-07-18 16:59:33', '2025-07-18 16:59:53', 'sadfghjkl', 'signatures/PRC-000010.png');
 
 -- --------------------------------------------------------
 
@@ -1332,43 +1746,37 @@ CREATE TABLE `tbl_borrow_request_items` (
 --
 
 INSERT INTO `tbl_borrow_request_items` (`br_item_id`, `breq_token`, `inv_id`, `is_approved`, `borrowed_date`, `returned_date`, `returner_name`) VALUES
-(1, 'PRC-000001', 985, 1, '2025-07-03 08:29:12', '2025-07-03 08:29:31', 'Ma\'am G'),
-(2, 'PRC-000002', 984, 1, '2025-07-03 14:08:40', '2025-07-03 14:40:56', 'Ma\'am GG'),
-(3, 'PRC-000003', 985, 1, '2025-07-03 14:40:30', '2025-07-03 14:40:52', 'Ma\'am G'),
-(4, 'PRC-000004', 984, 1, '2025-07-04 08:29:23', '2025-07-04 09:21:41', 'Ma\'am G'),
-(5, 'PRC-000005', 984, 1, '2025-07-07 11:55:20', '2025-07-07 11:55:37', 'Ma\'am GX'),
-(6, 'PRC-000006', 984, 1, '2025-07-07 16:45:46', '2025-07-07 16:46:05', 'Ma\'am GXG'),
-(7, 'PRC-000007', 4, 1, '2025-07-10 12:01:50', '2025-07-10 12:02:05', 'Ma\'am G'),
-(8, 'PRC-000008', 985, 1, '2025-07-10 12:03:27', '2025-07-10 12:03:43', 'Ma\'am GXG');
+(1, 'PRC-000001', 985, 1, '2025-07-18 14:11:08', '2025-07-18 15:06:03', 'GEROME'),
+(2, 'PRC-000002', 984, 1, '2025-07-18 14:49:41', '2025-07-18 15:06:10', 'GEREOME'),
+(3, 'PRC-000003', 985, 2, '2025-07-18 15:09:58', '2025-07-03 14:40:52', 'Ma\'am G'),
+(4, 'PRC-000004', 984, 2, '2025-07-18 15:09:56', '2025-07-04 09:21:41', 'Ma\'am G'),
+(5, 'PRC-000005', 984, 2, '2025-07-18 15:17:43', '2025-07-07 11:55:37', 'Ma\'am GX'),
+(6, 'PRC-000006', 984, 2, '2025-07-18 15:17:33', '2025-07-07 16:46:05', 'Ma\'am GXG'),
+(7, 'PRC-000007', 4, 2, '2025-07-18 15:19:55', '2025-07-10 12:02:05', 'Ma\'am G'),
+(8, 'PRC-000008', 985, 1, '2025-07-18 15:20:34', '2025-07-18 15:21:25', 'SDFGHJK'),
+(9, 'PRC-000001', 987, 1, '2025-07-18 14:11:08', '2025-07-18 15:06:03', 'GEROME'),
+(10, 'PRC-000002', 984, 1, '2025-07-18 14:49:41', '2025-07-18 15:06:10', 'GEREOME'),
+(11, 'PRC-000003', 984, 2, '2025-07-18 15:09:58', '', NULL),
+(12, 'PRC-000004', 985, 2, '2025-07-18 15:09:56', '', NULL),
+(13, 'PRC-000005', 985, 2, '2025-07-18 15:17:43', '', NULL),
+(14, 'PRC-000006', 984, 2, '2025-07-18 15:17:33', '', NULL),
+(15, 'PRC-000007', 985, 2, '2025-07-18 15:19:55', '', NULL),
+(16, 'PRC-000008', 984, 1, '2025-07-18 15:20:34', '2025-07-18 15:21:25', 'SDFGHJK'),
+(17, 'PRC-000009', 984, 1, '2025-07-18 15:21:53', '2025-07-18 15:22:04', 'GGGGGGG'),
+(18, 'PRC-000010', 984, 1, '2025-07-18 16:59:53', '', NULL);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbl_consumable_requests`
+-- Table structure for table `tbl_consumable_balance`
 --
 
-CREATE TABLE `tbl_consumable_requests` (
-  `request_id` int(11) NOT NULL,
-  `item_type_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `quantity_requested` int(11) NOT NULL,
-  `reason` text NOT NULL,
-  `status` varchar(50) NOT NULL DEFAULT 'Pending',
-  `request_date` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tbl_consumed_items`
---
-
-CREATE TABLE `tbl_consumed_items` (
+CREATE TABLE `tbl_consumable_balance` (
   `id` int(11) NOT NULL,
-  `inv_id` int(11) NOT NULL,
-  `quantity` int(11) NOT NULL,
-  `consumed_by` varchar(255) NOT NULL,
-  `date_consumed` datetime NOT NULL
+  `stock_number` varchar(255) NOT NULL,
+  `item_description` varchar(255) NOT NULL,
+  `unit` varchar(255) NOT NULL,
+  `beginning_balance` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -1400,10 +1808,8 @@ CREATE TABLE `tbl_inv` (
 --
 
 INSERT INTO `tbl_inv` (`inv_id`, `type_id`, `inv_serialno`, `inv_propno`, `inv_propname`, `inv_price`, `inv_status`, `inv_bnm`, `inv_date_added`, `date_acquired`, `price`, `condition`, `inv_quantity`, `end_user`, `accounted_to`) VALUES
-(984, 1, '09123X-123D', 'PO123', 'REGULATION', 0.00, '1', 'Altech Y-2019', 'July 02, 2025 08:34 AM', '2025-07-02', 20000.00, 'New', 0, '', 'Ma\'am Y'),
-(985, 1, '09123X-1233', 'PO125', 'Regulation', 0.00, '1', 'Altech Y-2019', 'July 02, 2025 09:03 AM', '2025-07-16', 20000.00, 'Good', 0, '', 'Ma\'am Z'),
-(987, 2, '09123X-123312', 'PO12578', 'Regulation', 0.00, '6', 'Altech Y-2019', 'July 08, 2025 03:49 PM', NULL, 30000.00, 'New', 0, 'Gason', 'Ma\'am Z'),
-(991, 1, '09123X-1233123', 'PO125', 'FAD', 0.00, '1', 'Altechyy Y-2019', 'July 09, 2025 10:55 AM', NULL, 0.00, 'New', 1, '', '');
+(984, 1, '09123X-123D', 'PO123', 'REGULATION', 0.00, '4', 'Altech Y-2019', 'July 02, 2025 08:34 AM', '2025-07-02', 20000.00, 'New', 0, '', 'Ma\'am Y'),
+(987, 2, '09123X-123312', 'PO12578', 'Regulation', 0.00, '1', 'Altech Y-2019', 'July 08, 2025 03:49 PM', NULL, 30000.00, 'New', 0, 'Gason', 'Ma\'am Z');
 
 -- --------------------------------------------------------
 
@@ -1486,7 +1892,7 @@ INSERT INTO `tbl_type` (`type_id`, `type_name`, `type_origin`) VALUES
 (35, 'DRONE', 'Non-Consumable'),
 (36, 'DRONE RC', 'Non-Consumable'),
 (37, 'Rack Mount', 'Non-Consumable'),
-(38, 'Cleaning supplies', 'Consumable');
+(38, 'Cleaning supplies', 'Non-Consumable');
 
 -- --------------------------------------------------------
 
@@ -1512,7 +1918,8 @@ CREATE TABLE `tbl_user` (
 
 INSERT INTO `tbl_user` (`user_id`, `username`, `user_password`, `user_ln`, `user_mi`, `user_fn`, `user_status`, `user_level`, `user_date_created`) VALUES
 (1, 'Admin', '$2y$10$AQyHxe9lfuYmN0SuJk0ja.mb7TYoBODNXKZbvGr/4c3dHsNJy3XZ.', 'CAR', '-', 'PRC', 1, 'Admin', '2025-03-21 03:52:55'),
-(2, 'rodulfo', '$2y$10$rYPHyPS346U8nM3wmVsoU.9neq7r7TVgWNJJ79DDr6EE87WCDRpfq', 'Dacocot', 'g', 'Rodulfo', 1, 'Admin', '2025-07-04 02:41:56');
+(2, 'rodulfo', '$2y$10$rYPHyPS346U8nM3wmVsoU.9neq7r7TVgWNJJ79DDr6EE87WCDRpfq', 'Dacocot', 'g', 'Rodulfo', 1, 'Admin', '2025-07-04 02:41:56'),
+(4, 'Employee', '$2y$10$vnE7oA40XK4GwhncNQOD0u0g.pbuB7OWbO.XH0ZfxHnDziPjyVcga', 'John', 'J', 'John', 1, 'Employee', '2025-07-18 10:52:52');
 
 --
 -- Indexes for dumped tables
@@ -1537,18 +1944,11 @@ ALTER TABLE `tbl_borrow_request_items`
   ADD PRIMARY KEY (`br_item_id`);
 
 --
--- Indexes for table `tbl_consumable_requests`
+-- Indexes for table `tbl_consumable_balance`
 --
-ALTER TABLE `tbl_consumable_requests`
-  ADD PRIMARY KEY (`request_id`),
-  ADD KEY `item_type_id` (`item_type_id`),
-  ADD KEY `user_id` (`user_id`);
-
---
--- Indexes for table `tbl_consumed_items`
---
-ALTER TABLE `tbl_consumed_items`
-  ADD PRIMARY KEY (`id`);
+ALTER TABLE `tbl_consumable_balance`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `stock_number` (`stock_number`);
 
 --
 -- Indexes for table `tbl_inv`
@@ -1582,43 +1982,37 @@ ALTER TABLE `tbl_user`
 -- AUTO_INCREMENT for table `tbl_auditlog`
 --
 ALTER TABLE `tbl_auditlog`
-  MODIFY `auditlog_id` int(25) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1238;
+  MODIFY `auditlog_id` int(25) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1651;
 
 --
 -- AUTO_INCREMENT for table `tbl_borrow_request`
 --
 ALTER TABLE `tbl_borrow_request`
-  MODIFY `breq_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `breq_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `tbl_borrow_request_items`
 --
 ALTER TABLE `tbl_borrow_request_items`
-  MODIFY `br_item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `br_item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
--- AUTO_INCREMENT for table `tbl_consumable_requests`
+-- AUTO_INCREMENT for table `tbl_consumable_balance`
 --
-ALTER TABLE `tbl_consumable_requests`
-  MODIFY `request_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `tbl_consumed_items`
---
-ALTER TABLE `tbl_consumed_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+ALTER TABLE `tbl_consumable_balance`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4825;
 
 --
 -- AUTO_INCREMENT for table `tbl_inv`
 --
 ALTER TABLE `tbl_inv`
-  MODIFY `inv_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=994;
+  MODIFY `inv_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1335;
 
 --
 -- AUTO_INCREMENT for table `tbl_inv_consumables`
 --
 ALTER TABLE `tbl_inv_consumables`
-  MODIFY `inv_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=239;
+  MODIFY `inv_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1939;
 
 --
 -- AUTO_INCREMENT for table `tbl_type`
@@ -1630,7 +2024,7 @@ ALTER TABLE `tbl_type`
 -- AUTO_INCREMENT for table `tbl_user`
 --
 ALTER TABLE `tbl_user`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

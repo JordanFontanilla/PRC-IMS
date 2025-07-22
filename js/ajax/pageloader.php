@@ -73,6 +73,10 @@ $(document).ready(function () {
         loadContent('pages/admin/page_itemrequest.php');
     });
 
+    $(document).on('click', '.load-consumable-balance', function () {
+        loadContent('pages/admin/page_consumable_balance.php');
+    });
+
     $(document).on('click', '.load-consumeditems', function () {
         loadContent('pages/admin/page_consumeditems.php');
     });

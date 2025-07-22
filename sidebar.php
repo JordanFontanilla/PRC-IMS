@@ -53,6 +53,7 @@
                     <hr>
                 <?php endif; ?>
                 <h6 class="collapse-header">Item Status:</h6>
+                <a class="collapse-item load-consumable-balance" id="consumablebalance" href="javascript:void(0);">Consumable Balance</a>
                 <a class="collapse-item load-borrowedlist" href="javascript:void(0);">Borrowed Equipment</a>
                 <a class="collapse-item load-returnlist" href="javascript:void(0);">Returned Equipment</a>
                 <a class="collapse-item load-missinglist" href="#">Missing List</a>

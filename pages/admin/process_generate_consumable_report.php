@@ -80,8 +80,19 @@ $sheet->getStyle('A8:H8')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_C
 $sheet->mergeCells('H8:I8');
 
 // Fetch data from the database
-$query = "SELECT ris_no, end_user_issuance, stock_number, item_description, unit, issuance FROM tbl_inv_consumables ORDER BY acceptance_date DESC";
-$result = $conn->query($query);
+$query = "SELECT ris_no, end_user_issuance, stock_number, item_description, unit, issuance FROM tbl_inv_consumables";
+
+if (isset($_GET['month']) && !empty($_GET['month'])) {
+    $month = $_GET['month'];
+    $query .= " WHERE DATE_FORMAT(acceptance_date, '%Y-%c') = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param('s', $month);
+    $stmt->execute();
+    $result = $stmt->get_result();
+} else {
+    $query .= " ORDER BY acceptance_date DESC";
+    $result = $conn->query($query);
+}
 
 $row = 9;
 if ($result->num_rows > 0) {

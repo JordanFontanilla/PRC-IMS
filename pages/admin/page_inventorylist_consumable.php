@@ -90,16 +90,15 @@ error_reporting(E_ALL);
             ORDER BY type_name
         ");
         ?>
-        <!-- filter dropdown, styled small and btn-like if you want -->
-        <div id="typeFilterContainer" style="display: none;">
-        <select id="typeFilter" class="form-control form-control-sm">
-            <option value="">All Types</option>
-            <?php while($t = $typeRes->fetch_assoc()): ?>
-            <option value="<?= htmlspecialchars($t['type_name']) ?>">
-                <?= htmlspecialchars($t['type_name']) ?>
-            </option>
-            <?php endwhile; ?>
-        </select>
+                <div id="filterContainer" class="d-inline-flex align-items-center gap-2">
+            <label for="filterColumn" class="mb-0">Filter by:</label>
+            <select id="filterColumn" class="form-control form-control-sm w-auto d-inline-block">
+                <option value="">All Columns</option>
+                <option value="1">Stock Number</option>
+                <option value="2">Acceptance Date</option>
+                <option value="3">RIS No.</option>
+            </select>
+            <input type="text" id="filterValue" class="form-control form-control-sm w-auto d-inline-block" placeholder="Search...">
         </div>
         <table class="table table-bordered" id="dataTableConsumable" width="100%" cellspacing="0">
             <thead>
@@ -183,18 +182,21 @@ $(document).ready(function () {
     ]
   });
 
-  // Position dropdown beside "Show N entries"
+  // Move the filter controls into the DataTables length control area
   var $lenContainer = $('#dataTableConsumable_length');
   $lenContainer.addClass('d-flex align-items-center gap-2');
-  $lenContainer.append($('#typeFilterContainer').show());
+  $lenContainer.append($('#filterContainer'));
 
-  // Hook up the dropdown filter
-  $('#typeFilter').on('change', function () {
-    var selectedType = $(this).val();
-    invTable
-      .column(4) // "Unit" column is index 4
-      .search(selectedType)
-      .draw();
+  // Apply the filter when column or value changes
+  $('#filterColumn, #filterValue').on('change keyup', function () {
+    var columnIndex = $('#filterColumn').val();
+    var filterValue = $('#filterValue').val();
+
+    if (columnIndex) {
+      invTable.column(columnIndex).search(filterValue).draw();
+    } else {
+      invTable.search(filterValue).draw(); // Global search if no column selected
+    }
   });
 
   $(document).on('click', '.report-missing', function() {
@@ -284,21 +286,20 @@ $('#reportExcelConsum').on('click', function() {
 });
 </script>
 <style>
-    #typeFilter {
-    min-width: 120px;
-    font-weight: 800;  /* or use “bold” */
-    font-size: 0.875rem;
-    border-radius: 0.375rem; /* rounded */
-    background-color:rgb(16, 155, 255); /* Bootstrap primary */
-    color: white !important; /* white text */
-    border: none;
-    padding: 0.25rem 0.75rem;
-    cursor: pointer;
-    transition: background-color 0.2s ease-in-out;
-}
+    #filterContainer {
+        min-width: 120px;
+        font-weight: 800;
+        font-size: 0.875rem;
+        border-radius: 0.375rem;
+        background-color:rgb(16, 155, 255);
+        color: white !important;
+        border: none;
+        padding: 0.25rem 0.75rem;
+        cursor: pointer;
+        transition: background-color 0.2s ease-in-out;
+    }
 
-#typeFilter:hover {
-    background-color:rgba(0, 105, 217, 0.7); /* darker on hover */
-}
-
+    #filterContainer:hover {
+        background-color:rgba(0, 105, 217, 0.7);
+    }
 </style>

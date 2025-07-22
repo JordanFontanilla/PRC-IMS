@@ -85,15 +85,27 @@ session_start();
         ");
         ?>
         <!-- filter dropdown, styled small and btn-like if you want -->
-        <div id="typeFilterContainer" style="display: none;">
-        <select id="typeFilter" class="form-control form-control-sm">
-            <option value="">All Types</option>
-            <?php while($t = $typeRes->fetch_assoc()): ?>
-            <option value="<?= htmlspecialchars($t['type_name']) ?>">
-                <?= htmlspecialchars($t['type_name']) ?>
-            </option>
-            <?php endwhile; ?>
-        </select>
+        <div id="filterContainer" class="d-inline-flex align-items-center gap-2">
+            <label for="filterColumn" class="mb-0">Filter by:</label>
+            <select id="filterColumn" class="form-control form-control-sm w-auto d-inline-block">
+                <option value="">All Columns</option>
+                <option value="0">ID</option>
+                <option value="1">Type ID</option>
+                <option value="2">Serial No.</option>
+                <option value="3">Property No.</option>
+                <option value="4">Property Name</option>
+                <option value="5">Inventory Price</option>
+                <option value="6">Status</option>
+                <option value="7">Brand/Model</option>
+                <option value="8">Date Added</option>
+                <option value="9">Date Acquired</option>
+                <option value="10">Price</option>
+                <option value="11">Condition</option>
+                <option value="12">Quantity</option>
+                <option value="13">End User</option>
+                <option value="14">Accounted To</option>
+            </select>
+            <input type="text" id="filterValue" class="form-control form-control-sm w-auto d-inline-block" placeholder="Search...">
         </div>
         <table class="table table-bordered" id="dataTableNonConsumable" width="100%" cellspacing="0">
             <thead>
@@ -179,18 +191,21 @@ $(document).ready(function () {
     ]
   });
 
-  // Position dropdown beside "Show N entries"
+  // Move the filter controls into the DataTables length control area
   var $lenContainer = $('#dataTableNonConsumable_length');
   $lenContainer.addClass('d-flex align-items-center gap-2');
-  $lenContainer.append($('#typeFilterContainer').show());
+  $lenContainer.append($('#filterContainer'));
 
-  // Hook up the dropdown filter
-  $('#typeFilter').on('change', function () {
-    var selectedType = $(this).val();
-    invTable
-      .column(1) // "Type" column is index 1
-      .search(selectedType)
-      .draw();
+  // Apply the filter when column or value changes
+  $('#filterColumn, #filterValue').on('change keyup', function () {
+    var columnIndex = $('#filterColumn').val();
+    var filterValue = $('#filterValue').val();
+
+    if (columnIndex) {
+      invTable.column(columnIndex).search(filterValue).draw();
+    } else {
+      invTable.search(filterValue).draw(); // Global search if no column selected
+    }
   });
 
   $(document).on('click', '.report-missing', function() {
@@ -277,22 +292,21 @@ $(document).ready(function () {
 });
 </script>
 <style>
-    #typeFilter {
-    min-width: 120px;
-    font-weight: 800;  /* or use “bold” */
-    font-size: 0.875rem;
-    border-radius: 0.375rem; /* rounded */
-    background-color:rgb(16, 155, 255); /* Bootstrap primary */
-    color: white !important; /* white text */
-    border: none;
-    padding: 0.25rem 0.75rem;
-    cursor: pointer;
-    transition: background-color 0.2s ease-in-out;
-}
+    #filterContainer {
+        min-width: 120px;
+        font-weight: 800;
+        font-size: 0.875rem;
+        border-radius: 0.375rem;
+        background-color:rgb(16, 155, 255);
+        color: white !important;
+        border: none;
+        padding: 0.25rem 0.75rem;
+        cursor: pointer;
+        transition: background-color 0.2s ease-in-out;
+    }
 
-#typeFilter:hover {
-    background-color:rgba(0, 105, 217, 0.7); /* darker on hover */
-}
-
+    #filterContainer:hover {
+        background-color:rgba(0, 105, 217, 0.7);
+    }
 </style>
 

@@ -1720,28 +1720,146 @@ $(document).ready(function() {
 });
 </script>
 
-<!-- Report Generation Modal -->
-<div class="modal fade" id="reportGenerationModal" tabindex="-1" role="dialog" aria-labelledby="reportGenerationModalLabel" aria-hidden="true">
+<!-- Import Beginning Balance Modal -->
+<div class="modal fade" id="importBeginningBalanceModal" tabindex="-1" role="dialog" aria-labelledby="importBeginningBalanceModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="reportGenerationModalLabel">Generate Consumable Report</h5>
+                <h5 class="modal-title" id="importBeginningBalanceModalLabel">Import Beginning Balance</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <p>Click the button below to generate the consumable report as an Excel file.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <a href="pages/admin/process_generate_consumable_report.php" class="btn btn-primary">Generate Report</a>
+                <form id="importBeginningBalanceForm" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="excelFileBeginningBalance">Choose Excel File</label>
+                        <input type="file" name="excelFileBalance" id="excelFileBeginningBalance" class="form-control" required accept=".xlsx, .xls">
+                    </div>
+                    <div class="form-group">
+                        <label for="excelSheetBeginningBalance">Choose Sheet</label>
+                        <select name="excelSheet" id="excelSheetBeginningBalance" class="form-control" required disabled>
+                            <option value="">Select a file first</option>
+                        </select>
+                    </div>
+                    <small class="form-text text-muted">
+                        <strong>Format:</strong><br>
+                        Column A: <strong>Stock No.</strong><br>
+                        Column B: <strong>Beginning Balance</strong><br>
+                        Column C: <strong>Unit</strong><br>
+                        Column D: <strong>Item Description</strong>
+                    </small>
+                    <button type="submit" class="btn btn-primary mt-3">Import</button>
+                </form>
             </div>
         </div>
     </div>
 </div>
 
-<!-- End of AddType Modal -->
+<script>
+$(document).ready(function() {
+    const $balanceModal = $('#importBeginningBalanceModal');
+    const $balanceForm = $('#importBeginningBalanceForm');
+    const $balanceFileInput = $('#excelFileBeginningBalance');
+    const $balanceSheetSelect = $('#excelSheetBeginningBalance');
+    const $balanceSubmitBtn = $balanceForm.find('button[type="submit"]');
+
+    $balanceFileInput.on('change', function() {
+        if (this.files.length === 0) {
+            $balanceSheetSelect.html('<option value="">Select a file first</option>').prop('disabled', true);
+            $balanceSubmitBtn.prop('disabled', true);
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('excelFileBalance', this.files[0]);
+
+        $balanceSheetSelect.prop('disabled', true);
+
+        $.ajax({
+            url: 'pages/admin/fetch_sheets.php',
+            method: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            dataType: 'json',
+            success: function(response) {
+                if (response.error) {
+                    Swal.fire('Error', response.error, 'error');
+                    $balanceSheetSelect.html('<option value="">Could not load sheets</option>');
+                    $balanceSubmitBtn.prop('disabled', true);
+                } else {
+                    $balanceSheetSelect.empty();
+                    response.sheets.forEach(function(sheetName) {
+                        $balanceSheetSelect.append(`<option value="${sheetName}">${sheetName}</option>`);
+                    });
+                    $balanceSheetSelect.prop('disabled', false);
+                    $balanceSubmitBtn.prop('disabled', false);
+                }
+            },
+            error: function() {
+                Swal.fire('Error', 'Could not retrieve sheet names from the server.', 'error');
+                $balanceSheetSelect.html('<option value="">Error loading sheets</option>');
+                $balanceSubmitBtn.prop('disabled', true);
+            }
+        });
+    });
+
+    $balanceForm.on('submit', function(e) {
+        e.preventDefault();
+
+        if ($balanceFileInput[0].files.length === 0) {
+            Swal.fire('Warning', 'Please select a file first.', 'warning');
+            return;
+        }
+
+        Swal.fire({
+            title: 'Importing...',
+            text: 'Please wait while the data is being imported.',
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
+        const formData = new FormData(this);
+
+        $.ajax({
+            url: 'pages/admin/process_import_beginning_balance.php',
+            method: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Import Successful',
+                        text: response.message,
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        location.reload();
+                    });
+                } else {
+                    Swal.fire('Import Failed', response.message, 'error');
+                }
+            },
+            error: function() {
+                Swal.fire('Import Failed', 'An unexpected error occurred.', 'error');
+            }
+        });
+    });
+
+    $balanceModal.on('hidden.bs.modal', function() {
+        $balanceForm[0].reset();
+        $balanceSheetSelect.html('<option value="">Select a file first</option>').prop('disabled', true);
+        $balanceSubmitBtn.prop('disabled', true);
+    });
+});
+</script>
+
+<!-- End of Import Beginning Balance Modal -->
 
 
 

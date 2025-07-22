@@ -1,9 +1,15 @@
 <?php
 header('Content-Type: application/json');
 
+$fileTmpPath = null;
+
 if (isset($_FILES['excelFile']) && $_FILES['excelFile']['error'] === UPLOAD_ERR_OK) {
     $fileTmpPath = $_FILES['excelFile']['tmp_name'];
+} elseif (isset($_FILES['excelFileBalance']) && $_FILES['excelFileBalance']['error'] === UPLOAD_ERR_OK) {
+    $fileTmpPath = $_FILES['excelFileBalance']['tmp_name'];
+}
 
+if ($fileTmpPath) {
     require '../../vendor/autoload.php'; // PhpSpreadsheet
 
     try {
