@@ -61,10 +61,18 @@ function importConsumables($sheet, $conn) {
             continue;
         }
 
-        // Check for duplicates (using stock_number, acceptance_date, ris_no, item_description)
-        $checkQuery = "SELECT COUNT(*) FROM tbl_inv_consumables WHERE stock_number = ? AND acceptance_date = ? AND ris_no = ? AND item_description = ?";
+        // Check for duplicates (using all columns)
+        $checkQuery = "SELECT COUNT(*) FROM tbl_inv_consumables WHERE
+                            stock_number <=> ? AND
+                            acceptance_date <=> ? AND
+                            ris_no <=> ? AND
+                            item_description <=> ? AND
+                            unit <=> ? AND
+                            receipt <=> ? AND
+                            issuance <=> ? AND
+                            end_user_issuance <=> ?";
         $stmtCheck = $conn->prepare($checkQuery);
-        $stmtCheck->bind_param("ssss", $stock_number, $acceptance_date, $ris_no, $item_description);
+        $stmtCheck->bind_param("sssssiis", $stock_number, $acceptance_date, $ris_no, $item_description, $unit, $receipt, $issuance, $end_user_issuance);
         $stmtCheck->execute();
         $stmtCheck->bind_result($rowCount);
         $stmtCheck->fetch();

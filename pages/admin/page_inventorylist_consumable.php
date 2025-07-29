@@ -9,19 +9,34 @@ error_reporting(E_ALL);
 
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h1 class="h3 mb-0 text-gray-800">Inventory List: Consumable</h1>
-    <div class="ml-auto">
+    <div class="ml-auto d-flex align-items-center">
+        <select id="inventoryMonthFilter" class="form-control form-control-sm" style="width:auto; margin-right: 10px;">
+            <option value="">Latest Month</option>
+        </select>
+        <div id="filterContainer" class="d-inline-flex align-items-center gap-2" style="margin-right: 10px;">
+            <label for="filterColumn" class="mb-0 mr-2">Filter by:</label>
+            <select id="filterColumn" class="form-control form-control-sm w-auto d-inline-block">
+                <option value="">All Columns</option>
+                <option value="1">Stock Number</option>
+                <option value="2">Acceptance Date</option>
+                <option value="3">RIS No.</option>
+            </select>
+            <input type="text" id="filterValue" class="form-control form-control-sm w-auto d-inline-block" placeholder="Search...">
+        </div>
+        <button type="button" class="btn btn-danger btn-sm" id="deleteMonthBtnInv" style="display:none; margin-right: 5px;"><i class="fas fa-trash"></i> Delete Month</button>
+        <button type="button" class="btn btn-success btn-sm" id="archiveForwardBtnInv" style="margin-right: 5px;"><i class="fas fa-archive"></i> Archive & Forward</button>
         <?php if (isset($_SESSION['user_level']) && $_SESSION['user_level'] == 'Admin'): ?>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addConsumableEquipModal"><i class="fas fa-plus"></i>
+        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addConsumableEquipModal"><i class="fas fa-plus"></i>
             Add
         </button>
-        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#importEquipModal"><i class="fas fa-file-import"></i>
+        <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#importEquipModal"><i class="fas fa-file-import"></i>
             Import
         </button>
         <?php endif; ?>
-        <button type="button" class="btn btn-warning" id="exportExcelConsum"><i class="fas fa-file-export"></i>
+        <button type="button" class="btn btn-warning btn-sm" id="exportExcelConsum"><i class="fas fa-file-export"></i>
             Export
         </button>
-        <button type="button" class="btn btn-success" id="reportExcelConsum"><i class="fas fa-file-excel"></i>
+        <button type="button" class="btn btn-success btn-sm" id="reportExcelConsum"><i class="fas fa-file-excel"></i>
             Reports
         </button>
     </div>
@@ -80,26 +95,6 @@ error_reporting(E_ALL);
 <div class="card-body">
 
     <div class="table-static">
-            <?php 
-        // open your DB connection (you can reuse or reopen—it’s a cheap call)
-        require '../../function_connection.php';
-        $typeRes = $conn->query("
-            SELECT DISTINCT type_name 
-            FROM tbl_type 
-            WHERE type_origin = 'Consumable'
-            ORDER BY type_name
-        ");
-        ?>
-                <div id="filterContainer" class="d-inline-flex align-items-center gap-2">
-            <label for="filterColumn" class="mb-0">Filter by:</label>
-            <select id="filterColumn" class="form-control form-control-sm w-auto d-inline-block">
-                <option value="">All Columns</option>
-                <option value="1">Stock Number</option>
-                <option value="2">Acceptance Date</option>
-                <option value="3">RIS No.</option>
-            </select>
-            <input type="text" id="filterValue" class="form-control form-control-sm w-auto d-inline-block" placeholder="Search...">
-        </div>
         <table class="table table-bordered" id="dataTableConsumable" width="100%" cellspacing="0">
             <thead>
                 <tr>
@@ -114,13 +109,9 @@ error_reporting(E_ALL);
                     
                     <th>End User of Issuance</th>
                     <th>Action</th>
-                    
-                    
-                    
                 </tr>
             </thead>    
             <tbody>
-            <?php require 'fetch_inventory_consumable.php'; ?>
             </tbody>
         </table>
     </div>
@@ -128,75 +119,131 @@ error_reporting(E_ALL);
 <?php include '../../sources2.php'; ?>
 
 <script>
-$('#generatePDFBtn').click(function() {
-    window.open('pages/admin/process_createpdf.php', '_blank'); // Opens in a new tab
-});
-
-document.getElementById("exportExcelConsum").addEventListener("click", function () {
-    Swal.fire({
-        title: "Exporting...",
-        text: "Please wait while the file is being generated.",
-        icon: "info",
-        allowOutsideClick: false,
-        showConfirmButton: false
-    });
-
-    // Get selected type filter value
-    var selectedType = document.getElementById("typeFilter") ? document.getElementById("typeFilter").value : "";
-
-    fetch('pages/admin/process_exporttoexcel.php?type=' + encodeURIComponent(selectedType) + '&origin=consumable')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error("Network response was not ok");
-            }
-            return response.blob();
-        })
-        .then(blob => {
-            const filename = "EQUIPMENTLIST_" + new Date().toISOString().slice(0,10).replace(/-/g, '') + ".xlsx";
-            const link = document.createElement("a");
-            const url = window.URL.createObjectURL(blob);
-            link.href = url;
-            link.download = filename;
-            document.body.appendChild(link);
-            link.click();
-            window.URL.revokeObjectURL(url);
-            link.remove();
-            Swal.fire({
-                title: "Export Successful!",
-                text: "Your Excel file has been downloaded.",
-                icon: "success",
-                timer: 2000,
-                showConfirmButton: false
-            });
-        })
-        .catch(error => {
-            console.error("Export failed:", error);
-            Swal.fire("Error", "An error occurred during export.", "error");
-        });
-});
 $(document).ready(function () {
   var invTable = $('#dataTableConsumable').DataTable({
-    order: [], // or keep your LIFO order if needed
-    columnDefs: [
-      { orderable: false, targets: -1 } // disable sort on "Action"
+    "ajax": {
+        "url": "pages/admin/fetch_inventory_consumable.php",
+        "type": "GET",
+        "data": function(d) {
+            d.month = sessionStorage.getItem('selectedMonth') || $('#inventoryMonthFilter').val();
+            d.filter_column = $('#filterColumn').val();
+            d.filter_value = $('#filterValue').val();
+        }
+    },
+    "columns": [
+        { "data": 0 },
+        { "data": 1 },
+        { "data": 2 },
+        { "data": 3 },
+        { "data": 4 },
+        { "data": 5 },
+        { "data": 6 },
+        { "data": 7 },
+        { "data": 8 },
+        { "data": 9, "orderable": false }
     ]
   });
 
-  // Move the filter controls into the DataTables length control area
-  var $lenContainer = $('#dataTableConsumable_length');
-  $lenContainer.addClass('d-flex align-items-center gap-2');
-  $lenContainer.append($('#filterContainer'));
+  // Populate month filter and set selected month
+  $.ajax({
+      url: 'pages/admin/fetch_consumable_months.php',
+      type: 'GET',
+      dataType: 'json',
+      success: function(data) {
+          var filter = $('#inventoryMonthFilter');
+          // Clear existing options except the default
+          filter.find('option:not(:first)').remove();
+          $.each(data, function(key, value) {
+              filter.append('<option value="' + value.year + '-' + value.month + '">' + value.month_name + ' ' + value.year + '</option>');
+          });
+          // Set the dropdown to the stored value
+          var storedMonth = sessionStorage.getItem('selectedMonth');
+          if (storedMonth) {
+              filter.val(storedMonth);
+              invTable.ajax.reload();
+              if (storedMonth !== "") {
+                  $('#deleteMonthBtnInv').show();
+              }
+          }
+      }
+  });
 
-  // Apply the filter when column or value changes
-  $('#filterColumn, #filterValue').on('change keyup', function () {
-    var columnIndex = $('#filterColumn').val();
-    var filterValue = $('#filterValue').val();
+  // Handle filters change
+  $('#inventoryMonthFilter, #filterColumn, #filterValue').on('change keyup', function() {
+      var selectedMonth = $('#inventoryMonthFilter').val();
+      sessionStorage.setItem('selectedMonth', selectedMonth);
+      invTable.ajax.reload();
+      if (selectedMonth !== "") {
+          $('#deleteMonthBtnInv').show();
+      } else {
+          $('#deleteMonthBtnInv').hide();
+      }
+  });
 
-    if (columnIndex) {
-      invTable.column(columnIndex).search(filterValue).draw();
-    } else {
-      invTable.search(filterValue).draw(); // Global search if no column selected
-    }
+  // Delete Month button click
+  $('#deleteMonthBtnInv').on('click', function() {
+      var selectedMonth = $('#inventoryMonthFilter').val();
+      if (selectedMonth === "") {
+          Swal.fire('No Month Selected', 'Please select a month to delete.', 'info');
+          return;
+      }
+      Swal.fire({
+          title: 'Are you sure?',
+          text: "You are about to delete all records for the selected month. This action cannot be undone!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#d33',
+          cancelButtonColor: '#3085d6',
+          confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+          if (result.isConfirmed) {
+              $.ajax({
+                  url: 'pages/admin/process_delete_monthly_balance.php',
+                  type: 'POST',
+                  data: { month: selectedMonth },
+                  dataType: 'json',
+                  success: function(response) {
+                      if (response.success) {
+                          Swal.fire('Deleted!', 'The records for the selected month have been deleted.', 'success').then(() => {
+                              location.reload();
+                          });
+                      } else {
+                          Swal.fire('Error', response.message, 'error');
+                      }
+                  }
+              });
+          }
+      });
+  });
+
+  // Archive and Forward button click
+  $('#archiveForwardBtnInv').on('click', function() {
+      Swal.fire({
+          title: 'Are you sure?',
+          text: "This will archive the current month and forward the balances to the next month.",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, proceed!'
+      }).then((result) => {
+          if (result.isConfirmed) {
+              $.ajax({
+                  url: 'pages/admin/process_archive_forward_month.php',
+                  type: 'POST',
+                  dataType: 'json',
+                  success: function(response) {
+                      if (response.success) {
+                          Swal.fire('Success', response.message, 'success').then(() => {
+                              location.reload();
+                          });
+                      } else {
+                          Swal.fire('Error', response.message, 'error');
+                      }
+                  }
+              });
+          }
+      });
   });
 
   $(document).on('click', '.report-missing', function() {

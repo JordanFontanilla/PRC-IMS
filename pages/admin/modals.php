@@ -1861,6 +1861,76 @@ $(document).ready(function() {
 
 <!-- End of Import Beginning Balance Modal -->
 
+<!-- Add Consumable Balance Modal -->
+<div class="modal fade" id="addConsumableBalanceModal" tabindex="-1" role="dialog" aria-labelledby="addConsumableBalanceModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addConsumableBalanceModalLabel">Add Consumable Balance</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="addConsumableBalanceForm">
+                    <div class="form-group">
+                        <label for="stock_number">Stock Number</label>
+                        <input type="text" class="form-control" id="stock_number" name="stock_number" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="item_description">Item Description</label>
+                        <input type="text" class="form-control" id="item_description" name="item_description" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="unit">Unit</label>
+                        <input type="text" class="form-control" id="unit" name="unit" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="beginning_balance">Beginning Balance</label>
+                        <input type="number" class="form-control" id="beginning_balance" name="beginning_balance" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Balance</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Consumable Balance Modal -->
+<div class="modal fade" id="editConsumableBalanceModal" tabindex="-1" role="dialog" aria-labelledby="editConsumableBalanceModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editConsumableBalanceModalLabel">Edit Consumable Balance</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editConsumableBalanceForm">
+                    <input type="hidden" id="edit_balance_id" name="id">
+                    <div class="form-group">
+                        <label for="edit_stock_number">Stock Number</label>
+                        <input type="text" class="form-control" id="edit_stock_number" name="stock_number" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_item_description">Item Description</label>
+                        <input type="text" class="form-control" id="edit_item_description" name="item_description" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_unit">Unit</label>
+                        <input type="text" class="form-control" id="edit_unit" name="unit" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit_beginning_balance">Beginning Balance</label>
+                        <input type="number" class="form-control" id="edit_beginning_balance" name="beginning_balance" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <!-- Create more for TINGI TINGI functionality -->
