@@ -9,34 +9,37 @@ $month = isset($_GET['month']) ? $_GET['month'] : '';
 $filter_column = isset($_GET['filter_column']) ? $_GET['filter_column'] : '';
 $filter_value = isset($_GET['filter_value']) ? $_GET['filter_value'] : '';
 
-// Query to fetch all consumables from tbl_inv_consumables
+$table_name = !empty($month) ? 'tbl_inv_consumables_archive' : 'tbl_inv_consumables';
+
+// Query to fetch consumables, joining with tbl_consumable_balance to get the correct unit
 $queryinv = "SELECT 
-                inv_id,
-                stock_number,
-                acceptance_date,
-                ris_no,
-                item_description,
-                unit,
-                receipt,
-                issuance,
-                end_user_issuance
-             FROM tbl_inv_consumables";
+                t1.inv_id,
+                t1.stock_number,
+                t1.acceptance_date,
+                t1.ris_no,
+                t1.item_description,
+                COALESCE(cb.unit, t1.unit) as unit, -- Prioritize unit from the balance table
+                t1.receipt,
+                t1.issuance,
+                t1.end_user_issuance
+             FROM $table_name t1
+             LEFT JOIN tbl_consumable_balance cb ON t1.stock_number = cb.stock_number";
 
 $conditions = [];
 $params = [];
 $types = '';
 
 if (!empty($month)) {
-    $conditions[] = "DATE_FORMAT(acceptance_date, '%Y-%c') = ?";
+    $conditions[] = "DATE_FORMAT(t1.acceptance_date, '%Y-%c') = ?";
     $params[] = $month;
     $types .= 's';
 }
 
 if (!empty($filter_column) && !empty($filter_value)) {
     $column_map = [
-        '1' => 'stock_number',
-        '2' => 'acceptance_date',
-        '3' => 'ris_no'
+        '1' => 't1.stock_number',
+        '2' => 't1.acceptance_date',
+        '3' => 't1.ris_no'
     ];
     if (array_key_exists($filter_column, $column_map)) {
         $conditions[] = $column_map[$filter_column] . " LIKE ?";
@@ -49,7 +52,7 @@ if (!empty($conditions)) {
     $queryinv .= " WHERE " . implode(' AND ', $conditions);
 }
 
-$queryinv .= " ORDER BY acceptance_date DESC";
+$queryinv .= " ORDER BY t1.acceptance_date DESC";
 
 $stmt = $conn->prepare($queryinv);
 
@@ -64,14 +67,10 @@ $data = [];
 
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
-        $balance = $row['receipt'] - $row['issuance'];
-
-        $actions = "<button class='btn btn-info btn-sm info-inv' data-toggle='modal' data-target='#viewEquipModal' data-id='" . htmlspecialchars($row['inv_id']) . "' data-origin='consumable'><i class='fas fa-eye'></i></button>
-                    <button class='btn btn-primary btn-sm edit-inv' data-toggle='modal' data-target='#editEquipModal' data-id='" . htmlspecialchars($row['inv_id']) . "' data-origin='consumable'><i class='fas fa-edit'></i></button>";
-        if (isset($_SESSION['user_level']) && $_SESSION['user_level'] == 'Admin') {
-            $actions .= "<button class='btn btn-danger btn-sm delete-inv' data-id='" . htmlspecialchars($row['inv_id']) . "' data-origin='consumable'><i class='fas fa-trash'></i></button>
-                         <button class='btn btn-warning btn-sm report-missing' title='Report as Missing' data-id='" . htmlspecialchars($row['inv_id']) . "' data-origin='consumable'><i class='fas fa-search'></i></button>";
-        }
+        $actions = "<button class='btn btn-info btn-sm info-inv' data-toggle='modal' data-target='#viewEquipModal' data-id='" . htmlspecialchars($row['inv_id']) . "' data-origin='consumable'><i class='fas fa-eye'></i></button>";
+        $actions .= " <button class='btn btn-primary btn-sm edit-inv' data-toggle='modal' data-target='#editEquipModal' data-id='" . htmlspecialchars($row['inv_id']) . "' data-origin='consumable'><i class='fas fa-edit'></i></button>
+                     <button class='btn btn-danger btn-sm delete-inv' data-id='" . htmlspecialchars($row['inv_id']) . "' data-origin='consumable'><i class='fas fa-trash'></i></button>
+                     <button class='btn btn-warning btn-sm report-missing' title='Report as Missing' data-id='" . htmlspecialchars($row['inv_id']) . "' data-origin='consumable'><i class='fas fa-search'></i></button>";
 
         $data[] = [
             htmlspecialchars($row['inv_id']),

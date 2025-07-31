@@ -125,7 +125,7 @@ $(document).ready(function () {
         "url": "pages/admin/fetch_inventory_consumable.php",
         "type": "GET",
         "data": function(d) {
-            d.month = sessionStorage.getItem('selectedMonth') || $('#inventoryMonthFilter').val();
+            d.month = $('#inventoryMonthFilter').val();
             d.filter_column = $('#filterColumn').val();
             d.filter_value = $('#filterValue').val();
         }
@@ -140,39 +140,28 @@ $(document).ready(function () {
         { "data": 6 },
         { "data": 7 },
         { "data": 8 },
-        { "data": 9, "orderable": false }
+        { "data": 9, "orderable": false, "render": function(data, type, row) { return data; } }
     ]
   });
 
-  // Populate month filter and set selected month
+  // Populate month filter
   $.ajax({
       url: 'pages/admin/fetch_consumable_months.php',
       type: 'GET',
       dataType: 'json',
       success: function(data) {
           var filter = $('#inventoryMonthFilter');
-          // Clear existing options except the default
           filter.find('option:not(:first)').remove();
           $.each(data, function(key, value) {
               filter.append('<option value="' + value.year + '-' + value.month + '">' + value.month_name + ' ' + value.year + '</option>');
           });
-          // Set the dropdown to the stored value
-          var storedMonth = sessionStorage.getItem('selectedMonth');
-          if (storedMonth) {
-              filter.val(storedMonth);
-              invTable.ajax.reload();
-              if (storedMonth !== "") {
-                  $('#deleteMonthBtnInv').show();
-              }
-          }
       }
   });
 
   // Handle filters change
   $('#inventoryMonthFilter, #filterColumn, #filterValue').on('change keyup', function() {
-      var selectedMonth = $('#inventoryMonthFilter').val();
-      sessionStorage.setItem('selectedMonth', selectedMonth);
       invTable.ajax.reload();
+      var selectedMonth = $('#inventoryMonthFilter').val();
       if (selectedMonth !== "") {
           $('#deleteMonthBtnInv').show();
       } else {
@@ -329,7 +318,12 @@ $(document).ready(function () {
 });
 });
 $('#reportExcelConsum').on('click', function() {
-    $('#reportGenerationModal').modal('show');
+    var month = $('#inventoryMonthFilter').val();
+    var url = 'pages/admin/process_generate_consumable_report.php';
+    if (month) {
+        url += '?month=' + month;
+    }
+    window.open(url, '_blank');
 });
 </script>
 <style>

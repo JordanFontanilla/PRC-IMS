@@ -95,14 +95,7 @@ if ($result->num_rows === 0 && date('Y-m', strtotime($display_month)) === $curre
         $issuance = $row['total_issuance'];
         $ending_balance = ($beginning_balance + $receipts) - $issuance;
 
-        // Update the ending balance in the database only for the current month being displayed
-        // and only if it's the actual current month (not a historical month filter)
-        if (date('Y-m', strtotime($display_month)) === $current_date_ym) {
-            $update_ending_balance_query = "UPDATE tbl_consumable_monthly_balance SET ending_balance = ? WHERE id = ?";
-            $update_stmt = $conn->prepare($update_ending_balance_query);
-            $update_stmt->bind_param("ii", $ending_balance, $row['id']);
-            $update_stmt->execute();
-        }
+        
 
         $actions = "<button class='btn btn-primary btn-sm edit-consumable-balance' data-id='" . $row['id'] . "'><i class='fas fa-edit'></i></button>
                     <button class='btn btn-danger btn-sm delete-consumable-balance' data-id='" . $row['id'] . "'><i class='fas fa-trash'></i></button>";

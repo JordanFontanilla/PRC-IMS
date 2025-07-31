@@ -584,6 +584,24 @@ $(document).on('click', '#saveUserChanges', function() {
             loadEquipmentTypes('non-consumable', 'Non-Consumable');
         });
 
+        // Autofill unit based on stock number for consumables
+        $('#addConsumableEquipModal').on('keyup change', '#stock_number', function() {
+            var stockNumber = $(this).val();
+            if (stockNumber) {
+                $.ajax({
+                    url: 'pages/admin/fetch_unit_by_stock_number.php',
+                    type: 'GET',
+                    data: { stock_number: stockNumber },
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.success && response.unit) {
+                            $('#addConsumableEquipModal #unit').val(response.unit);
+                        }
+                    }
+                });
+            }
+        });
+
         // Consumable Equipment Submit
         $(document).on('click', '#submitConsumable', function(e) {
             e.preventDefault();
