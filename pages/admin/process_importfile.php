@@ -6,6 +6,10 @@ header('Content-Type: application/json');
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
+// Increase memory limit and execution time
+ini_set('memory_limit', '512M');
+set_time_limit(0);
+
 /**
  * Processes the import of consumable items from a spreadsheet.
  *
@@ -196,7 +200,7 @@ try {
 
     $conn->close();
 
-} catch (Exception $e) {
+} catch (Throwable $e) { // Catch any error or exception
     error_log("Import script error: " . $e->getMessage());
     http_response_code(400); // Bad Request
     $response = ['error' => $e->getMessage()];

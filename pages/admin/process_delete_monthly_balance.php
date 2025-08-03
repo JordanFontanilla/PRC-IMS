@@ -13,21 +13,21 @@ if (isset($_POST['month'])) {
         // Delete from tbl_consumable_monthly_balance
         $query1 = "DELETE FROM tbl_consumable_monthly_balance WHERE month_year = ?";
         $stmt1 = $conn->prepare($query1);
-        if (!$stmt1) throw new Exception('Prepare failed for query 1: ' . $conn->error);
+        if (!$stmt1) throw new Exception('Prepare failed for monthly balance delete: ' . $conn->error);
         $stmt1->bind_param("s", $month_date_for_balance);
-        if (!$stmt1->execute()) throw new Exception('Execute failed for query 1: ' . $stmt1->error);
+        if (!$stmt1->execute()) throw new Exception('Execute failed for monthly balance delete: ' . $stmt1->error);
         $stmt1->close();
 
-        // Delete from tbl_inv_consumables_archive
-        $query2 = "DELETE FROM tbl_inv_consumables_archive WHERE DATE_FORMAT(acceptance_date, '%Y-%c') = ?";
+        // Delete from tbl_inv_consumables_archive based on the archive_date
+        $query2 = "DELETE FROM tbl_inv_consumables_archive WHERE DATE_FORMAT(archive_date, '%Y-%c') = ?";
         $stmt2 = $conn->prepare($query2);
-        if (!$stmt2) throw new Exception('Prepare failed for query 2: ' . $conn->error);
-        $stmt2->bind_param("s", $month); // Use the "Y-n" format here
-        if (!$stmt2->execute()) throw new Exception('Execute failed for query 2: ' . $stmt2->error);
+        if (!$stmt2) throw new Exception('Prepare failed for archive delete: ' . $conn->error);
+        $stmt2->bind_param("s", $month);
+        if (!$stmt2->execute()) throw new Exception('Execute failed for archive delete: ' . $stmt2->error);
         $stmt2->close();
 
         $conn->commit();
-        echo json_encode(['success' => true, 'message' => 'Successfully deleted records for the selected month.']);
+        echo json_encode(['success' => true, 'message' => 'Successfully deleted records for the selected month from both balance and archive.']);
 
     } catch (Exception $e) {
         $conn->rollback();

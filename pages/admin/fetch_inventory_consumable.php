@@ -30,7 +30,7 @@ $params = [];
 $types = '';
 
 if (!empty($month)) {
-    $conditions[] = "DATE_FORMAT(t1.acceptance_date, '%Y-%c') = ?";
+    $conditions[] = "DATE_FORMAT(t1.archive_date, '%Y-%c') = ?";
     $params[] = $month;
     $types .= 's';
 }

@@ -2,14 +2,11 @@
 require '../../function_connection.php';
 header('Content-Type: application/json');
 
-// Query to get distinct months from both the monthly balance and the archive table
+// Query to get distinct months from the archive table based on archive_date
 $query = "
-    SELECT DISTINCT month_year FROM (
-        SELECT month_year FROM tbl_consumable_monthly_balance
-        UNION
-        SELECT DISTINCT DATE_FORMAT(acceptance_date, '%Y-%m-01') AS month_year FROM tbl_inv_consumables_archive
-    ) AS all_months
-    WHERE month_year IS NOT NULL
+    SELECT DISTINCT DATE_FORMAT(archive_date, '%Y-%m-01') AS month_year 
+    FROM tbl_inv_consumables_archive
+    WHERE archive_date IS NOT NULL
     ORDER BY month_year DESC
 ";
 

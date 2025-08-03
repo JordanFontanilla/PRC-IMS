@@ -80,17 +80,15 @@ $sheet->getStyle('A8:H8')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_C
 $sheet->mergeCells('H8:I8');
 
 // Fetch data from the database
-$query = "SELECT ris_no, end_user_issuance, stock_number, item_description, unit, issuance FROM tbl_inv_consumables";
-
 if (isset($_GET['month']) && !empty($_GET['month'])) {
     $month = $_GET['month'];
-    $query .= " WHERE DATE_FORMAT(acceptance_date, '%Y-%c') = ?";
+    $query = "SELECT t1.ris_no, t1.end_user_issuance, t1.stock_number, t1.item_description, cb.unit, t1.issuance FROM tbl_inv_consumables_archive t1 LEFT JOIN tbl_consumable_balance cb ON t1.stock_number = cb.stock_number WHERE DATE_FORMAT(t1.archive_date, '%Y-%c') = ?";
     $stmt = $conn->prepare($query);
     $stmt->bind_param('s', $month);
     $stmt->execute();
     $result = $stmt->get_result();
 } else {
-    $query .= " ORDER BY acceptance_date DESC";
+    $query = "SELECT t1.ris_no, t1.end_user_issuance, t1.stock_number, t1.item_description, cb.unit, t1.issuance FROM tbl_inv_consumables t1 LEFT JOIN tbl_consumable_balance cb ON t1.stock_number = cb.stock_number ORDER BY t1.acceptance_date DESC";
     $result = $conn->query($query);
 }
 

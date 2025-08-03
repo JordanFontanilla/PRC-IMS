@@ -1050,7 +1050,7 @@ $(function() {
                     Swal.fire('Error', response.error, 'error');
                     $sheetSelect.html('<option value="">Could not load sheets</option>');
                     $submitBtn.prop('disabled', true);
-                } else {
+                } else if (response.sheets) {
                     $sheetSelect.empty();
                     response.sheets.forEach(function(sheetName) {
                         $sheetSelect.append(`<option value="${sheetName}">${sheetName}</option>`);
@@ -1059,8 +1059,13 @@ $(function() {
                     $submitBtn.prop('disabled', false);
                 }
             },
-            error: function() {
-                Swal.fire('Error', 'Could not retrieve sheet names from the server.', 'error');
+            error: function(xhr, status, error) {
+                console.error("AJAX error:", status, error, xhr.responseText);
+                let errorMsg = 'Could not retrieve sheet names. Check console for details.';
+                if (xhr.responseJSON && xhr.responseJSON.error) {
+                    errorMsg = xhr.responseJSON.error;
+                }
+                Swal.fire('Error', errorMsg, 'error');
                 $sheetSelect.html('<option value="">Error loading sheets</option>');
                 $submitBtn.prop('disabled', true);
             },
